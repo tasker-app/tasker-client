@@ -7,6 +7,8 @@ Client repo for Tasker
 3. Props drill maximum 3 levels
 4. Use `semantic tag` as much as posible
 5. Avoid using `any` type as much as posible
+6. For image, use `.webp` extension
+7. For icon, use `.svg` extension
 
 ## Create a new component ⚙️
 
