@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import { Button } from '@/components/Button'
+import { Text } from '@/components/Common'
 
 const LandingContainer = styled.div`
   font-weight: bold;
@@ -9,7 +10,9 @@ const LandingContainer = styled.div`
 const Landing = () => {
   return (
     <LandingContainer>
-      Landing
+      <Text color="#000" size={12} type="bold">
+        Test
+      </Text>
       <Button />
     </LandingContainer>
   )
