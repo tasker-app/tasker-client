@@ -121,7 +121,7 @@ export const Header = () => {
               <MenuIcon />
             </NavigationButton>
           </CustomTooltip>
-          <CustomTooltip content="Toggle Home">
+          <CustomTooltip content="Home">
             <NavigationButton>
               <HomeIcon />
             </NavigationButton>
