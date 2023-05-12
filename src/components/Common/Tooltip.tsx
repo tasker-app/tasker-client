@@ -58,7 +58,7 @@ const closedAndFade = keyframes`
 
 const Content = styled(Tooltip.Content)`
   border-radius: 4px;
-  width: 100px;
+  width: 120px;
   height: 28px;
   background: rgba(38, 38, 38, 0.9);
   user-select: none;
