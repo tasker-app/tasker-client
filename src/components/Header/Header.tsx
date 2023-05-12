@@ -6,8 +6,7 @@ import { ReactComponent as QuestionIcon } from '@/assets/icons/question.svg'
 import { ReactComponent as SearchIcon } from '@/assets/icons/search.svg'
 import { ReactComponent as StarIcon } from '@/assets/icons/star.svg'
 import DefaultAvatar from '@/assets/images/DefaultAvatar.webp'
-
-import { Text } from '../Common'
+import { CustomTooltip, Text } from '@/components/Common'
 
 const StyledHeader = styled.header`
   background-color: #efefef;
@@ -117,9 +116,11 @@ export const Header = () => {
     <StyledHeader>
       <NavigationAndSearch>
         <Navigation>
-          <NavigationButton>
-            <MenuIcon />
-          </NavigationButton>
+          <CustomTooltip content="Toggle menu">
+            <NavigationButton>
+              <MenuIcon />
+            </NavigationButton>
+          </CustomTooltip>
           <NavigationButton>
             <HomeIcon />
           </NavigationButton>
