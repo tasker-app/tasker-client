@@ -34,14 +34,16 @@ const Navigation = styled.div`
 const NavigationButton = styled.button`
   border: none;
   cursor: pointer;
+  background-color: transparent;
+  border-radius: 8px;
+  transition: background-color 0.2s ease-in-out;
 
   &:hover {
     background-color: #d9d9d9;
-    border-radius: 8px;
   }
 
   svg {
-    padding: 8px;
+    padding: 4px;
   }
 `
 
@@ -58,7 +60,7 @@ const SearchBar = styled.div`
 
   input {
     width: 175px;
-    height: 30px;
+    height: 32px;
     border-radius: 8px;
     border: none;
     background-color: #d9d9d9;
