@@ -16,6 +16,7 @@ const StyledHeader = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 10px 30px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.25);
 `
 const NavigationAndSearch = styled.nav`
   display: flex;
@@ -27,8 +28,21 @@ const Navigation = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 30px;
+  gap: 24px;
+`
+
+const NavigationButton = styled.button`
+  border: none;
   cursor: pointer;
+
+  &:hover {
+    background-color: #d9d9d9;
+    border-radius: 8px;
+  }
+
+  svg {
+    padding: 8px;
+  }
 `
 
 const SearchBar = styled.div`
@@ -49,6 +63,7 @@ const SearchBar = styled.div`
     border: none;
     background-color: #d9d9d9;
     padding-left: 35px;
+    font-family: 'Regular';
 
     &:focus {
       outline: none;
@@ -100,9 +115,15 @@ export const Header = () => {
     <StyledHeader>
       <NavigationAndSearch>
         <Navigation>
-          <MenuIcon />
-          <HomeIcon />
-          <QuestionIcon />
+          <NavigationButton>
+            <MenuIcon />
+          </NavigationButton>
+          <NavigationButton>
+            <HomeIcon />
+          </NavigationButton>
+          <NavigationButton>
+            <QuestionIcon />
+          </NavigationButton>
         </Navigation>
 
         <SearchBar>
@@ -118,7 +139,7 @@ export const Header = () => {
         </Button>
 
         <Avatar>
-          <img alt="Avatar" src={DefaultAvatar} />
+          <img alt="Avatar" loading="lazy" src={DefaultAvatar} />
         </Avatar>
       </ButtonAndAvatar>
     </StyledHeader>
