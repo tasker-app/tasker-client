@@ -116,17 +116,21 @@ export const Header = () => {
     <StyledHeader>
       <NavigationAndSearch>
         <Navigation>
-          <CustomTooltip content="Toggle menu">
+          <CustomTooltip content="Toggle Menu">
             <NavigationButton>
               <MenuIcon />
             </NavigationButton>
           </CustomTooltip>
-          <NavigationButton>
-            <HomeIcon />
-          </NavigationButton>
-          <NavigationButton>
-            <QuestionIcon />
-          </NavigationButton>
+          <CustomTooltip content="Toggle Home">
+            <NavigationButton>
+              <HomeIcon />
+            </NavigationButton>
+          </CustomTooltip>
+          <CustomTooltip content="Help & Feedback">
+            <NavigationButton>
+              <QuestionIcon />
+            </NavigationButton>
+          </CustomTooltip>
         </Navigation>
 
         <SearchBar>
