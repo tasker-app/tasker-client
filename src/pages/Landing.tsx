@@ -1,21 +1,20 @@
 import styled from 'styled-components'
 
-import { ReactComponent as ChartIcon } from '@/assets/icons/chart.svg'
-import { Button } from '@/components/Button'
-import { Text } from '@/components/Common'
+import { Header } from '@/components/Header'
 
-const LandingContainer = styled.div`
-  font-weight: bold;
-`
+const LandingContainer = styled.div``
 
 const Landing = () => {
   return (
+    // <LandingContainer>
+    //   <Text color="#000" size={12} type="bold">
+    //     Test
+    //   </Text>
+    //   <ChartIcon />
+    //   <Button />
+    // </LandingContainer>
     <LandingContainer>
-      <Text color="#000" size={12} type="bold">
-        Test
-      </Text>
-      <ChartIcon />
-      <Button />
+      <Header />
     </LandingContainer>
   )
 }
