@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import styled from 'styled-components'
 
 import { ReactComponent as HomeIcon } from '@/assets/icons/home.svg'
@@ -7,6 +8,7 @@ import { ReactComponent as SearchIcon } from '@/assets/icons/search.svg'
 import { ReactComponent as StarIcon } from '@/assets/icons/star.svg'
 import DefaultAvatar from '@/assets/images/DefaultAvatar.webp'
 import { CustomTooltip, Text } from '@/components/Common'
+import { UserModal } from '@/components/UserModal'
 
 const StyledHeader = styled.header`
   background-color: #efefef;
@@ -101,8 +103,12 @@ const Avatar = styled.div`
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  overflow: hidden;
   cursor: pointer;
+  overflow: hidden;
+
+  &:hover {
+    opacity: 0.8;
+  }
 
   img {
     width: 100%;
@@ -111,7 +117,15 @@ const Avatar = styled.div`
   }
 `
 
+const AvatarModalButton = styled.button`
+  border: none;
+  position: relative;
+  background-color: transparent;
+`
+
 export const Header = () => {
+  const [isOpen, setIsOpen] = useState(false)
+
   return (
     <StyledHeader>
       <NavigationAndSearch>
@@ -138,17 +152,19 @@ export const Header = () => {
           <input placeholder="Task ABC" type="text" />
         </SearchBar>
       </NavigationAndSearch>
-
       <ButtonAndAvatar>
         <Button>
           <StarIcon />
           <Text size={12}>Upgrade to Premium</Text>
         </Button>
 
-        <Avatar>
-          <img alt="Avatar" loading="lazy" src={DefaultAvatar} />
-        </Avatar>
+        <AvatarModalButton onClick={() => setIsOpen(true)}>
+          <Avatar>
+            <img alt="Avatar" loading="lazy" src={DefaultAvatar} />
+          </Avatar>
+        </AvatarModalButton>
       </ButtonAndAvatar>
+      <UserModal handleClose={() => setIsOpen(false)} isOpen={isOpen} />
     </StyledHeader>
   )
 }
