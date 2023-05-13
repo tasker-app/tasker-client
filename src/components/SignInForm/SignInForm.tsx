@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 import styled from 'styled-components'
 
 import { Text } from '../Common/Text'
@@ -20,7 +20,7 @@ const FormCover = styled.div`
   transform: translate(-50%, -50%);
 `
 
-const Form = styled.div`
+const Form = styled.form`
   text-align: left;
   width: 438.59px;
   height: 310px;
@@ -60,6 +60,49 @@ const FormFooter = styled.div`
 export const SignInForm = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isErrorEmail, setIsErrorEmail] = useState(false)
+  const [isErrorPass, setIsErrorPass] = useState(false)
+
+  const validateEmail = (emailFromInput: string) => {
+    const emailPattern =
+      /^[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.(-?[a-zA-Z0-9])+$/
+
+    if (emailFromInput === '') {
+      setIsErrorEmail(true)
+
+      return false
+    } else if (emailPattern.test(emailFromInput)) {
+      setIsErrorEmail(false)
+
+      return true
+    } else {
+      setIsErrorEmail(true)
+
+      return false
+    }
+  }
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    if (email === '') {
+      setIsErrorEmail(true)
+
+      return
+    } else {
+      setIsErrorEmail(false)
+    }
+    if (password === '') {
+      setIsErrorPass(true)
+
+      return
+    } else {
+      setIsErrorPass(false)
+    }
+    if (!validateEmail(email)) {
+      return
+    }
+    console.log('submited', { email, password })
+  }
 
   return (
     <SignInFormContainer>
@@ -67,14 +110,29 @@ export const SignInForm = () => {
         <Text size={36} type="bold">
           Get into Tasker
         </Text>
-        <Form>
+        <Form onSubmit={(e: FormEvent<HTMLFormElement>) => handleSubmit(e)}>
           <InputBlock>
             <Text size={18}>Email</Text>
-            <Input height="36px" setInput={setEmail} type="text" value={email} width="365px"></Input>
+            <Input
+              height="36px"
+              isError={isErrorEmail}
+              setInput={setEmail}
+              type="text"
+              value={email}
+              width="365px"
+            ></Input>
           </InputBlock>
           <InputBlock>
             <Text size={18}>Password</Text>
-            <Input height="36px" setInput={setPassword} type="password" value={password} width="365px"></Input>
+
+            <Input
+              height="36px"
+              isError={isErrorPass}
+              setInput={setPassword}
+              type="password"
+              value={password}
+              width="365px"
+            ></Input>
           </InputBlock>
           <ForgotPasswordButton>
             <Text color="#787878" size={14} type="italic">
@@ -82,7 +140,7 @@ export const SignInForm = () => {
             </Text>
           </ForgotPasswordButton>
           <SubmitButton>
-            <SignInButton>Get In</SignInButton>
+            <SignInButton type="submit">Get In</SignInButton>
           </SubmitButton>
           <FormFooter>
             <Text color="#787878" size={13}>

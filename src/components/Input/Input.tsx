@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 
-import unViewHide from '@/assets/icons/unview-hide.svg'
-import viewHide from '@/assets/icons/view-hide.svg'
+import { ReactComponent as UnViewHide } from '@/assets/icons/unview-hide.svg'
+import { ReactComponent as ViewHide } from '@/assets/icons/view-hide.svg'
 
 // TEMP FOR CODEBASE EXAMPLE
 const InputCover = styled.div`
@@ -32,53 +32,54 @@ const InputContainer = styled.input<{ status: string; width: string; height: str
   }
 `
 const Icon = styled.div`
-  img {
-    position: absolute;
-    right: 1rem;
-    fill: #9e9ea7;
-    width: 1.3rem;
-    height: 1.3rem;
-    top: 20%;
-    border-radius: 10px;
-    transition: 0.3s ease-in-out;
-  }
-  img:hover {
+  position: absolute;
+  right: 1rem;
+  fill: #9e9ea7;
+  width: 1.3rem;
+  height: 1.3rem;
+  top: 22%;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s ease-in-out;
+  &:hover {
     background-color: #d9d9d9;
   }
 `
 
 type InputProps = {
-  width: string
-  height: string
+  width?: string
+  height?: string
   setInput: (input: string) => void
-  value: string
+  value?: string
   type: string
+  isError?: boolean
 }
 
-export const Input = ({ width, height, setInput, value, type }: InputProps) => {
-  // const [status, setStatus] = useState('normal')
-  const status = 'normal'
+export const Input = ({ width, height, setInput, value, type, isError }: InputProps) => {
   const [isView, setIsView] = useState(false)
 
   return (
     <InputCover>
       <InputContainer
         height={height || '36px'}
-        status={status}
+        status={isError ? 'error' : 'normal'}
         type={type == 'password' && !isView ? 'password' : type == 'password' && isView ? 'text' : 'text'}
         value={value}
         width={width || '100px'}
         onChange={(e) => {
           setInput(e.target.value)
         }}
-      ></InputContainer>
-      {type == 'password' ? (
+      />
+      {type === 'password' ? (
         <Icon
           onClick={() => {
             setIsView(!isView)
           }}
         >
-          <img alt="" src={isView ? viewHide : unViewHide} />
+          {isView ? <UnViewHide /> : <ViewHide />}
         </Icon>
       ) : (
         ''

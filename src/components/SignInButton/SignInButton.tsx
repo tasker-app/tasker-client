@@ -19,8 +19,9 @@ const ButtonContainer = styled.button`
 `
 
 type SignInButtonProps = {
+  type?: 'button' | 'submit'
   children: React.ReactNode
 }
-export const SignInButton = ({ children }: SignInButtonProps) => {
-  return <ButtonContainer>{children}</ButtonContainer>
+export const SignInButton = ({ type, children }: SignInButtonProps) => {
+  return <ButtonContainer type={type}>{children}</ButtonContainer>
 }

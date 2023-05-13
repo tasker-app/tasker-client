@@ -1,12 +1,13 @@
 import styled from 'styled-components'
 
 import SignInImage from '@/assets/images/SignInImage.webp'
+import { AuthHeader } from '@/components/AuthHeader'
 import { SignInForm } from '@/components/SignInForm'
 
 const SignInContainer = styled.div`
   width: 100vw;
   height: 100vh;
-  img {
+  .background-image {
     width: 300px;
     position: fixed;
     right: 0;
@@ -17,8 +18,9 @@ const SignInContainer = styled.div`
 const SignIn = () => {
   return (
     <SignInContainer>
-      <SignInForm></SignInForm>
-      <img alt="Sign in Illustration" src={SignInImage} />
+      <AuthHeader />
+      <SignInForm />
+      <img alt="Sign in Illustration" className="background-image" src={SignInImage} />
     </SignInContainer>
   )
 }
