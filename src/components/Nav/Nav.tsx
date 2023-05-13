@@ -1,3 +1,4 @@
+import * as React from 'react'
 import styled from 'styled-components'
 
 import { ReactComponent as AddIcon } from '@/assets/icons/add.svg'
@@ -23,7 +24,7 @@ const NavOptions = styled.div`
   gap: 15px;
 `
 
-const NavButton = styled.button`
+const NavButton = styled.button<{ isActive?: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -38,6 +39,12 @@ const NavButton = styled.button`
   &:hover {
     background-color: #e1e1e1;
   }
+
+  ${(props) =>
+    props.isActive &&
+    `
+    background-color: #e1e1e1;
+  `}
 `
 
 const Flex = styled.div`
@@ -80,10 +87,16 @@ const YourTeams = styled.div`
 `
 
 export const Nav = () => {
+  const [active, setActive] = React.useState('Today')
+
+  const handleActive = (value: string) => {
+    setActive(value)
+  }
+
   return (
     <NavContainer>
       <NavOptions>
-        <NavButton>
+        <NavButton isActive={active === 'Today'} onClick={() => handleActive('Today')}>
           <Flex>
             <CalendarIcon />
             <Text size={16}>Today</Text>
@@ -92,7 +105,7 @@ export const Nav = () => {
             12
           </Text>
         </NavButton>
-        <NavButton>
+        <NavButton isActive={active === 'Upcoming'} onClick={() => handleActive('Upcoming')}>
           <Flex>
             <DateIcon />
             <Text size={16}>Upcoming</Text>
@@ -101,7 +114,7 @@ export const Nav = () => {
             20
           </Text>
         </NavButton>
-        <NavButton>
+        <NavButton isActive={active === 'Statistic'} onClick={() => handleActive('Statistic')}>
           <Flex>
             <ChartIcon />
             <Text size={16}>Statistic</Text>
