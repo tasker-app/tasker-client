@@ -7,12 +7,15 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import Landing from './pages/Landing'
 import SignIn from './pages/SignIn'
+import TestNav from './pages/TestNav'
+
 
 const Guard = () => {
   return (
     <Routes>
       <Route element={<Landing />} path="/" />
       <Route element={<SignIn />} path="/signin" />
+      <Route element={<TestNav />} path="/testnav" />
     </Routes>
   )
 }
