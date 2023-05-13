@@ -1,11 +1,10 @@
 import { FormEvent, useState } from 'react'
 import styled from 'styled-components'
 
-import { Text } from '../Common/Text'
-import { Input } from '../Input'
-import { SignInButton } from '../SignInButton'
+import { Text } from '@/components/Common/Text'
+import { SignInButton } from '@/components/SignInButton'
 
-// TEMP FOR CODEBASE EXAMPLE
+import { Input } from '../Input'
 
 const SignInFormContainer = styled.div`
   width: 100%;
@@ -38,6 +37,7 @@ const InputBlock = styled.div`
 `
 const ForgotPasswordButton = styled.div`
   text-align: right;
+  margin-right: 20px;
   cursor: pointer;
   &:hover {
     text-decoration: underline;
@@ -113,7 +113,7 @@ export const SignInForm = () => {
         <Form onSubmit={(e: FormEvent<HTMLFormElement>) => handleSubmit(e)}>
           <InputBlock>
             <Text size={18}>Email</Text>
-            <Input height="36px" isError={isErrorEmail} setInput={setEmail} value={email} width="365px"></Input>
+            <Input height="36px" isError={isErrorEmail} setInput={setEmail} value={email} width="365px" />
           </InputBlock>
           <InputBlock>
             <Text size={18}>Password</Text>
@@ -125,7 +125,7 @@ export const SignInForm = () => {
               type="password"
               value={password}
               width="365px"
-            ></Input>
+            />
           </InputBlock>
           <ForgotPasswordButton>
             <Text color="#787878" size={14} type="italic">
@@ -133,7 +133,9 @@ export const SignInForm = () => {
             </Text>
           </ForgotPasswordButton>
           <SubmitButton>
-            <SignInButton type="submit">Get In</SignInButton>
+            <SignInButton type="submit">
+              <Text size={16}>Get In</Text>
+            </SignInButton>
           </SubmitButton>
           <FormFooter>
             <Text color="#787878" size={13}>

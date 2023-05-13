@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 
-// TEMP FOR CODEBASE EXAMPLE
 const ButtonContainer = styled.button`
   background: linear-gradient(180deg, rgba(128, 137, 218, 0.62) 0%, rgba(53, 170, 254, 0.67) 100%);
   border-radius: 12px;

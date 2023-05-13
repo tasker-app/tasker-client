@@ -61,7 +61,9 @@ export const AuthHeader = () => {
           </StyledNavText>
         </Nav>
         <Nav>
-          <SignInButton>Sign in</SignInButton>
+          <SignInButton>
+            <Text size={15}>Sign In</Text>
+          </SignInButton>
         </Nav>
       </NavContainer>
     </StyledAuthHeader>

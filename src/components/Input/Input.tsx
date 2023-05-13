@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { ReactComponent as UnViewHide } from '@/assets/icons/unview-hide.svg'
 import { ReactComponent as ViewHide } from '@/assets/icons/view-hide.svg'
 
-// TEMP FOR CODEBASE EXAMPLE
 const InputCover = styled.div`
   position: relative;
 `
