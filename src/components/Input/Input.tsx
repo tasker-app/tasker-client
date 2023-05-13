@@ -54,11 +54,11 @@ type InputProps = {
   height?: string
   setInput: (input: string) => void
   value?: string
-  type: string
+  type?: 'text' | 'password'
   isError?: boolean
 }
 
-export const Input = ({ width, height, setInput, value, type, isError }: InputProps) => {
+export const Input = ({ width, height, setInput, value, type = 'text', isError }: InputProps) => {
   const [isView, setIsView] = useState(false)
 
   return (

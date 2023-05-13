@@ -113,14 +113,7 @@ export const SignInForm = () => {
         <Form onSubmit={(e: FormEvent<HTMLFormElement>) => handleSubmit(e)}>
           <InputBlock>
             <Text size={18}>Email</Text>
-            <Input
-              height="36px"
-              isError={isErrorEmail}
-              setInput={setEmail}
-              type="text"
-              value={email}
-              width="365px"
-            ></Input>
+            <Input height="36px" isError={isErrorEmail} setInput={setEmail} value={email} width="365px"></Input>
           </InputBlock>
           <InputBlock>
             <Text size={18}>Password</Text>
