@@ -83,6 +83,7 @@ export const SignInForm = () => {
       hasError = true
     } else {
       setIsErrorEmail(false)
+      hasError = false
     }
     if (password === '') {
       setIsErrorPass(true)
