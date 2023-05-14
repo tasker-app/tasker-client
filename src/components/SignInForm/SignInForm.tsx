@@ -81,24 +81,25 @@ export const SignInForm = () => {
       return false
     }
   }
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    if (email === '') {
+  const validation = () => {
+    if (email == '') {
       setIsErrorEmail(true)
-
-      return
+    } else if (!validateEmail(email)) {
+      setIsErrorEmail(true)
     } else {
-      setIsErrorEmail(false)
+      setIsErrorEmail(true)
     }
-    if (password === '') {
+    if (password == '') {
       setIsErrorPass(true)
-
-      return
     } else {
       setIsErrorPass(false)
     }
-    if (!validateEmail(email)) {
+
+    return isErrorEmail && isErrorPass
+  }
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!validation()) {
       return
     }
     console.log('submited', { email, password })
@@ -113,7 +114,14 @@ export const SignInForm = () => {
         <Form onSubmit={(e: FormEvent<HTMLFormElement>) => handleSubmit(e)}>
           <InputBlock>
             <Text size={18}>Email</Text>
-            <Input height="36px" isError={isErrorEmail} setInput={setEmail} value={email} width="365px" />
+            <Input
+              height="36px"
+              isError={isErrorEmail}
+              setInput={setEmail}
+              setOnChange={setIsErrorEmail}
+              value={email}
+              width="365px"
+            />
           </InputBlock>
           <InputBlock>
             <Text size={18}>Password</Text>
@@ -122,6 +130,7 @@ export const SignInForm = () => {
               height="36px"
               isError={isErrorPass}
               setInput={setPassword}
+              setOnChange={setIsErrorPass}
               type="password"
               value={password}
               width="365px"

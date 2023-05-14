@@ -52,12 +52,21 @@ type InputProps = {
   width?: string
   height?: string
   setInput: (input: string) => void
+  setOnChange?: (isChange: boolean) => void
   value?: string
   type?: 'text' | 'password'
   isError?: boolean
 }
 
-export const Input = ({ width, height, setInput, value, type = 'text', isError }: InputProps) => {
+export const Input = ({
+  width,
+  height,
+  setInput,
+  value,
+  type = 'text',
+  isError,
+  setOnChange = () => {}
+}: InputProps) => {
   const [isView, setIsView] = useState(false)
 
   return (
@@ -69,6 +78,7 @@ export const Input = ({ width, height, setInput, value, type = 'text', isError }
         value={value}
         width={width || '100px'}
         onChange={(e) => {
+          setOnChange(false)
           setInput(e.target.value)
         }}
       />
