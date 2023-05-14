@@ -76,24 +76,25 @@ export const SignInForm = () => {
     }
   }
   const validation = (email: string, password: string) => {
-    let hasError = false
+    let hasEmailError = false
+    let hasPasswordError = false
 
     if (!validateEmail(email)) {
       setIsErrorEmail(true)
-      hasError = true
+      hasEmailError = true
     } else {
       setIsErrorEmail(false)
-      hasError = false
+      hasEmailError = false
     }
     if (password === '') {
       setIsErrorPass(true)
-      hasError = true
+      hasPasswordError = true
     } else {
       setIsErrorPass(false)
-      hasError = false
+      hasPasswordError = false
     }
 
-    return hasError
+    return hasEmailError || hasPasswordError
   }
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
