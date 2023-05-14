@@ -2,9 +2,8 @@ import { FormEvent, useState } from 'react'
 import styled from 'styled-components'
 
 import { Text } from '@/components/Common/Text'
+import { Input } from '@/components/Input'
 import { SignInButton } from '@/components/SignInButton'
-
-import { Input } from '../Input'
 
 const SignInFormContainer = styled.div`
   width: 100%;
