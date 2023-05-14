@@ -47,6 +47,7 @@ module.exports = {
     'no-console': 'warn',
     'no-unused-vars': 'warn',
     'no-alert': 'error',
+    eqeqeq: ['error', 'always'],
     quotes: ['off', 'single'],
     'prettier/prettier': [
       'warn',
