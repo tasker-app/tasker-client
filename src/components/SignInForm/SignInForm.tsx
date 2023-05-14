@@ -68,41 +68,39 @@ export const SignInForm = () => {
       /^[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.(-?[a-zA-Z0-9])+$/
 
     if (emailFromInput === '') {
-      setIsErrorEmail(true)
-
       return false
-    } else if (emailPattern.test(emailFromInput)) {
-      setIsErrorEmail(false)
-
-      return true
+    } else if (!emailPattern.test(emailFromInput)) {
+      return false
     } else {
-      setIsErrorEmail(true)
-
-      return false
+      return true
     }
   }
-  const validation = () => {
-    if (email == '') {
+  const validation = (email: string, password: string) => {
+    let hasError = false
+
+    if (!validateEmail(email)) {
       setIsErrorEmail(true)
-    } else if (!validateEmail(email)) {
-      setIsErrorEmail(true)
+      hasError = true
     } else {
-      setIsErrorEmail(true)
+      setIsErrorEmail(false)
     }
-    if (password == '') {
+    if (password === '') {
       setIsErrorPass(true)
+      hasError = true
     } else {
       setIsErrorPass(false)
+      hasError = false
     }
 
-    return isErrorEmail && isErrorPass
+    return hasError
   }
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!validation()) {
+    if (validation(email, password)) {
       return
+    } else {
+      console.log('submited', { email, password })
     }
-    console.log('submited', { email, password })
   }
 
   return (

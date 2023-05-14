@@ -74,7 +74,7 @@ export const Input = ({
       <InputContainer
         height={height || '36px'}
         status={isError ? 'error' : 'normal'}
-        type={type == 'password' && !isView ? 'password' : type == 'password' && isView ? 'text' : 'text'}
+        type={type === 'password' && !isView ? 'password' : type === 'password' && isView ? 'text' : 'text'}
         value={value}
         width={width || '100px'}
         onChange={(e) => {
