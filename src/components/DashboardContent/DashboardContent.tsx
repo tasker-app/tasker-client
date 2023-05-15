@@ -5,8 +5,9 @@ import { ReactComponent as AddIcon } from '@/assets/icons/add.svg'
 import { ReactComponent as FilterIcon } from '@/assets/icons/filter.svg'
 import ChairBackgroundImage from '@/assets/images/ChairBackgroundImage.webp'
 import { Text } from '@/components/Common'
+import { DAYS_OF_WEEK, MONTHS } from '@/libs/constans'
 
-const NavContentContainer = styled.section`
+const DashboardContentContainer = styled.section`
   width: 100%;
   margin-top: 24px;
   box-sizing: border-box;
@@ -29,10 +30,21 @@ const Today = styled.div`
   gap: 20px;
 `
 
-const Filter = styled.div`
+const FilterButton = styled.button`
   display: flex;
   align-items: center;
   gap: 8px;
+  border: none;
+  background-color: transparent;
+  border-radius: 4px;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+
+  &:hover {
+    background-color: #e1e1e1;
+  }
 `
 
 const AddTask = styled.button`
@@ -82,21 +94,19 @@ const ShareButton = styled.button`
   }
 `
 
-export const NavContent = () => {
+export const DashboardContent = () => {
   const currentDateFormatted = () => {
     const currentDate = new Date()
-    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
-    const dayOfWeek = daysOfWeek[currentDate.getDay()]
+    const dayOfWeek = DAYS_OF_WEEK[currentDate.getDay()]
     const day = currentDate.getDate()
-    const month = months[currentDate.getMonth()]
+    const month = MONTHS[currentDate.getMonth()]
 
-    return dayOfWeek + ' ' + day + ' ' + month
+    return `${dayOfWeek} ${day} ${month}`
   }
 
   return (
-    <NavContentContainer>
+    <DashboardContentContainer>
       <Content>
         <Flex>
           <Today>
@@ -108,12 +118,12 @@ export const NavContent = () => {
             </Text>
           </Today>
 
-          <Filter>
+          <FilterButton>
             <FilterIcon />
             <Text color="#949494" size={16}>
               View
             </Text>
-          </Filter>
+          </FilterButton>
         </Flex>
 
         <AddTask>
@@ -143,6 +153,6 @@ export const NavContent = () => {
           </FacebookShareButton>
         </Center>
       </Content>
-    </NavContentContainer>
+    </DashboardContentContainer>
   )
 }

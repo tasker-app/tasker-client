@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 
+import { DashboardContent } from '@/components/DashboardContent'
 import { Header } from '@/components/Header'
 import { Nav } from '@/components/Nav'
-import { NavContent } from '@/components/NavContent'
 
 const DashboardContainer = styled.div``
 
@@ -28,7 +28,7 @@ const Dashboard = () => {
       <Header handleNavToggle={handleNavToggle} />
       <Grid isExpanded={isExpanded}>
         <Nav isNavOpen={isNavOpen} />
-        <NavContent />
+        <DashboardContent />
       </Grid>
     </DashboardContainer>
   )
