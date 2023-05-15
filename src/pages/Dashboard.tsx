@@ -7,28 +7,28 @@ import { Nav } from '@/components/Nav'
 
 const DashboardContainer = styled.div``
 
-const Grid = styled.div<{ isExpanded: boolean }>`
+const Grid = styled.div`
   display: grid;
-  grid-template-columns: ${(props) => (props.isExpanded ? '40px 1fr' : 'repeat(5, 1fr)')};
-  gap: ${(props) => (props.isExpanded ? '0' : '30px')};
-  transition: grid-template-columns 0.3s ease-in-out;
+  grid-template-columns: 1fr auto;
+
+  height: calc(100vh - 132px); // 132px = 60px (header) + 72px (space)
+  margin: 24px auto;
+  width: calc(100vw - 80px); // 80px (space)
 `
 
 const Dashboard = () => {
   const [isNavOpen, setIsNavOpen] = useState(true)
-  const [isExpanded, setIsExpanded] = useState(false)
 
   const handleNavToggle = () => {
     setIsNavOpen(!isNavOpen)
-    setIsExpanded(!isExpanded)
   }
 
   return (
     <DashboardContainer>
       <Header handleNavToggle={handleNavToggle} />
-      <Grid isExpanded={isExpanded}>
+      <Grid>
         <Nav isNavOpen={isNavOpen} />
-        <DashboardContent />
+        <DashboardContent isNavOpen={isNavOpen} />
       </Grid>
     </DashboardContainer>
   )
