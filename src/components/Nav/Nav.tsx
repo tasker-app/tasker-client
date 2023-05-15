@@ -10,11 +10,10 @@ import { Text } from '@/components/Common'
 
 const NavContainer = styled.nav<{ isNavOpen: boolean }>`
   width: ${(props) => (props.isNavOpen ? '300px' : '0')};
-  height: 100vh;
+  height: 100%;
   background-color: #fafafa;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
   border-radius: 8px;
-  margin: 24px 0 0 40px;
   transition: width 0.2s ease-in-out;
 `
 
@@ -100,9 +99,7 @@ export const Nav = ({ isNavOpen }: NavProps) => {
 
   useEffect(() => {
     if (isNavOpen) {
-      setTimeout(() => {
-        setIsOptionDisplayed(true)
-      }, 200)
+      setTimeout(() => setIsOptionDisplayed(true), 100)
     } else {
       setIsOptionDisplayed(false)
     }

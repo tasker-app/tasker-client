@@ -5,14 +5,13 @@ import { ReactComponent as AddIcon } from '@/assets/icons/add.svg'
 import { ReactComponent as FilterIcon } from '@/assets/icons/filter.svg'
 import ChairBackgroundImage from '@/assets/images/ChairBackgroundImage.webp'
 import { Text } from '@/components/Common'
-import { DAYS_OF_WEEK, MONTHS } from '@/libs/constans'
+import { DAYS_OF_WEEK, MONTHS } from '@/libs/constant'
 
-const DashboardContentContainer = styled.section`
-  width: 100%;
-  margin-top: 24px;
+const DashboardContentContainer = styled.section<{ isNavOpen: boolean }>`
+  width: ${(props) => (props.isNavOpen ? 'calc(100vw - 120px - 300px)' : 'calc(100vw - 80px)')};
+  margin: 24px auto;
   box-sizing: border-box;
-  padding: 40px 50px 40px 10px;
-  grid-area: 1 / 2 / 2 / 6;
+  transition: width 0.2s ease-in-out;
 `
 
 const Content = styled.div`
@@ -84,7 +83,7 @@ const ImageBackground = styled.div`
   }
 `
 
-const ShareButton = styled.button`
+const ShareButton = styled.div`
   border: none;
   background-color: transparent;
   cursor: pointer;
@@ -94,7 +93,11 @@ const ShareButton = styled.button`
   }
 `
 
-export const DashboardContent = () => {
+type DashboardContentProps = {
+  isNavOpen: boolean
+}
+
+export const DashboardContent = ({ isNavOpen }: DashboardContentProps) => {
   const currentDateFormatted = () => {
     const currentDate = new Date()
 
@@ -106,7 +109,7 @@ export const DashboardContent = () => {
   }
 
   return (
-    <DashboardContentContainer>
+    <DashboardContentContainer isNavOpen={isNavOpen}>
       <Content>
         <Flex>
           <Today>
