@@ -1,11 +1,14 @@
+import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg'
 import { ReactComponent as CollapseIcon } from '@/assets/icons/collapse.svg'
-import { ReactComponent as ExpandIcon } from '@/assets/icons/expand.svg'
 import { ReactComponent as FlagIcon } from '@/assets/icons/flag.svg'
 import { Text } from '@/components/Common'
+import { ORDERING_LIST, PRIORITY_LIST, SORTING_LIST } from '@/libs/constant'
+
+import { CustomSelect } from './CustomSelect'
 
 const ModalOverlay = styled.div<{ isOpen: boolean }>`
   ${(props) => (props.isOpen ? 'display: block' : 'display: none')};
@@ -35,6 +38,7 @@ const ModalWrapper = styled.div<{ isOpen: boolean }>`
     border: 1px solid rgba(148, 148, 148, 0.6);
   }
 `
+
 const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -53,29 +57,6 @@ const Title = styled.div`
   gap: 12px;
 `
 
-const SelectionButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  border-radius: 4px;
-  padding: 5px;
-  transition: background-color 0.2s ease-in-out;
-
-  &:hover {
-    background-color: #e1e1e1;
-  }
-
-  svg {
-    filter: brightness(0) saturate(100%) invert(47%) sepia(0%) saturate(1802%) hue-rotate(152deg) brightness(97%)
-      contrast(69%);
-    width: 20px;
-    height: 20px;
-  }
-`
-
 const Filter = styled.div`
   margin-top: 30px;
   display: flex;
@@ -87,7 +68,12 @@ type ModalProps = {
   isOpen: boolean
   handleClose: () => void
 }
+
 export const ViewModal = ({ isOpen, handleClose }: ModalProps) => {
+  const [selectedSorting, setSelectedSorting] = useState('default')
+  const [selectedOrdering, setSelectedOrdering] = useState('ascending')
+  const [selectedPriority, setSelectedPriority] = useState('default')
+
   if (!isOpen) return null
 
   return createPortal(
@@ -104,12 +90,9 @@ export const ViewModal = ({ isOpen, handleClose }: ModalProps) => {
               <Text size={16}> Sorting</Text>
             </Title>
 
-            <SelectionButton>
-              <Text color="#787878" size={16}>
-                Default
-              </Text>
-              <ExpandIcon />
-            </SelectionButton>
+            <CustomSelect list={SORTING_LIST} setValue={setSelectedSorting} value={selectedSorting}>
+              {selectedSorting}
+            </CustomSelect>
           </Flex>
 
           <Flex>
@@ -118,12 +101,9 @@ export const ViewModal = ({ isOpen, handleClose }: ModalProps) => {
               <Text size={16}> Ordering</Text>
             </Title>
 
-            <SelectionButton>
-              <Text color="#787878" size={16}>
-                Ascending
-              </Text>
-              <ExpandIcon />
-            </SelectionButton>
+            <CustomSelect list={ORDERING_LIST} setValue={setSelectedOrdering} value={selectedOrdering}>
+              {selectedOrdering}
+            </CustomSelect>
           </Flex>
 
           <Filter>
@@ -136,17 +116,14 @@ export const ViewModal = ({ isOpen, handleClose }: ModalProps) => {
                 <FlagIcon />
                 <Text size={16}> Priority</Text>
               </Title>
-              <SelectionButton>
-                <Text color="#787878" size={16}>
-                  Default
-                </Text>
-                <ExpandIcon />
-              </SelectionButton>
+              <CustomSelect list={PRIORITY_LIST} setValue={setSelectedPriority} value={selectedPriority}>
+                {selectedPriority}
+              </CustomSelect>
             </Flex>
           </Filter>
         </ModalContent>
       </ModalWrapper>
     </>,
-    document.getElementById('portal-viewmodal')!
+    document.getElementById('portal-viewmodal') as HTMLElement
   )
 }
