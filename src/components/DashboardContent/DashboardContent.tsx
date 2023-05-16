@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { FacebookShareButton } from 'react-share'
 import styled from 'styled-components'
 
@@ -5,6 +6,7 @@ import { ReactComponent as AddIcon } from '@/assets/icons/add.svg'
 import { ReactComponent as FilterIcon } from '@/assets/icons/filter.svg'
 import ChairBackgroundImage from '@/assets/images/ChairBackgroundImage.webp'
 import { Text } from '@/components/Common'
+import { ViewModal } from '@/components/ViewModal'
 import { DAYS_OF_WEEK, MONTHS } from '@/libs/constant'
 
 const DashboardContentContainer = styled.section<{ isNavOpen: boolean }>`
@@ -98,6 +100,8 @@ type DashboardContentProps = {
 }
 
 export const DashboardContent = ({ isNavOpen }: DashboardContentProps) => {
+  const [isOpen, setIsOpen] = useState(false)
+
   const currentDateFormatted = () => {
     const currentDate = new Date()
 
@@ -121,7 +125,7 @@ export const DashboardContent = ({ isNavOpen }: DashboardContentProps) => {
             </Text>
           </Today>
 
-          <FilterButton>
+          <FilterButton onClick={() => setIsOpen(true)}>
             <FilterIcon />
             <Text color="#949494" size={16}>
               View
@@ -156,6 +160,7 @@ export const DashboardContent = ({ isNavOpen }: DashboardContentProps) => {
           </FacebookShareButton>
         </Center>
       </Content>
+      <ViewModal handleClose={() => setIsOpen(false)} isOpen={isOpen} />
     </DashboardContentContainer>
   )
 }
