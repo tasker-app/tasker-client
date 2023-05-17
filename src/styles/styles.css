@@ -44,3 +44,7 @@
   --color-primary: #f0f0f0;
   --color-secondary: #fff;
 }
+
+.air-datepicker--pointer {
+  display: none;
+}

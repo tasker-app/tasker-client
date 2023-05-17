@@ -11,8 +11,11 @@ import { CustomTooltip, Text } from '@/components/Common'
 import { UserModal } from '@/components/UserModal'
 
 const StyledHeader = styled.header`
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
   background-color: #efefef;
-  height: 80px;
+  height: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -123,7 +126,11 @@ const AvatarModalButton = styled.button`
   background-color: transparent;
 `
 
-export const Header = () => {
+type HeaderProps = {
+  handleNavToggle?: () => void
+}
+
+export const Header = ({ handleNavToggle }: HeaderProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -131,7 +138,7 @@ export const Header = () => {
       <NavigationAndSearch>
         <Navigation>
           <CustomTooltip content="Toggle Menu">
-            <NavigationButton>
+            <NavigationButton onClick={handleNavToggle}>
               <MenuIcon />
             </NavigationButton>
           </CustomTooltip>
