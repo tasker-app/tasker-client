@@ -14,7 +14,7 @@ const SignUpFormContainer = styled.div`
 `
 const FormCover = styled.div`
   text-align: -webkit-center;
-  margin-top: 80px;
+  margin-top: 40px;
   position: absolute;
   top: 50%;
   left: 50%;
