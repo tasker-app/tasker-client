@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 
-import { ReactComponent as CalendarIcon } from '@/assets/icons/calendar.svg'
 import { ReactComponent as ClockIcon } from '@/assets/icons/clock.svg'
 import { ReactComponent as FlagIcon } from '@/assets/icons/flag.svg'
 import { Text } from '@/components/Common'
+import { DatePicker } from '@/components/DatePicker'
 
 const AddTaskContainer = styled.div`
   height: 190px;
@@ -127,10 +127,7 @@ export const AddTask = () => {
           onChange={(e) => setTaskDescription(e.target.value)}
         />
         <TaskProperties>
-          <TaskPropertiesButton>
-            <CalendarIcon />
-            <Text color="#949494">Today</Text>
-          </TaskPropertiesButton>
+          <DatePicker />
           <TaskPropertiesButton>
             <FlagIcon />
             <Text color="#949494">Priority</Text>
