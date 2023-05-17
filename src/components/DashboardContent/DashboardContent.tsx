@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { ReactComponent as AddIcon } from '@/assets/icons/add.svg'
 import { ReactComponent as FilterIcon } from '@/assets/icons/filter.svg'
 import ChairBackgroundImage from '@/assets/images/ChairBackgroundImage.webp'
+import { AddTask } from '@/components/AddTask'
 import { Text } from '@/components/Common'
 import { ViewModal } from '@/components/ViewModal'
 import { DAYS_OF_WEEK, MONTHS } from '@/libs/constant'
@@ -48,29 +49,31 @@ const FilterButton = styled.button`
   }
 `
 
-const AddTask = styled.button`
+const AddTaskButton = styled.button<{ isHidden: boolean }>`
   display: flex;
   align-items: center;
-  margin-top: 40px;
   gap: 8px;
+  margin-top: 40px;
   border: none;
   background-color: transparent;
   border-radius: 4px;
   padding-right: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
+  display: ${(props) => (props.isHidden ? 'none' : 'flex')};
 
   &:hover {
     background-color: #e1e1e1;
   }
 `
 
-const Center = styled.div`
+const Center = styled.div<{ isHidden: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 20px;
+  display: ${(props) => (props.isHidden ? 'none' : 'flex')};
 `
 
 const ImageBackground = styled.div`
@@ -101,6 +104,7 @@ type DashboardContentProps = {
 
 export const DashboardContent = ({ isNavOpen }: DashboardContentProps) => {
   const [isOpen, setIsOpen] = useState(false)
+  const [addNewTask, setAddNewTask] = useState(false)
 
   const currentDateFormatted = () => {
     const currentDate = new Date()
@@ -133,12 +137,14 @@ export const DashboardContent = ({ isNavOpen }: DashboardContentProps) => {
           </FilterButton>
         </Flex>
 
-        <AddTask>
+        <AddTaskButton isHidden={addNewTask} onClick={() => setAddNewTask(true)}>
           <AddIcon />
           <Text size={16}>Add your task</Text>
-        </AddTask>
+        </AddTaskButton>
 
-        <Center>
+        {addNewTask && <AddTask />}
+
+        <Center isHidden={addNewTask}>
           <ImageBackground>
             <img alt="background" loading="lazy" src={ChairBackgroundImage} />
           </ImageBackground>
