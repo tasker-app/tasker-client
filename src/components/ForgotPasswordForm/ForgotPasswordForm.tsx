@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 import { Text } from '@/components/Common/Text'
 import { Input } from '@/components/Input'
-// import { Selection } from '@/components/Selection'
 import { SignInButton } from '@/components/SignInButton'
 
 const SignUpFormContainer = styled.div`
@@ -44,7 +43,6 @@ const SubmitButton = styled.div`
   margin: 20px 0 10px 0;
   text-align: center;
 `
-
 const FormFooter = styled.div`
   text-align: center;
   .hightlight {
