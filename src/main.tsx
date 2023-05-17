@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import Landing from './pages/Landing'
 import SignIn from './pages/SignIn'
+import SignUp from './pages/SignUp'
 import TestNav from './pages/TestNav'
 
 const Guard = () => {
@@ -14,6 +15,8 @@ const Guard = () => {
     <Routes>
       <Route element={<Landing />} path="/" />
       <Route element={<SignIn />} path="/signin" />
+      <Route element={<SignUp />} path="/signup" />
+
       <Route element={<TestNav />} path="/testnav" />
     </Routes>
   )
