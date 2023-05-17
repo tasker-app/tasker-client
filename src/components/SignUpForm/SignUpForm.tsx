@@ -78,7 +78,7 @@ export const SignUpForm = () => {
       return true
     }
   }
-  const validation = (email: string, password: string) => {
+  const validation = () => {
     let hasEmailError = false
     let hasPasswordError = false
     let hasNameError = false
@@ -98,7 +98,7 @@ export const SignUpForm = () => {
       setIsErrorEmail(false)
       hasEmailError = false
     }
-    if (password === '' || password.length < 8) {
+    if (password === '' || password?.length < 8) {
       setIsErrorPass(true)
       hasPasswordError = true
     } else {
@@ -117,7 +117,7 @@ export const SignUpForm = () => {
   }
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (validation(email, password)) {
+    if (validation()) {
       return
     } else {
       console.log('submited', { name, email, password, rePassword })
