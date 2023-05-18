@@ -1,10 +1,10 @@
+import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { ReactComponent as Logo } from '@/assets/icons/logo.svg'
 
 import { Text } from '../Common'
 import { SignInButton } from '../SignInButton'
-
 const StyledAuthHeader = styled.div`
   background-color: transparent;
   height: 50px;
@@ -28,6 +28,9 @@ const Nav = styled.div`
   margin: 15px;
   cursor: pointer;
   white-space: nowrap;
+  a:-webkit-any-link {
+    text-decoration: none;
+  }
 
   span {
     &:hover {
@@ -46,25 +49,43 @@ const StyledLogo = styled(Logo)`
 `
 
 export const AuthHeader = () => {
+  const location = useLocation()
+
   return (
     <StyledAuthHeader>
       <StyledLogo />
       <NavContainer>
-        <Nav>
-          <StyledNavText color="#787878" size={15}>
-            Pricing
-          </StyledNavText>
-        </Nav>
-        <Nav>
-          <StyledNavText color="#787878" size={15}>
-            About Us
-          </StyledNavText>
-        </Nav>
-        <Nav>
-          <SignInButton>
-            <Text size={15}>Sign In</Text>
-          </SignInButton>
-        </Nav>
+        {location.pathname === '/pricing' ? (
+          ''
+        ) : (
+          <Nav>
+            <Link to="/pricing">
+              <StyledNavText color="#787878" size={15}>
+                Pricing
+              </StyledNavText>
+            </Link>
+          </Nav>
+        )}
+        {location.pathname === '/about-us' ? (
+          ''
+        ) : (
+          <Nav>
+            <StyledNavText color="#787878" size={15}>
+              About Us
+            </StyledNavText>
+          </Nav>
+        )}
+        {location.pathname === '/signin' ? (
+          ''
+        ) : (
+          <Nav>
+            <Link to="/signin">
+              <SignInButton>
+                <Text size={15}>Sign In</Text>
+              </SignInButton>
+            </Link>
+          </Nav>
+        )}
       </NavContainer>
     </StyledAuthHeader>
   )

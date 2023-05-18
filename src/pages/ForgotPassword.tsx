@@ -4,7 +4,7 @@ import SignInImage from '@/assets/images/SignInImage.webp'
 import { AuthHeader } from '@/components/AuthHeader'
 import { ForgotPasswordForm } from '@/components/ForgotPasswordForm'
 
-const SignInContainer = styled.div`
+const ForgotPasswordContainer = styled.div`
   width: 100vw;
   height: 100vh;
   .background-image {
@@ -17,11 +17,11 @@ const SignInContainer = styled.div`
 
 const ForgotPassword = () => {
   return (
-    <SignInContainer>
+    <ForgotPasswordContainer>
       <AuthHeader />
       <ForgotPasswordForm />
       <img alt="Sign in Illustration" className="background-image" src={SignInImage} />
-    </SignInContainer>
+    </ForgotPasswordContainer>
   )
 }
 
