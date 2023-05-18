@@ -1,4 +1,5 @@
 import { FormEvent, useState } from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Text } from '@/components/Common/Text'
@@ -16,6 +17,9 @@ const FormCover = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  a:-webkit-any-link {
+    text-decoration: none;
+  }
 `
 
 const Form = styled.form`
@@ -136,9 +140,11 @@ export const SignInForm = () => {
             />
           </InputBlock>
           <ForgotPasswordButton>
-            <Text color="#787878" size={14} type="italic">
-              Forget your password?
-            </Text>
+            <Link to="/forgot-password">
+              <Text color="#787878" size={14} type="italic">
+                Forget your password?
+              </Text>
+            </Link>
           </ForgotPasswordButton>
           <SubmitButton>
             <SignInButton type="submit">
@@ -147,7 +153,12 @@ export const SignInForm = () => {
           </SubmitButton>
           <FormFooter>
             <Text color="#787878" size={13}>
-              Wanna create a new account?<span className="hightlight"> Sign up here</span>
+              Wanna create a new account?
+              <Link to="/signup">
+                <span className="hightlight" style={{ color: '#787878' }}>
+                  {' ' + 'Sign up here'}
+                </span>
+              </Link>
             </Text>
           </FormFooter>
         </Form>
