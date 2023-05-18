@@ -2,9 +2,15 @@ import { useState } from 'react'
 import styled from 'styled-components'
 
 import { ReactComponent as ClockIcon } from '@/assets/icons/clock.svg'
-import { ReactComponent as FlagIcon } from '@/assets/icons/flag.svg'
+import { ReactComponent as DefaultFlag } from '@/assets/icons/flag-default.svg'
+import { ReactComponent as GreenFlag } from '@/assets/icons/flag-green.svg'
+import { ReactComponent as RedFlag } from '@/assets/icons/flag-red.svg'
+import { ReactComponent as YellowFlag } from '@/assets/icons/flag-yellow.svg'
 import { Text } from '@/components/Common'
 import { DatePicker } from '@/components/DatePicker'
+import { PRIORITY_LIST } from '@/libs/constant'
+
+import { SelectPriority } from './SelectPriority'
 
 const AddTaskContainer = styled.div`
   height: 190px;
@@ -55,7 +61,7 @@ const TaskProperties = styled.div`
   gap: 16px;
 `
 
-const TaskPropertiesButton = styled.button`
+const TaskPropertiesButton = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
@@ -112,9 +118,17 @@ const Button = styled.button`
   }
 `
 
+const MAPPING_FLAG_ICON = {
+  default: <DefaultFlag />,
+  low: <GreenFlag />,
+  medium: <YellowFlag />,
+  high: <RedFlag />
+}
+
 export const AddTask = () => {
   const [taskName, setTaskName] = useState('')
   const [taskDescription, setTaskDescription] = useState('')
+  const [priority, setPriority] = useState('default')
 
   return (
     <AddTaskContainer>
@@ -128,10 +142,12 @@ export const AddTask = () => {
         />
         <TaskProperties>
           <DatePicker />
-          <TaskPropertiesButton>
-            <FlagIcon />
-            <Text color="#949494">Priority</Text>
-          </TaskPropertiesButton>
+          <SelectPriority list={PRIORITY_LIST} setValue={setPriority} value={priority}>
+            <TaskPropertiesButton>
+              {MAPPING_FLAG_ICON[priority as keyof typeof MAPPING_FLAG_ICON]}
+              <Text color="#949494">{PRIORITY_LIST.find((item) => item.value === priority)?.label}</Text>
+            </TaskPropertiesButton>
+          </SelectPriority>
           <TaskPropertiesButton>
             <ClockIcon />
             <Text color="#949494">Reminder</Text>
