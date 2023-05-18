@@ -143,7 +143,7 @@ export const PricingCard = () => {
             <ButtonBlock>
               {isBuyFree ? (
                 <SignInButton disabled={true} height="35px" width="201.36px" onClick={() => setIsBuyFree(true)}>
-                  You’re currently here
+                  {isBuyPremium ? 'Be premium' : 'You’re currently here'}
                 </SignInButton>
               ) : (
                 <SignInButton disabled={isBuyPremium} height="35px" width="201.36px" onClick={() => setIsBuyFree(true)}>
