@@ -96,7 +96,7 @@ export const PricingCard = () => {
     <PricingCardContainer>
       <CardCover>
         <Title>
-          <Text size={36} type="bold">
+          <Text size={32} type="bold">
             What special deal we offer for you
           </Text>
         </Title>
