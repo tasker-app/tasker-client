@@ -105,7 +105,7 @@ export const PricingCard = () => {
         </Text>
 
         <CardContainer>
-          <Card isBuy={isBuyFree}>
+          <Card isBuy={isBuyFree || isBuyPremium}>
             <div style={{ width: 'inherit' }}>
               <CardHeader>
                 <HeaderContent>
@@ -141,9 +141,15 @@ export const PricingCard = () => {
               </CardContent>
             </div>
             <ButtonBlock>
-              <SignInButton disabled={isBuyFree} height="35px" width="201.36px" onClick={() => setIsBuyFree(true)}>
-                Be premium
-              </SignInButton>
+              {isBuyFree ? (
+                <SignInButton disabled={true} height="35px" width="201.36px" onClick={() => setIsBuyFree(true)}>
+                  You’re currently here
+                </SignInButton>
+              ) : (
+                <SignInButton disabled={isBuyPremium} height="35px" width="201.36px" onClick={() => setIsBuyFree(true)}>
+                  Be premium
+                </SignInButton>
+              )}
             </ButtonBlock>
           </Card>
           <Card isBuy={isBuyPremium}>
@@ -183,14 +189,15 @@ export const PricingCard = () => {
               </CardContent>
             </div>
             <ButtonBlock>
-              <SignInButton
-                disabled={isBuyPremium}
-                height="35px"
-                width="201.36px"
-                onClick={() => setIsBuyPremium(true)}
-              >
-                Be premium
-              </SignInButton>
+              {isBuyPremium ? (
+                <SignInButton disabled={true} height="35px" width="201.36px" onClick={() => setIsBuyPremium(true)}>
+                  You’re currently here
+                </SignInButton>
+              ) : (
+                <SignInButton disabled={false} height="35px" width="201.36px" onClick={() => setIsBuyPremium(true)}>
+                  Be premium
+                </SignInButton>
+              )}
             </ButtonBlock>
           </Card>
         </CardContainer>
