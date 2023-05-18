@@ -7,6 +7,7 @@ import { ReactComponent as FilterIcon } from '@/assets/icons/filter.svg'
 import ChairBackgroundImage from '@/assets/images/ChairBackgroundImage.webp'
 import { AddTask } from '@/components/AddTask'
 import { Text } from '@/components/Common'
+import { TaskPreview } from '@/components/TaskPreview'
 import { ViewModal } from '@/components/ViewModal'
 import { DAYS_OF_WEEK, MONTHS } from '@/libs/constant'
 
@@ -53,7 +54,7 @@ const AddTaskButton = styled.button<{ isHidden: boolean }>`
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 40px;
+  margin-top: 24px;
   border: none;
   background-color: transparent;
   border-radius: 4px;
@@ -137,13 +138,14 @@ export const DashboardContent = ({ isNavOpen }: DashboardContentProps) => {
           </FilterButton>
         </Flex>
 
+        <TaskPreview description="Cardio and weight" dueDate={1685059199000} name="Doing exercise" priority="high" />
+
         <AddTaskButton isHidden={addNewTask} onClick={() => setAddNewTask(true)}>
           <AddIcon />
           <Text size={16}>Add your task</Text>
         </AddTaskButton>
 
         {addNewTask && <AddTask />}
-
         <Center isHidden={addNewTask}>
           <ImageBackground>
             <img alt="background" loading="lazy" src={ChairBackgroundImage} />
