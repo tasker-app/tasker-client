@@ -74,7 +74,6 @@ const DiamondStyled = styled(Diamond)`
 const ButtonBlock = styled.div``
 
 export const PricingCard = () => {
-  const [isBuyFree, setIsBuyFree] = useState(false)
   const [isBuyPremium, setIsBuyPremium] = useState(false)
   const freePackage = {
     price: 0,
@@ -105,7 +104,7 @@ export const PricingCard = () => {
         </Text>
 
         <CardContainer>
-          <Card isBuy={isBuyFree || isBuyPremium}>
+          <Card isBuy={true}>
             <div style={{ width: 'inherit' }}>
               <CardHeader>
                 <HeaderContent>
@@ -141,15 +140,9 @@ export const PricingCard = () => {
               </CardContent>
             </div>
             <ButtonBlock>
-              {isBuyFree ? (
-                <SignInButton disabled={true} height="35px" width="201.36px" onClick={() => setIsBuyFree(true)}>
-                  {isBuyPremium ? 'Be premium' : 'You’re currently here'}
-                </SignInButton>
-              ) : (
-                <SignInButton disabled={isBuyPremium} height="35px" width="201.36px" onClick={() => setIsBuyFree(true)}>
-                  Be premium
-                </SignInButton>
-              )}
+              <SignInButton disabled={true} height="35px" width="201.36px">
+                {isBuyPremium ? 'You’r premium' : 'You’re currently here'}
+              </SignInButton>
             </ButtonBlock>
           </Card>
           <Card isBuy={isBuyPremium}>
@@ -191,7 +184,7 @@ export const PricingCard = () => {
             <ButtonBlock>
               {isBuyPremium ? (
                 <SignInButton disabled={true} height="35px" width="201.36px" onClick={() => setIsBuyPremium(true)}>
-                  You’re currently here
+                  You’r premium
                 </SignInButton>
               ) : (
                 <SignInButton disabled={false} height="35px" width="201.36px" onClick={() => setIsBuyPremium(true)}>
