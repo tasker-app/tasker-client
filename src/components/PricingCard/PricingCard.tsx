@@ -141,7 +141,7 @@ export const PricingCard = () => {
               </CardContent>
             </div>
             <ButtonBlock>
-              <SignInButton height="35px" width="201.36px" onClick={() => setIsBuyFree(true)}>
+              <SignInButton disabled={isBuyFree} height="35px" width="201.36px" onClick={() => setIsBuyFree(true)}>
                 Be premium
               </SignInButton>
             </ButtonBlock>
@@ -183,7 +183,12 @@ export const PricingCard = () => {
               </CardContent>
             </div>
             <ButtonBlock>
-              <SignInButton height="35px" width="201.36px" onClick={() => setIsBuyPremium(true)}>
+              <SignInButton
+                disabled={isBuyPremium}
+                height="35px"
+                width="201.36px"
+                onClick={() => setIsBuyPremium(true)}
+              >
                 Be premium
               </SignInButton>
             </ButtonBlock>
