@@ -1,15 +1,15 @@
 import { useState } from 'react'
-import { FacebookShareButton } from 'react-share'
 import styled from 'styled-components'
 
 import { ReactComponent as AddIcon } from '@/assets/icons/add.svg'
 import { ReactComponent as FilterIcon } from '@/assets/icons/filter.svg'
-import ChairBackgroundImage from '@/assets/images/ChairBackgroundImage.webp'
 import { AddTask } from '@/components/AddTask'
 import { Text } from '@/components/Common'
 import { TaskPreview } from '@/components/TaskPreview'
 import { ViewModal } from '@/components/ViewModal'
 import { DAYS_OF_WEEK, MONTHS } from '@/libs/constant'
+
+import { DashboardStatus } from './DashboardStatus'
 
 const DashboardContentContainer = styled.section<{ isNavOpen: boolean }>`
   width: ${(props) => (props.isNavOpen ? 'calc(100vw - 120px - 300px)' : 'calc(100vw - 80px)')};
@@ -68,44 +68,28 @@ const AddTaskButton = styled.button<{ isHidden: boolean }>`
   }
 `
 
-const Center = styled.div<{ isHidden: boolean }>`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  display: ${(props) => (props.isHidden ? 'none' : 'flex')};
-`
-
-const ImageBackground = styled.div`
-  width: 400px;
-  height: 270px;
-  overflow: hidden;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-`
-
-const ShareButton = styled.div`
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`
-
 type DashboardContentProps = {
   isNavOpen: boolean
+}
+
+type TaskProps = {
+  id: number
+  name: string
+  description: string
+  dueDate: number
+  priority: 'low' | 'medium' | 'high' | 'default'
 }
 
 export const DashboardContent = ({ isNavOpen }: DashboardContentProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [addNewTask, setAddNewTask] = useState(false)
+  const [isStatusHidden, setIsStatusHidden] = useState(false)
+  const [tasks, setTasks] = useState<TaskProps[]>([])
+
+  const handleAddTask = () => {
+    setIsStatusHidden(true)
+    setAddNewTask(true)
+  }
 
   const currentDateFormatted = () => {
     const currentDate = new Date()
@@ -138,35 +122,31 @@ export const DashboardContent = ({ isNavOpen }: DashboardContentProps) => {
           </FilterButton>
         </Flex>
 
-        <TaskPreview description="Cardio and weight" dueDate={1685059199000} name="Doing exercise" priority="high" />
+        {tasks.map((task) => (
+          <div key={task.id}>
+            <TaskPreview
+              description={task.description}
+              dueDate={task.dueDate}
+              name={task.name}
+              priority={task.priority}
+            />
+          </div>
+        ))}
 
-        <AddTaskButton isHidden={addNewTask} onClick={() => setAddNewTask(true)}>
+        <AddTaskButton isHidden={addNewTask} onClick={handleAddTask}>
           <AddIcon />
           <Text size={16}>Add your task</Text>
         </AddTaskButton>
 
-        {addNewTask && <AddTask />}
-        <Center isHidden={addNewTask}>
-          <ImageBackground>
-            <img alt="background" loading="lazy" src={ChairBackgroundImage} />
-          </ImageBackground>
-
-          <Text size={20} type="bold">
-            Enjoy your day, Toan.
-          </Text>
-
-          <Text color="#949494" size={16}>
-            Today you completed 20 tasks. Share your awesomeness to friend
-          </Text>
-
-          <FacebookShareButton hashtag={'#Xem task tui ne'} url={'https://www.youtube.com/watch?v=niPkap1ozUA'}>
-            <ShareButton>
-              <Text color="#69B578" size={16}>
-                Share #TaskerComplete
-              </Text>
-            </ShareButton>
-          </FacebookShareButton>
-        </Center>
+        {addNewTask && (
+          <AddTask
+            setAddNewTask={setAddNewTask}
+            setIsStatusHidden={setIsStatusHidden}
+            setTasks={setTasks}
+            tasks={tasks}
+          />
+        )}
+        {tasks.length === 0 && <DashboardStatus isStatusHidden={isStatusHidden} />}
       </Content>
       <ViewModal handleClose={() => setIsOpen(false)} isOpen={isOpen} />
     </DashboardContentContainer>

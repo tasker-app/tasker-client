@@ -45,13 +45,23 @@ const Input = styled.input`
 `
 //#endregion
 
-export const DatePicker = () => {
+type DatePickerProps = {
+  setDueDate: (date: number) => void
+}
+
+export const DatePicker = ({ setDueDate }: DatePickerProps) => {
   const inputRef = useRef<HTMLInputElement>(null)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const datepickerRef = useRef<any>(null)
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedDate, setSelectedDate] = useState<number>(new window.Date().getTime())
+
+  useEffect(() => {
+    if (selectedDate) {
+      setDueDate(selectedDate)
+    }
+  }, [selectedDate])
 
   useEffect(() => {
     if (inputRef.current) {
