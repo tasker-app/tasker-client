@@ -87,7 +87,14 @@ export const TaskPreview = ({ name, description, priority, dueDate }: TaskPrevie
           </Priority>
         </ContentContainer>
       </TaskPreviewContainer>
-      <TaskDetailsModal handleClose={() => setIsOpenModal(false)} isOpen={isOpenModal} />
+      <TaskDetailsModal
+        description={description}
+        dueDate={dueDate}
+        handleClose={() => setIsOpenModal(false)}
+        isOpen={isOpenModal}
+        name={name}
+        priority={priority}
+      />
     </>
   )
 }
