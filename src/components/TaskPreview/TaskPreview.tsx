@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import styled from 'styled-components'
 
 import { ReactComponent as DefaultFlag } from '@/assets/icons/flag-default.svg'
@@ -7,6 +8,7 @@ import { ReactComponent as YellowFlag } from '@/assets/icons/flag-yellow.svg'
 import { Text } from '@/components/Common'
 import { calculateRemainingDays } from '@/utils'
 
+import { TaskDetailsModal } from '../TaskDetailsModal'
 import { Checkbox } from './Checkbox'
 
 const TaskPreviewContainer = styled.div`
@@ -57,30 +59,35 @@ const MAPPING_FLAG_ICON = {
 }
 
 export const TaskPreview = ({ name, description, priority, dueDate }: TaskPreviewProps) => {
+  const [isOpenModal, setIsOpenModal] = useState(false)
+
   return (
-    <TaskPreviewContainer>
-      <CheckContainer>
-        <Checkbox />
-      </CheckContainer>
-      <ContentContainer>
-        <Text color="#0F0F0F" size={16} type="bold">
-          {name}
-        </Text>
-        <Text color="#787878" size={14} type="regular">
-          {description}
-        </Text>
-      </ContentContainer>
-      <ContentContainer>
-        <Text color="#949494" size={14} type="regular">
-          {calculateRemainingDays(dueDate)}
-        </Text>
-        <Priority>
-          {MAPPING_FLAG_ICON[priority as keyof typeof MAPPING_FLAG_ICON]}
-          <Text color="#949494" size={14} type="regular">
-            {priority}
+    <>
+      <TaskPreviewContainer onClick={() => setIsOpenModal(true)}>
+        <CheckContainer>
+          <Checkbox />
+        </CheckContainer>
+        <ContentContainer>
+          <Text color="#0F0F0F" size={16} type="bold">
+            {name}
           </Text>
-        </Priority>
-      </ContentContainer>
-    </TaskPreviewContainer>
+          <Text color="#787878" size={14} type="regular">
+            {description}
+          </Text>
+        </ContentContainer>
+        <ContentContainer>
+          <Text color="#949494" size={14} type="regular">
+            {calculateRemainingDays(dueDate)}
+          </Text>
+          <Priority>
+            {MAPPING_FLAG_ICON[priority as keyof typeof MAPPING_FLAG_ICON]}
+            <Text color="#949494" size={14} type="regular">
+              {priority}
+            </Text>
+          </Priority>
+        </ContentContainer>
+      </TaskPreviewContainer>
+      <TaskDetailsModal handleClose={() => setIsOpenModal(false)} isOpen={isOpenModal} />
+    </>
   )
 }

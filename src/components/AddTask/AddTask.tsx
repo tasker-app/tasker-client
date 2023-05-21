@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { ReactComponent as ClockIcon } from '@/assets/icons/clock.svg'
@@ -10,9 +10,11 @@ import { Text } from '@/components/Common'
 import { DatePicker } from '@/components/DatePicker'
 import { PRIORITY_LIST } from '@/libs/constant'
 import { Task as TaskType } from '@/models/task'
+import { moveToEndOfDate } from '@/utils'
 
 import { SelectPriority } from './SelectPriority'
 
+// #region Styles
 const AddTaskContainer = styled.div<{ isCancelAddTask: boolean }>`
   height: 190px;
   border: 1px solid rgba(148, 148, 148, 0.8);
@@ -121,6 +123,7 @@ const Button = styled.button<{ isTaskNameEmpty?: boolean }>`
     }
   }
 `
+// #endregion
 
 const MAPPING_FLAG_ICON = {
   default: <DefaultFlag />,
@@ -136,32 +139,55 @@ type AddTaskProps = {
   tasks: TaskType[]
 }
 
+type NewTask = {
+  name: string
+  description: string
+  priority: 'default' | 'low' | 'medium' | 'high'
+  dueDate: number
+}
+
 export const AddTask = ({ setAddNewTask, setTasks, tasks, setIsStatusHidden }: AddTaskProps) => {
-  const [taskName, setTaskName] = useState('')
-  const [taskDescription, setTaskDescription] = useState('')
-  const [priority, setPriority] = useState<'default' | 'low' | 'medium' | 'high'>('default')
-  const [dueDate, setDueDate] = useState(0)
   const [isCancelAddTask, setIsCancelAddTask] = useState(false)
+  const [task, setTask] = useState<NewTask>({
+    name: '',
+    description: '',
+    priority: 'default',
+    dueDate: new window.Date().getTime()
+  })
+
+  const inputNameRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    inputNameRef.current?.focus()
+
+    return () => {
+      setIsCancelAddTask(false)
+    }
+  }, [tasks])
 
   const handleAddTask = () => {
     if (isTaskNameEmpty) return null
 
     const newTask = {
       id: tasks.length + 1,
-      name: taskName,
-      description: taskDescription,
-      priority: priority,
-      dueDate: dueDate
+      name: task.name,
+      description: task.description,
+      priority: task.priority,
+      dueDate: moveToEndOfDate(task.dueDate)
     }
 
     const newTasks = [...tasks, newTask]
 
     setTasks(newTasks)
-    setIsCancelAddTask(true)
-    setAddNewTask(false)
+    setTask({
+      name: '',
+      description: '',
+      priority: 'default',
+      dueDate: new Date().getTime()
+    })
   }
 
-  const isTaskNameEmpty = taskName.trim() === ''
+  const isTaskNameEmpty = task.name.trim() === ''
 
   const handleCancelAddTask = () => {
     setIsCancelAddTask(true)
@@ -172,19 +198,32 @@ export const AddTask = ({ setAddNewTask, setTasks, tasks, setIsStatusHidden }: A
   return (
     <AddTaskContainer isCancelAddTask={isCancelAddTask}>
       <AddTaskContent>
-        <TaskName placeholder="Task name" type="text" value={taskName} onChange={(e) => setTaskName(e.target.value)} />
+        <TaskName
+          ref={inputNameRef}
+          placeholder="Task name"
+          type="text"
+          value={task.name}
+          onChange={(e) => setTask((prevTask) => ({ ...prevTask, name: e.target.value }))}
+        />
         <TaskDescription
           placeholder="Description"
           type="text"
-          value={taskDescription}
-          onChange={(e) => setTaskDescription(e.target.value)}
+          value={task.description}
+          onChange={(e) => setTask((prevTask) => ({ ...prevTask, description: e.target.value }))}
         />
         <TaskProperties>
-          <DatePicker setDueDate={setDueDate} />
-          <SelectPriority list={PRIORITY_LIST} setValue={setPriority} value={priority}>
+          <DatePicker
+            dueDate={task.dueDate}
+            setDueDate={(dueDate) => setTask((prevTask) => ({ ...prevTask, dueDate }))}
+          />
+          <SelectPriority
+            list={PRIORITY_LIST}
+            setValue={(priority) => setTask((prevTask) => ({ ...prevTask, priority }))}
+            value={task.priority}
+          >
             <TaskPropertiesButton>
-              {MAPPING_FLAG_ICON[priority as keyof typeof MAPPING_FLAG_ICON]}
-              <Text color="#949494">{PRIORITY_LIST.find((item) => item.value === priority)?.label}</Text>
+              {MAPPING_FLAG_ICON[task.priority as keyof typeof MAPPING_FLAG_ICON]}
+              <Text color="#949494">{PRIORITY_LIST.find((item) => item.value === task.priority)?.label}</Text>
             </TaskPropertiesButton>
           </SelectPriority>
           <TaskPropertiesButton>
