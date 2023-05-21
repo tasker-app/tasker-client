@@ -8,6 +8,7 @@ import { Text } from '@/components/Common'
 import { TaskPreview } from '@/components/TaskPreview'
 import { ViewModal } from '@/components/ViewModal'
 import { DAYS_OF_WEEK, MONTHS } from '@/libs/constant'
+import { Task as TaskType } from '@/models/task'
 
 import { DashboardStatus } from './DashboardStatus'
 
@@ -72,19 +73,11 @@ type DashboardContentProps = {
   isNavOpen: boolean
 }
 
-type TaskProps = {
-  id: number
-  name: string
-  description: string
-  dueDate: number
-  priority: 'low' | 'medium' | 'high' | 'default'
-}
-
 export const DashboardContent = ({ isNavOpen }: DashboardContentProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [addNewTask, setAddNewTask] = useState(false)
   const [isStatusHidden, setIsStatusHidden] = useState(false)
-  const [tasks, setTasks] = useState<TaskProps[]>([])
+  const [tasks, setTasks] = useState<TaskType[]>([])
 
   const handleAddTask = () => {
     setIsStatusHidden(true)

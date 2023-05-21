@@ -9,6 +9,7 @@ import { ReactComponent as YellowFlag } from '@/assets/icons/flag-yellow.svg'
 import { Text } from '@/components/Common'
 import { DatePicker } from '@/components/DatePicker'
 import { PRIORITY_LIST } from '@/libs/constant'
+import { Task as TaskType } from '@/models/task'
 
 import { SelectPriority } from './SelectPriority'
 
@@ -133,15 +134,22 @@ const MAPPING_FLAG_ICON = {
 type AddTaskProps = {
   setAddNewTask: (isAddNewTask: boolean) => void
   setIsStatusHidden: (isStatusHidden: boolean) => void
-  setTasks: (tasks: any) => void
-  tasks: any
+  setTasks: (tasks: TaskType[]) => void
+  tasks: TaskType[]
+}
+
+type NewTask = {
+  name: string
+  description: string
+  priority: 'default' | 'low' | 'medium' | 'high'
+  dueDate: number
 }
 
 export const AddTask = ({ setAddNewTask, setTasks, tasks, setIsStatusHidden }: AddTaskProps) => {
   const [isCancelAddTask, setIsCancelAddTask] = useState(false)
-  const [task, setTask] = useState({
-    taskName: '',
-    taskDescription: '',
+  const [task, setTask] = useState<NewTask>({
+    name: '',
+    description: '',
     priority: 'default',
     dueDate: 0
   })
@@ -161,22 +169,24 @@ export const AddTask = ({ setAddNewTask, setTasks, tasks, setIsStatusHidden }: A
 
     const newTask = {
       id: tasks.length + 1,
-      name: task.taskName,
-      description: task.taskDescription,
+      name: task.name,
+      description: task.description,
       priority: task.priority,
       dueDate: task.dueDate
     }
 
-    setTasks((prevTasks: any) => [...prevTasks, newTask])
+    const newTasks = [...tasks, newTask]
+
+    setTasks(newTasks)
     setTask({
-      taskName: '',
-      taskDescription: '',
+      name: '',
+      description: '',
       priority: 'default',
       dueDate: new Date().getTime()
     })
   }
 
-  const isTaskNameEmpty = task.taskName.trim() === ''
+  const isTaskNameEmpty = task.name.trim() === ''
 
   const handleCancelAddTask = () => {
     setIsCancelAddTask(true)
@@ -191,14 +201,14 @@ export const AddTask = ({ setAddNewTask, setTasks, tasks, setIsStatusHidden }: A
           ref={inputNameRef}
           placeholder="Task name"
           type="text"
-          value={task.taskName}
-          onChange={(e) => setTask((prevTask) => ({ ...prevTask, taskName: e.target.value }))}
+          value={task.name}
+          onChange={(e) => setTask((prevTask) => ({ ...prevTask, name: e.target.value }))}
         />
         <TaskDescription
           placeholder="Description"
           type="text"
-          value={task.taskDescription}
-          onChange={(e) => setTask((prevTask) => ({ ...prevTask, taskDescription: e.target.value }))}
+          value={task.description}
+          onChange={(e) => setTask((prevTask) => ({ ...prevTask, description: e.target.value }))}
         />
         <TaskProperties>
           <DatePicker setDueDate={(dueDate) => setTask((prevTask) => ({ ...prevTask, dueDate }))} />
