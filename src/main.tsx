@@ -7,7 +7,6 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import Dashboard from './pages/Dashboard'
-import DatePage from './pages/DatePage'
 import ForgotPassword from './pages/ForgotPassword'
 import Pricing from './pages/Pricing'
 import SignIn from './pages/SignIn'
@@ -21,7 +20,6 @@ const Guard = () => {
       <Route element={<SignUp />} path="/signup" />
       <Route element={<Pricing />} path="/pricing" />
       <Route element={<ForgotPassword />} path="/forgot-password" />
-      <Route element={<DatePage />} path="/date" />
     </Routes>
   )
 }

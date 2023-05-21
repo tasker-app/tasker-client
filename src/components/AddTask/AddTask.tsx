@@ -9,6 +9,7 @@ import { ReactComponent as YellowFlag } from '@/assets/icons/flag-yellow.svg'
 import { Text } from '@/components/Common'
 import { DatePicker } from '@/components/DatePicker'
 import { PRIORITY_LIST } from '@/libs/constant'
+import { Task as TaskType } from '@/models/task'
 
 import { SelectPriority } from './SelectPriority'
 
@@ -131,14 +132,14 @@ const MAPPING_FLAG_ICON = {
 type AddTaskProps = {
   setAddNewTask: (isAddNewTask: boolean) => void
   setIsStatusHidden: (isStatusHidden: boolean) => void
-  setTasks: (tasks: any) => void
-  tasks: any
+  setTasks: (tasks: TaskType[]) => void
+  tasks: TaskType[]
 }
 
 export const AddTask = ({ setAddNewTask, setTasks, tasks, setIsStatusHidden }: AddTaskProps) => {
   const [taskName, setTaskName] = useState('')
   const [taskDescription, setTaskDescription] = useState('')
-  const [priority, setPriority] = useState('default')
+  const [priority, setPriority] = useState<'default' | 'low' | 'medium' | 'high'>('default')
   const [dueDate, setDueDate] = useState(0)
   const [isCancelAddTask, setIsCancelAddTask] = useState(false)
 
@@ -153,7 +154,9 @@ export const AddTask = ({ setAddNewTask, setTasks, tasks, setIsStatusHidden }: A
       dueDate: dueDate
     }
 
-    setTasks((prevTasks: any) => [...prevTasks, newTask])
+    const newTasks = [...tasks, newTask]
+
+    setTasks(newTasks)
     setIsCancelAddTask(true)
     setAddNewTask(false)
   }
