@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { ReactComponent as ClockIcon } from '@/assets/icons/clock.svg'
@@ -12,6 +12,7 @@ import { PRIORITY_LIST } from '@/libs/constant'
 
 import { SelectPriority } from './SelectPriority'
 
+// #region Styles
 const AddTaskContainer = styled.div<{ isCancelAddTask: boolean }>`
   height: 190px;
   border: 1px solid rgba(148, 148, 148, 0.8);
@@ -120,6 +121,7 @@ const Button = styled.button<{ isTaskNameEmpty?: boolean }>`
     }
   }
 `
+// #endregion
 
 const MAPPING_FLAG_ICON = {
   default: <DefaultFlag />,
@@ -136,29 +138,45 @@ type AddTaskProps = {
 }
 
 export const AddTask = ({ setAddNewTask, setTasks, tasks, setIsStatusHidden }: AddTaskProps) => {
-  const [taskName, setTaskName] = useState('')
-  const [taskDescription, setTaskDescription] = useState('')
-  const [priority, setPriority] = useState('default')
-  const [dueDate, setDueDate] = useState(0)
   const [isCancelAddTask, setIsCancelAddTask] = useState(false)
+  const [task, setTask] = useState({
+    taskName: '',
+    taskDescription: '',
+    priority: 'default',
+    dueDate: 0
+  })
+
+  const inputNameRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    inputNameRef.current?.focus()
+
+    return () => {
+      setIsCancelAddTask(false)
+    }
+  }, [tasks])
 
   const handleAddTask = () => {
     if (isTaskNameEmpty) return null
 
     const newTask = {
       id: tasks.length + 1,
-      name: taskName,
-      description: taskDescription,
-      priority: priority,
-      dueDate: dueDate
+      name: task.taskName,
+      description: task.taskDescription,
+      priority: task.priority,
+      dueDate: task.dueDate
     }
 
     setTasks((prevTasks: any) => [...prevTasks, newTask])
-    setIsCancelAddTask(true)
-    setAddNewTask(false)
+    setTask({
+      taskName: '',
+      taskDescription: '',
+      priority: 'default',
+      dueDate: new Date().getTime()
+    })
   }
 
-  const isTaskNameEmpty = taskName.trim() === ''
+  const isTaskNameEmpty = task.taskName.trim() === ''
 
   const handleCancelAddTask = () => {
     setIsCancelAddTask(true)
@@ -169,19 +187,29 @@ export const AddTask = ({ setAddNewTask, setTasks, tasks, setIsStatusHidden }: A
   return (
     <AddTaskContainer isCancelAddTask={isCancelAddTask}>
       <AddTaskContent>
-        <TaskName placeholder="Task name" type="text" value={taskName} onChange={(e) => setTaskName(e.target.value)} />
+        <TaskName
+          ref={inputNameRef}
+          placeholder="Task name"
+          type="text"
+          value={task.taskName}
+          onChange={(e) => setTask((prevTask) => ({ ...prevTask, taskName: e.target.value }))}
+        />
         <TaskDescription
           placeholder="Description"
           type="text"
-          value={taskDescription}
-          onChange={(e) => setTaskDescription(e.target.value)}
+          value={task.taskDescription}
+          onChange={(e) => setTask((prevTask) => ({ ...prevTask, taskDescription: e.target.value }))}
         />
         <TaskProperties>
-          <DatePicker setDueDate={setDueDate} />
-          <SelectPriority list={PRIORITY_LIST} setValue={setPriority} value={priority}>
+          <DatePicker setDueDate={(dueDate) => setTask((prevTask) => ({ ...prevTask, dueDate }))} />
+          <SelectPriority
+            list={PRIORITY_LIST}
+            setValue={(priority) => setTask((prevTask) => ({ ...prevTask, priority }))}
+            value={task.priority}
+          >
             <TaskPropertiesButton>
-              {MAPPING_FLAG_ICON[priority as keyof typeof MAPPING_FLAG_ICON]}
-              <Text color="#949494">{PRIORITY_LIST.find((item) => item.value === priority)?.label}</Text>
+              {MAPPING_FLAG_ICON[task.priority as keyof typeof MAPPING_FLAG_ICON]}
+              <Text color="#949494">{PRIORITY_LIST.find((item) => item.value === task.priority)?.label}</Text>
             </TaskPropertiesButton>
           </SelectPriority>
           <TaskPropertiesButton>
