@@ -237,6 +237,7 @@ export const TaskDetailsModal = ({
                 Due Date
               </Text>
               <DatePicker
+                dueDate={dueDate}
                 maxWidth="104px"
                 setDueDate={(dueDate) => setTask((prevTask) => ({ ...prevTask, dueDate }))}
               />

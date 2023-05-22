@@ -10,6 +10,7 @@ import { Text } from '@/components/Common'
 import { DatePicker } from '@/components/DatePicker'
 import { PRIORITY_LIST } from '@/libs/constant'
 import { Task as TaskType } from '@/models/task'
+import { moveToEndOfDate } from '@/utils'
 
 import { SelectPriority } from './SelectPriority'
 
@@ -151,7 +152,7 @@ export const AddTask = ({ setAddNewTask, setTasks, tasks, setIsStatusHidden }: A
     name: '',
     description: '',
     priority: 'default',
-    dueDate: 0
+    dueDate: new window.Date().getTime()
   })
 
   const inputNameRef = useRef<HTMLInputElement>(null)
@@ -172,7 +173,7 @@ export const AddTask = ({ setAddNewTask, setTasks, tasks, setIsStatusHidden }: A
       name: task.name,
       description: task.description,
       priority: task.priority,
-      dueDate: task.dueDate
+      dueDate: moveToEndOfDate(task.dueDate)
     }
 
     const newTasks = [...tasks, newTask]
@@ -218,7 +219,10 @@ export const AddTask = ({ setAddNewTask, setTasks, tasks, setIsStatusHidden }: A
           onChange={(e) => setTask((prevTask) => ({ ...prevTask, description: e.target.value }))}
         />
         <TaskProperties>
-          <DatePicker setDueDate={(dueDate) => setTask((prevTask) => ({ ...prevTask, dueDate }))} />
+          <DatePicker
+            dueDate={task.dueDate}
+            setDueDate={(dueDate) => setTask((prevTask) => ({ ...prevTask, dueDate }))}
+          />
           <SelectPriority
             list={PRIORITY_LIST}
             setValue={(priority) => setTask((prevTask) => ({ ...prevTask, priority }))}
