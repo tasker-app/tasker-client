@@ -9,13 +9,15 @@ import { ReactComponent as GreenFlag } from '@/assets/icons/flag-green.svg'
 import { ReactComponent as RedFlag } from '@/assets/icons/flag-red.svg'
 import { ReactComponent as YellowFlag } from '@/assets/icons/flag-yellow.svg'
 import { ReactComponent as LockIcon } from '@/assets/icons/lock.svg'
-import { ReactComponent as MeatballMenuIcon } from '@/assets/icons/meatball-menu.svg'
+import { ReactComponent as TrashIcon } from '@/assets/icons/trash.svg'
 import { ReactComponent as UpIcon } from '@/assets/icons/up.svg'
 import { SelectPriority } from '@/components/AddTask'
-import { Text } from '@/components/Common'
+import { CustomTooltip, Text } from '@/components/Common'
 import { DatePicker } from '@/components/DatePicker'
 import { Checkbox } from '@/components/TaskPreview'
 import { PRIORITY_LIST } from '@/libs/constant'
+
+import { DeleteTask } from './DeleteTask'
 
 //#region styles
 const ModalOverlay = styled.div<{ isOpen: boolean }>`
@@ -167,48 +169,79 @@ const MAPPING_FLAG_ICON = {
   high: <RedFlag />
 }
 
-type TaskDetailsModalProps = {
-  isOpen: boolean
-  handleClose: () => void
+type TaskProps = {
   name: string
   description: string
   dueDate: number
   priority: 'low' | 'medium' | 'high' | 'default'
 }
+
+type TaskDetailsModalProps = {
+  isOpen: boolean
+  handleClose: () => void
+  setUpdateTask: (task: TaskProps) => void
+  name: string
+  description: string
+  dueDate: number
+  priority: 'low' | 'medium' | 'high' | 'default'
+  deleteTask: () => void
+}
+
 export const TaskDetailsModal = ({
   isOpen,
   handleClose,
   name,
   description,
   dueDate,
-  priority
+  priority,
+  setUpdateTask,
+  deleteTask
 }: TaskDetailsModalProps) => {
   const [task, setTask] = useState({
     name: name,
     description: description,
-    priority: priority,
-    dueDate: dueDate
+    dueDate: dueDate,
+    priority: priority
   })
+
+  const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false)
 
   if (!isOpen) return null
 
   return createPortal(
     <>
-      <ModalOverlay isOpen={isOpen} onClick={handleClose} />
+      <ModalOverlay
+        isOpen={isOpen}
+        onClick={() => {
+          setUpdateTask(task)
+          handleClose()
+        }}
+      />
       <ModalWrapper isOpen={isOpen}>
         <TaskOptions>
-          <OptionButton>
-            <UpIcon />
-          </OptionButton>
-          <OptionButton>
-            <DownIcon />
-          </OptionButton>
-          <OptionButton>
-            <MeatballMenuIcon />
-          </OptionButton>
-          <OptionButton onClick={handleClose}>
-            <CloseIcon />
-          </OptionButton>
+          <CustomTooltip content="Previous">
+            <OptionButton>
+              <UpIcon />
+            </OptionButton>
+          </CustomTooltip>
+
+          <CustomTooltip content="Next">
+            <OptionButton>
+              <DownIcon />
+            </OptionButton>
+          </CustomTooltip>
+
+          <CustomTooltip content="Delete">
+            <OptionButton onClick={() => setIsOpenDeleteModal(true)}>
+              <TrashIcon />
+            </OptionButton>
+          </CustomTooltip>
+
+          <CustomTooltip content="Close">
+            <OptionButton onClick={handleClose}>
+              <CloseIcon />
+            </OptionButton>
+          </CustomTooltip>
         </TaskOptions>
         <ModalContent>
           <TaskDetails>
@@ -273,6 +306,7 @@ export const TaskDetailsModal = ({
           </TaskProperties>
         </ModalContent>
       </ModalWrapper>
+      <DeleteTask deleteTask={deleteTask} handleClose={() => setIsOpenDeleteModal(false)} isOpen={isOpenDeleteModal} />
     </>,
     document.getElementById('portal-viewtaskdetails')!
   )

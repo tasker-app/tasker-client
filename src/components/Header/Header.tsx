@@ -21,7 +21,6 @@ const StyledHeader = styled.header`
   align-items: center;
   padding: 10px 30px;
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.25);
-  z-index: 1;
 `
 const NavigationAndSearch = styled.nav`
   display: flex;
