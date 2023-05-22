@@ -6,12 +6,13 @@ import styled from 'styled-components'
 import { ReactComponent as CalendarIcon } from '@/assets/icons/calendar.svg'
 
 //#region style
-const Date = styled.div`
+const Date = styled.div<{ maxWidth: string | undefined }>`
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 8px;
   position: relative;
+  max-width: ${(props) => (props.maxWidth ? props.maxWidth : '100%')};
 
   svg {
     width: 20px;
@@ -46,10 +47,11 @@ const Input = styled.input`
 //#endregion
 
 type DatePickerProps = {
+  maxWidth?: string
   setDueDate: (date: number) => void
 }
 
-export const DatePicker = ({ setDueDate }: DatePickerProps) => {
+export const DatePicker = ({ setDueDate, maxWidth }: DatePickerProps) => {
   const inputRef = useRef<HTMLInputElement>(null)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const datepickerRef = useRef<any>(null)
@@ -106,7 +108,7 @@ export const DatePicker = ({ setDueDate }: DatePickerProps) => {
   }, [])
 
   return (
-    <Date>
+    <Date maxWidth={maxWidth}>
       <Input ref={inputRef} readOnly />
       <CalendarIcon />
     </Date>

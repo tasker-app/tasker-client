@@ -132,10 +132,11 @@ const TaskPropertiesButton = styled.div`
   gap: 10px;
   background-color: transparent;
   border-radius: 8px;
+  padding: 5px 9px;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
-  padding: 5px 10px;
   box-sizing: border-box;
+  border: 1px solid rgba(120, 120, 120, 0.5);
 
   &:hover {
     background-color: #e3e3e3;
@@ -144,6 +145,10 @@ const TaskPropertiesButton = styled.div`
   svg {
     width: 20px;
     height: 20px;
+  }
+
+  &:nth-child(n + 2) {
+    border: none;
   }
 `
 
@@ -154,7 +159,6 @@ const PremiumLabel = styled.div`
   padding: 4px 8px;
   box-sizing: border-box;
 `
-
 //#endregion
 const MAPPING_FLAG_ICON = {
   default: <DefaultFlag />,
@@ -232,7 +236,10 @@ export const TaskDetailsModal = ({
               <Text color="#949494" size={16} type="bold">
                 Due Date
               </Text>
-              <DatePicker setDueDate={(dueDate) => setTask((prevTask) => ({ ...prevTask, dueDate }))} />
+              <DatePicker
+                maxWidth="104px"
+                setDueDate={(dueDate) => setTask((prevTask) => ({ ...prevTask, dueDate }))}
+              />
             </Property>
 
             <Property>
