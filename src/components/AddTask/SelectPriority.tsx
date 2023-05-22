@@ -21,7 +21,7 @@ type SelectProps = {
   children: ReactNode
   list: Array<{ label: string; value: string }>
   value: string
-  setValue: (value: string) => void
+  setValue: (value: 'default' | 'low' | 'medium' | 'high') => void
 }
 
 export const SelectPriority = (props: SelectProps) => {
