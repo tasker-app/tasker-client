@@ -6,12 +6,13 @@ import styled from 'styled-components'
 import { ReactComponent as CalendarIcon } from '@/assets/icons/calendar.svg'
 
 //#region style
-const Date = styled.div`
+const Date = styled.div<{ maxWidth: string | undefined }>`
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 8px;
   position: relative;
+  max-width: ${(props) => (props.maxWidth ? props.maxWidth : '100%')};
 
   svg {
     width: 20px;
@@ -46,11 +47,12 @@ const Input = styled.input`
 //#endregion
 
 type DatePickerProps = {
+  maxWidth?: string
   dueDate: number
   setDueDate: (date: number) => void
 }
 
-export const DatePicker = ({ dueDate, setDueDate }: DatePickerProps) => {
+export const DatePicker = ({ dueDate, setDueDate, maxWidth }: DatePickerProps) => {
   const inputRef = useRef<HTMLInputElement>(null)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const datepickerRef = useRef<any>(null)
@@ -58,15 +60,10 @@ export const DatePicker = ({ dueDate, setDueDate }: DatePickerProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedDate, setSelectedDate] = useState<number>(new window.Date().getTime())
 
-  useEffect(() => {
-    if (selectedDate) {
-      setDueDate(selectedDate)
-    }
-  }, [selectedDate])
-
   // when the dueDate changes, update the datepicker
   useEffect(() => {
     if (datepickerRef.current) {
+      setSelectedDate(dueDate)
       datepickerRef.current.selectDate(new window.Date(dueDate))
     }
   }, [dueDate])
@@ -99,14 +96,16 @@ export const DatePicker = ({ dueDate, setDueDate }: DatePickerProps) => {
           }
         },
         minDate: new window.Date(),
-        selectedDates: [new window.Date()],
+        // selectedDates: [new window.Date(selectedDate)],
         autoClose: true,
-        onSelect({ date }: { date: Date | Date[] }) {
+        onSelect({ date, datepicker }: { date: Date | Date[]; datepicker: AirDatepicker }) {
           if (date) {
             // set it to the end of the day
             const endOfDate = (date as Date).setHours(23, 59, 59, 999)
 
+            setDueDate(endOfDate)
             setSelectedDate(endOfDate)
+            datepicker.setViewDate(endOfDate)
           }
         }
       })
@@ -114,7 +113,7 @@ export const DatePicker = ({ dueDate, setDueDate }: DatePickerProps) => {
   }, [])
 
   return (
-    <Date>
+    <Date maxWidth={maxWidth}>
       <Input ref={inputRef} readOnly />
       <CalendarIcon />
     </Date>

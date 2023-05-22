@@ -195,8 +195,14 @@ export const AddTask = ({ setAddNewTask, setTasks, tasks, setIsStatusHidden }: A
     setIsStatusHidden(false)
   }
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && !isTaskNameEmpty) {
+      handleAddTask()
+    }
+  }
+
   return (
-    <AddTaskContainer isCancelAddTask={isCancelAddTask}>
+    <AddTaskContainer isCancelAddTask={isCancelAddTask} tabIndex={0} onKeyDown={handleKeyDown}>
       <AddTaskContent>
         <TaskName
           ref={inputNameRef}
@@ -204,6 +210,7 @@ export const AddTask = ({ setAddNewTask, setTasks, tasks, setIsStatusHidden }: A
           type="text"
           value={task.name}
           onChange={(e) => setTask((prevTask) => ({ ...prevTask, name: e.target.value }))}
+          onKeyDown={handleKeyDown}
         />
         <TaskDescription
           placeholder="Description"
