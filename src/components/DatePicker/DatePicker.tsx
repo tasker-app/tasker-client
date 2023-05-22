@@ -57,10 +57,8 @@ export const DatePicker = ({ dueDate, setDueDate, maxWidth }: DatePickerProps) =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const datepickerRef = useRef<any>(null)
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [selectedDate, setSelectedDate] = useState<number>(new window.Date().getTime())
+  const [selectedDate, setSelectedDate] = useState<number>(new window.Date(dueDate).getTime())
 
-  // when the dueDate changes, update the datepicker
   useEffect(() => {
     if (datepickerRef.current) {
       setSelectedDate(dueDate)
@@ -96,7 +94,7 @@ export const DatePicker = ({ dueDate, setDueDate, maxWidth }: DatePickerProps) =
           }
         },
         minDate: new window.Date(),
-        // selectedDates: [new window.Date(selectedDate)],
+        selectedDates: [new window.Date(selectedDate)],
         autoClose: true,
         onSelect({ date, datepicker }: { date: Date | Date[]; datepicker: AirDatepicker }) {
           if (date) {
