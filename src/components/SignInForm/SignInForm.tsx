@@ -89,7 +89,7 @@ export const SignInForm = () => {
       setIsErrorEmail(false)
       hasEmailError = false
     }
-    if (password === '') {
+    if (password === '' || password?.length < 8) {
       setIsErrorPass(true)
       hasPasswordError = true
     } else {
