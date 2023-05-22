@@ -118,6 +118,11 @@ export const DashboardContent = ({ isNavOpen }: DashboardContentProps) => {
         {tasks.map((task) => (
           <div key={task.id}>
             <TaskPreview
+              deleteTask={() => {
+                const newTasks = tasks.filter((t) => t.id !== task.id)
+
+                setTasks(newTasks)
+              }}
               description={task.description}
               dueDate={task.dueDate}
               name={task.name}

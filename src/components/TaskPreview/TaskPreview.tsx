@@ -44,11 +44,19 @@ const Priority = styled.div`
   }
 `
 
+type TaskProps = {
+  name: string
+  description: string
+  dueDate: number
+  priority: 'low' | 'medium' | 'high' | 'default'
+}
+
 type TaskPreviewProps = {
   name: string
   description: string
   dueDate: number
   priority: 'low' | 'medium' | 'high' | 'default'
+  deleteTask: () => void
 }
 
 const MAPPING_FLAG_ICON = {
@@ -58,42 +66,50 @@ const MAPPING_FLAG_ICON = {
   high: <RedFlag />
 }
 
-export const TaskPreview = ({ name, description, priority, dueDate }: TaskPreviewProps) => {
+export const TaskPreview = ({ name, description, priority, dueDate, deleteTask }: TaskPreviewProps) => {
   const [isOpenModal, setIsOpenModal] = useState(false)
+  const [task, setTask] = useState<TaskProps>({
+    name: name,
+    description: description,
+    priority: priority,
+    dueDate: dueDate
+  })
 
   return (
     <>
-      <TaskPreviewContainer onClick={() => setIsOpenModal(true)}>
+      <TaskPreviewContainer>
         <CheckContainer>
           <Checkbox />
         </CheckContainer>
-        <ContentContainer>
+        <ContentContainer onClick={() => setIsOpenModal(true)}>
           <Text color="#0F0F0F" size={16} type="bold">
-            {name}
+            {task.name}
           </Text>
           <Text color="#787878" size={14} type="regular">
-            {description}
+            {task.description}
           </Text>
         </ContentContainer>
-        <ContentContainer>
+        <ContentContainer onClick={() => setIsOpenModal(true)}>
           <Text color="#949494" size={14} type="regular">
-            {calculateRemainingDays(dueDate)}
+            {calculateRemainingDays(task.dueDate)}
           </Text>
           <Priority>
-            {MAPPING_FLAG_ICON[priority as keyof typeof MAPPING_FLAG_ICON]}
+            {MAPPING_FLAG_ICON[task.priority as keyof typeof MAPPING_FLAG_ICON]}
             <Text color="#949494" size={14} type="regular">
-              {priority}
+              {task.priority}
             </Text>
           </Priority>
         </ContentContainer>
       </TaskPreviewContainer>
       <TaskDetailsModal
-        description={description}
-        dueDate={dueDate}
+        deleteTask={deleteTask}
+        description={task.description}
+        dueDate={task.dueDate}
         handleClose={() => setIsOpenModal(false)}
         isOpen={isOpenModal}
-        name={name}
-        priority={priority}
+        name={task.name}
+        priority={task.priority}
+        setUpdateTask={setTask}
       />
     </>
   )
