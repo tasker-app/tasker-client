@@ -5,6 +5,7 @@ import { ReactComponent as UnViewHide } from '@/assets/icons/unview-hide.svg'
 import { ReactComponent as ViewHide } from '@/assets/icons/view-hide.svg'
 
 const InputCover = styled.div`
+  width: fit-content;
   position: relative;
 `
 const InputContainer = styled.input<{ status: string; width: string; height: string }>`
@@ -53,12 +54,14 @@ type InputProps = {
   height?: string
   setInput: (input: string) => void
   setOnChange?: (isChange: boolean) => void
-  value?: string
+  value: string
   type?: 'text' | 'password'
   isError?: boolean
+  handleKeyDown?: () => void
 }
 
 export const Input = ({
+  handleKeyDown = () => {},
   width,
   height,
   setInput,
@@ -80,6 +83,9 @@ export const Input = ({
         onChange={(e) => {
           setOnChange(false)
           setInput(e.target.value)
+        }}
+        onKeyDown={() => {
+          handleKeyDown()
         }}
       />
       {type === 'password' ? (

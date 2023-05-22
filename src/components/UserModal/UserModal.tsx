@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
@@ -6,6 +7,7 @@ import { ReactComponent as SignOutIcon } from '@/assets/icons/signout.svg'
 import { ReactComponent as StarIcon } from '@/assets/icons/star.svg'
 import DefaultAvatar from '@/assets/images/DefaultAvatar.webp'
 import { Text } from '@/components/Common'
+import { SettingModal } from '@/components/SettingModal'
 
 const ModalOverlay = styled.div<{ isOpen: boolean }>`
   ${(props) => (props.isOpen ? 'display: block' : 'display: none')};
@@ -83,6 +85,8 @@ type ModalProps = {
   handleClose: () => void
 }
 export const UserModal = ({ isOpen, handleClose }: ModalProps) => {
+  const [isOpenSetting, setIsOpenSetting] = useState(false)
+
   if (!isOpen) return null
 
   return createPortal(
@@ -103,7 +107,11 @@ export const UserModal = ({ isOpen, handleClose }: ModalProps) => {
           </Flex>
 
           <ModalOptions>
-            <ModalOptionButton>
+            <ModalOptionButton
+              onClick={() => {
+                setIsOpenSetting(true)
+              }}
+            >
               <SettingIcon />
               <Text>Setting</Text>
             </ModalOptionButton>
@@ -118,6 +126,7 @@ export const UserModal = ({ isOpen, handleClose }: ModalProps) => {
           </ModalOptions>
         </ModalContent>
       </ModalWrapper>
+      <SettingModal handleClose={() => setIsOpenSetting(false)} isOpenSetting={isOpenSetting} />
     </>,
     document.getElementById('portal')!
   )
