@@ -1,13 +1,16 @@
 import 'react-toastify/dist/ReactToastify.css'
 
 import { useState } from 'react'
+import { toast, ToastContainer } from 'react-toastify'
 import styled from 'styled-components'
 
 import { ReactComponent as CalendarIcon } from '@/assets/icons/calendar.svg'
 import { ReactComponent as ChartIcon } from '@/assets/icons/chart.svg'
 import { ReactComponent as DateIcon } from '@/assets/icons/date.svg'
+import { ReactComponent as OverdueIcon } from '@/assets/icons/overdue.svg'
 import { CheckBox } from '@/components/CheckBox'
 import { Text } from '@/components/Common/Text'
+import { useNavStore } from '@/stores'
 const SideBarSettingContainer = styled.div`
   height: 100%;
 `
@@ -145,10 +148,53 @@ const Loader = styled.div`
 `
 
 export const SideBarSetting = () => {
+  const [navbar, updateNavBar] = useNavStore((state) => [state.navbar, state.updateNavBar])
   const [isLoadingSave, setIsLoadingSave] = useState(false)
+  const [isCheckToday, setIsCheckToday] = useState<boolean>(navbar.includes('Today'))
+  const [isCheckUpcoming, setIsCheckUpcoming] = useState<boolean>(navbar.includes('Upcoming'))
+  const [isCheckOverdue, setIsCheckOverdue] = useState<boolean>(navbar.includes('Overdue'))
+  const [isCheckStatistic, setIsCheckStatistic] = useState<boolean>(navbar.includes('Statistic'))
+  const [isChanged, setIsChanged] = useState(false)
+  const notify = () =>
+    toast.error('At least one is chosen', {
+      position: 'top-center',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: 'light'
+    })
+  const handleSubmit = () => {
+    setIsLoadingSave(true)
+
+    const allNav: string[] = []
+
+    if (isCheckToday) {
+      allNav.push('Today')
+    }
+    if (isCheckUpcoming) {
+      allNav.push('Upcoming')
+    }
+    if (isCheckOverdue) {
+      allNav.push('Overdue')
+    }
+    if (isCheckStatistic) {
+      allNav.push('Statistic')
+    }
+    if (allNav.length === 0) {
+      notify()
+    } else {
+      updateNavBar(allNav)
+    }
+    setIsLoadingSave(false)
+  }
 
   return (
     <SideBarSettingContainer>
+      <ToastContainer />
+
       <Header>
         <HeaderContent>
           <Text size={25} type="bold">
@@ -165,20 +211,53 @@ export const SideBarSetting = () => {
               </Text>
             </Title>
             <SideBarSettingContent>
-              <Nav onClick={() => setIsLoadingSave(true)}>
-                <CheckBox height="16px" width="16px" />
+              <Nav>
+                <CheckBox
+                  height="16px"
+                  isChecked={isCheckToday}
+                  width="16px"
+                  onChecked={setIsCheckToday}
+                  onClick={() => setIsChanged(true)}
+                />
                 <CalendarIcon />
                 <Text size={16}>Today</Text>
               </Nav>
               <Nav>
-                <CheckBox height="16px" width="16px" />
+                <CheckBox
+                  height="16px"
+                  isChecked={isCheckUpcoming}
+                  width="16px"
+                  onChecked={setIsCheckUpcoming}
+                  onClick={() => setIsChanged(true)}
+                />
                 <DateIcon />
                 <Text size={16}>Upcoming</Text>
               </Nav>
               <Nav>
-                <CheckBox height="16px" width="16px" />
+                <CheckBox
+                  height="16px"
+                  isChecked={isCheckOverdue}
+                  width="16px"
+                  onChecked={setIsCheckOverdue}
+                  onClick={() => setIsChanged(true)}
+                />
+                <OverdueIcon />
+                <Text size={16}>Overdue</Text>
+              </Nav>
+              <Nav>
+                <CheckBox
+                  height="16px"
+                  isChecked={isCheckStatistic}
+                  width="16px"
+                  onChecked={setIsCheckStatistic}
+                  onClick={() => {
+                    console.log('checked')
+
+                    setIsChanged(true)
+                  }}
+                />
                 <ChartIcon />
-                <Text size={16}>Stastistic</Text>
+                <Text size={16}>Statistic</Text>
               </Nav>
             </SideBarSettingContent>
           </SettingContainer>
@@ -197,7 +276,7 @@ export const SideBarSetting = () => {
             ''
           )}
 
-          <SaveButton>
+          <SaveButton disabled={!isChanged} onClick={handleSubmit}>
             <Text color="#0F0F0F" size={15}>
               Save change
             </Text>
