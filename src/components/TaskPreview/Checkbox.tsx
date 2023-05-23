@@ -24,7 +24,8 @@ const CheckboxContainer = styled.button`
     transition: opacity 0.2s ease;
   }
 
-  &:is(:hover) {
+  &:is(:hover),
+  &:is(:active) {
     border-color: #b1aeae;
     background: #e6e6e6;
 

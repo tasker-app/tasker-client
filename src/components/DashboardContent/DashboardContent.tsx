@@ -5,12 +5,11 @@ import { ReactComponent as AddIcon } from '@/assets/icons/add.svg'
 import { ReactComponent as FilterIcon } from '@/assets/icons/filter.svg'
 import { AddTask } from '@/components/AddTask'
 import { Text } from '@/components/Common'
-import { TaskPreview } from '@/components/TaskPreview'
 import { ViewModal } from '@/components/ViewModal'
-import { DAYS_OF_WEEK, MONTHS } from '@/libs/constant'
-import { Task as TaskType } from '@/models/task'
+import { currentDateFormatted } from '@/utils'
 
 import { DashboardStatus } from './DashboardStatus'
+import { ListTask } from './ListTask'
 
 const DashboardContentContainer = styled.section<{ isNavOpen: boolean }>`
   width: ${(props) => (props.isNavOpen ? 'calc(100vw - 120px - 300px)' : 'calc(100vw - 80px)')};
@@ -74,24 +73,13 @@ type DashboardContentProps = {
 }
 
 export const DashboardContent = ({ isNavOpen }: DashboardContentProps) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpenView, setIsOpenView] = useState(false)
   const [addNewTask, setAddNewTask] = useState(false)
   const [isStatusHidden, setIsStatusHidden] = useState(false)
-  const [tasks, setTasks] = useState<TaskType[]>([])
 
   const handleAddTask = () => {
     setIsStatusHidden(true)
     setAddNewTask(true)
-  }
-
-  const currentDateFormatted = () => {
-    const currentDate = new Date()
-
-    const dayOfWeek = DAYS_OF_WEEK[currentDate.getDay()]
-    const day = currentDate.getDate()
-    const month = MONTHS[currentDate.getMonth()]
-
-    return `${dayOfWeek} ${day} ${month}`
   }
 
   return (
@@ -107,7 +95,7 @@ export const DashboardContent = ({ isNavOpen }: DashboardContentProps) => {
             </Text>
           </Today>
 
-          <FilterButton onClick={() => setIsOpen(true)}>
+          <FilterButton onClick={() => setIsOpenView(true)}>
             <FilterIcon />
             <Text color="#949494" size={16}>
               View
@@ -115,33 +103,17 @@ export const DashboardContent = ({ isNavOpen }: DashboardContentProps) => {
           </FilterButton>
         </Flex>
 
-        {tasks.map((task) => (
-          <div key={task.id}>
-            <TaskPreview
-              description={task.description}
-              dueDate={task.dueDate}
-              name={task.name}
-              priority={task.priority}
-            />
-          </div>
-        ))}
+        <ListTask />
 
         <AddTaskButton isHidden={addNewTask} onClick={handleAddTask}>
           <AddIcon />
           <Text size={16}>Add your task</Text>
         </AddTaskButton>
 
-        {addNewTask && (
-          <AddTask
-            setAddNewTask={setAddNewTask}
-            setIsStatusHidden={setIsStatusHidden}
-            setTasks={setTasks}
-            tasks={tasks}
-          />
-        )}
-        {tasks.length === 0 && <DashboardStatus isStatusHidden={isStatusHidden} />}
+        {addNewTask && <AddTask setAddNewTask={setAddNewTask} setIsStatusHidden={setIsStatusHidden} />}
+        <DashboardStatus isStatusHidden={isStatusHidden} />
       </Content>
-      <ViewModal handleClose={() => setIsOpen(false)} isOpen={isOpen} />
+      <ViewModal handleClose={() => setIsOpenView(false)} isOpen={isOpenView} />
     </DashboardContentContainer>
   )
 }

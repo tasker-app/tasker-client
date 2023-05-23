@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { useState } from 'react'
 import styled from 'styled-components'
 
@@ -6,12 +7,13 @@ import { ReactComponent as GreenFlag } from '@/assets/icons/flag-green.svg'
 import { ReactComponent as RedFlag } from '@/assets/icons/flag-red.svg'
 import { ReactComponent as YellowFlag } from '@/assets/icons/flag-yellow.svg'
 import { Text } from '@/components/Common'
+import { useTaskStore } from '@/stores'
 import { calculateRemainingDays } from '@/utils'
 
 import { TaskDetailsModal } from '../TaskDetailsModal'
 import { Checkbox } from './Checkbox'
 
-const TaskPreviewContainer = styled.div`
+const TaskPreviewContainer = styled(motion.div)`
   height: 60px;
   margin-top: 24px;
   display: grid;
@@ -45,6 +47,7 @@ const Priority = styled.div`
 `
 
 type TaskPreviewProps = {
+  id: string
   name: string
   description: string
   dueDate: number
@@ -58,16 +61,39 @@ const MAPPING_FLAG_ICON = {
   high: <RedFlag />
 }
 
-export const TaskPreview = ({ name, description, priority, dueDate }: TaskPreviewProps) => {
+const variants = {
+  initial: {
+    opacity: 1,
+    x: 0
+  },
+  complete: {
+    opacity: 0,
+    x: 400,
+    transition: {
+      duration: 0.4
+    }
+  }
+}
+
+export const TaskPreview = ({ id, name, description, priority, dueDate }: TaskPreviewProps) => {
   const [isOpenModal, setIsOpenModal] = useState(false)
+  const [isCompleted, setIsCompleted] = useState(false)
+  const [completeTask] = useTaskStore((state) => [state.completeTask])
+
+  const handleCheck = () => {
+    setIsCompleted(true)
+    setTimeout(() => {
+      completeTask(id)
+    }, 450)
+  }
 
   return (
     <>
-      <TaskPreviewContainer onClick={() => setIsOpenModal(true)}>
-        <CheckContainer>
+      <TaskPreviewContainer animate={isCompleted ? 'complete' : 'initial'} variants={variants}>
+        <CheckContainer onClick={handleCheck}>
           <Checkbox />
         </CheckContainer>
-        <ContentContainer>
+        <ContentContainer onClick={() => setIsOpenModal(true)}>
           <Text color="#0F0F0F" size={16} type="bold">
             {name}
           </Text>
@@ -75,7 +101,7 @@ export const TaskPreview = ({ name, description, priority, dueDate }: TaskPrevie
             {description}
           </Text>
         </ContentContainer>
-        <ContentContainer>
+        <ContentContainer onClick={() => setIsOpenModal(true)}>
           <Text color="#949494" size={14} type="regular">
             {calculateRemainingDays(dueDate)}
           </Text>
@@ -91,6 +117,7 @@ export const TaskPreview = ({ name, description, priority, dueDate }: TaskPrevie
         description={description}
         dueDate={dueDate}
         handleClose={() => setIsOpenModal(false)}
+        id={id}
         isOpen={isOpenModal}
         name={name}
         priority={priority}
