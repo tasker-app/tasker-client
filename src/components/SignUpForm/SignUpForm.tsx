@@ -184,7 +184,7 @@ export const SignUpForm = () => {
           </InputBlock> */}
           <Condition>
             <ConditionContainer>
-              <CheckBox onChecked={setNotDisableButton} />
+              <CheckBox onChange={() => setNotDisableButton(!notDisableButton)} />
               <Text color="#787878" size={14}>
                 By selecting this option, I agree with Tasker’s Term and Policy
               </Text>
