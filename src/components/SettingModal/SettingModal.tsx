@@ -8,6 +8,7 @@ import { ReactComponent as UserIcon } from '@/assets/icons/user-circle.svg'
 import { ReactComponent as WalletIcon } from '@/assets/icons/wallet.svg'
 import { Text } from '@/components/Common'
 import { AccountSetting } from '@/components/SettingModal/AccountSetting'
+import { ReminderSetting } from '@/components/SettingModal/ReminderSetting'
 import { SideBarSetting } from '@/components/SettingModal/SideBarSetting'
 import { SubscriptionSetting } from '@/components/SettingModal/SubscriptionSetting'
 
@@ -182,8 +183,10 @@ export const SettingModal = ({ isOpenSetting, handleClose }: ModalProps) => {
                 <SubscriptionSetting />
               ) : active === 'Sidebar' ? (
                 <SideBarSetting />
+              ) : active === 'Reminder' ? (
+                <ReminderSetting />
               ) : (
-                <AccountSetting />
+                ''
               )}
             </ContentBlock>
           </FlexBlock>
