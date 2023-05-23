@@ -9,7 +9,7 @@ import { ReactComponent as YellowFlag } from '@/assets/icons/flag-yellow.svg'
 import { Text } from '@/components/Common'
 import { DatePicker } from '@/components/DatePicker'
 import { PRIORITY_LIST } from '@/libs/constant'
-import { Task as TaskType } from '@/models/task'
+import { useTaskStore } from '@/stores'
 import { moveToEndOfDate } from '@/utils'
 
 import { SelectPriority } from './SelectPriority'
@@ -135,8 +135,6 @@ const MAPPING_FLAG_ICON = {
 type AddTaskProps = {
   setAddNewTask: (isAddNewTask: boolean) => void
   setIsStatusHidden: (isStatusHidden: boolean) => void
-  setTasks: (tasks: TaskType[]) => void
-  tasks: TaskType[]
 }
 
 type NewTask = {
@@ -146,7 +144,7 @@ type NewTask = {
   dueDate: number
 }
 
-export const AddTask = ({ setAddNewTask, setTasks, tasks, setIsStatusHidden }: AddTaskProps) => {
+export const AddTask = ({ setAddNewTask, setIsStatusHidden }: AddTaskProps) => {
   const [isCancelAddTask, setIsCancelAddTask] = useState(false)
   const [task, setTask] = useState<NewTask>({
     name: '',
@@ -154,6 +152,7 @@ export const AddTask = ({ setAddNewTask, setTasks, tasks, setIsStatusHidden }: A
     priority: 'default',
     dueDate: new window.Date().getTime()
   })
+  const [tasks, addTask] = useTaskStore((state) => [state.tasks, state.addTask])
 
   const inputNameRef = useRef<HTMLInputElement>(null)
 
@@ -169,16 +168,15 @@ export const AddTask = ({ setAddNewTask, setTasks, tasks, setIsStatusHidden }: A
     if (isTaskNameEmpty) return null
 
     const newTask = {
-      id: tasks.length + 1,
+      id: Math.random().toString(36),
       name: task.name,
       description: task.description,
       priority: task.priority,
       dueDate: moveToEndOfDate(task.dueDate)
     }
 
-    const newTasks = [...tasks, newTask]
+    addTask(newTask)
 
-    setTasks(newTasks)
     setTask({
       name: '',
       description: '',
@@ -202,7 +200,7 @@ export const AddTask = ({ setAddNewTask, setTasks, tasks, setIsStatusHidden }: A
   }
 
   return (
-    <AddTaskContainer isCancelAddTask={isCancelAddTask} tabIndex={0} onKeyDown={handleKeyDown}>
+    <AddTaskContainer isCancelAddTask={isCancelAddTask} tabIndex={0}>
       <AddTaskContent>
         <TaskName
           ref={inputNameRef}

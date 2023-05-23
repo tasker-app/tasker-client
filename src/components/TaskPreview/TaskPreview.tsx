@@ -7,6 +7,7 @@ import { ReactComponent as GreenFlag } from '@/assets/icons/flag-green.svg'
 import { ReactComponent as RedFlag } from '@/assets/icons/flag-red.svg'
 import { ReactComponent as YellowFlag } from '@/assets/icons/flag-yellow.svg'
 import { Text } from '@/components/Common'
+import { useTaskStore } from '@/stores'
 import { calculateRemainingDays } from '@/utils'
 
 import { TaskDetailsModal } from '../TaskDetailsModal'
@@ -45,20 +46,12 @@ const Priority = styled.div`
   }
 `
 
-type TaskProps = {
-  name: string
-  description: string
-  dueDate: number
-  priority: 'low' | 'medium' | 'high' | 'default'
-}
-
 type TaskPreviewProps = {
+  id: string
   name: string
   description: string
   dueDate: number
   priority: 'low' | 'medium' | 'high' | 'default'
-  deleteTask: () => void
-  completeTask: () => void
 }
 
 const MAPPING_FLAG_ICON = {
@@ -82,20 +75,15 @@ const variants = {
   }
 }
 
-export const TaskPreview = ({ name, description, priority, dueDate, deleteTask, completeTask }: TaskPreviewProps) => {
+export const TaskPreview = ({ id, name, description, priority, dueDate }: TaskPreviewProps) => {
   const [isOpenModal, setIsOpenModal] = useState(false)
-  const [task, setTask] = useState<TaskProps>({
-    name: name,
-    description: description,
-    priority: priority,
-    dueDate: dueDate
-  })
   const [isCompleted, setIsCompleted] = useState(false)
+  const [completeTask] = useTaskStore((state) => [state.completeTask])
 
   const handleCheck = () => {
     setIsCompleted(true)
     setTimeout(() => {
-      completeTask()
+      completeTask(id)
     }, 450)
   }
 
@@ -107,33 +95,32 @@ export const TaskPreview = ({ name, description, priority, dueDate, deleteTask, 
         </CheckContainer>
         <ContentContainer onClick={() => setIsOpenModal(true)}>
           <Text color="#0F0F0F" size={16} type="bold">
-            {task.name}
+            {name}
           </Text>
           <Text color="#787878" size={14} type="regular">
-            {task.description}
+            {description}
           </Text>
         </ContentContainer>
         <ContentContainer onClick={() => setIsOpenModal(true)}>
           <Text color="#949494" size={14} type="regular">
-            {calculateRemainingDays(task.dueDate)}
+            {calculateRemainingDays(dueDate)}
           </Text>
           <Priority>
-            {MAPPING_FLAG_ICON[task.priority as keyof typeof MAPPING_FLAG_ICON]}
+            {MAPPING_FLAG_ICON[priority as keyof typeof MAPPING_FLAG_ICON]}
             <Text color="#949494" size={14} type="regular">
-              {task.priority}
+              {priority}
             </Text>
           </Priority>
         </ContentContainer>
       </TaskPreviewContainer>
       <TaskDetailsModal
-        deleteTask={deleteTask}
-        description={task.description}
-        dueDate={task.dueDate}
+        description={description}
+        dueDate={dueDate}
         handleClose={() => setIsOpenModal(false)}
+        id={id}
         isOpen={isOpenModal}
-        name={task.name}
-        priority={task.priority}
-        setUpdateTask={setTask}
+        name={name}
+        priority={priority}
       />
     </>
   )

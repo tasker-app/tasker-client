@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import ChairBackgroundImage from '@/assets/images/ChairBackgroundImage.webp'
 import { Text } from '@/components/Common'
+import { useTaskStore } from '@/stores'
 
 const Center = styled.div<{ isStatusHidden: boolean }>`
   display: ${(props) => (props.isStatusHidden ? 'none' : 'flex')};
@@ -39,6 +40,10 @@ type DashboardStatusProps = {
 }
 
 export const DashboardStatus = ({ isStatusHidden }: DashboardStatusProps) => {
+  const [tasks] = useTaskStore((state) => [state.tasks])
+
+  if (tasks.length !== 0) return null
+
   return (
     <Center isStatusHidden={isStatusHidden}>
       <ImageBackground>

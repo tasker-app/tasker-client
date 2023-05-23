@@ -16,6 +16,7 @@ import { CustomTooltip, Text } from '@/components/Common'
 import { DatePicker } from '@/components/DatePicker'
 import { Checkbox } from '@/components/TaskPreview'
 import { PRIORITY_LIST } from '@/libs/constant'
+import { useTaskStore } from '@/stores'
 
 import { DeleteTask } from './DeleteTask'
 
@@ -169,22 +170,14 @@ const MAPPING_FLAG_ICON = {
   high: <RedFlag />
 }
 
-type TaskProps = {
-  name: string
-  description: string
-  dueDate: number
-  priority: 'low' | 'medium' | 'high' | 'default'
-}
-
 type TaskDetailsModalProps = {
   isOpen: boolean
   handleClose: () => void
-  setUpdateTask: (task: TaskProps) => void
   name: string
   description: string
   dueDate: number
   priority: 'low' | 'medium' | 'high' | 'default'
-  deleteTask: () => void
+  id: string
 }
 
 export const TaskDetailsModal = ({
@@ -194,10 +187,10 @@ export const TaskDetailsModal = ({
   description,
   dueDate,
   priority,
-  setUpdateTask,
-  deleteTask
+  id
 }: TaskDetailsModalProps) => {
   const [task, setTask] = useState({
+    id,
     name: name,
     description: description,
     dueDate: dueDate,
@@ -206,6 +199,8 @@ export const TaskDetailsModal = ({
 
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false)
 
+  const [deleteTask, updateTask] = useTaskStore((state) => [state.deleteTask, state.updateTask])
+
   if (!isOpen) return null
 
   return createPortal(
@@ -213,7 +208,7 @@ export const TaskDetailsModal = ({
       <ModalOverlay
         isOpen={isOpen}
         onClick={() => {
-          setUpdateTask(task)
+          updateTask(task)
           handleClose()
         }}
       />
@@ -306,8 +301,12 @@ export const TaskDetailsModal = ({
           </TaskProperties>
         </ModalContent>
       </ModalWrapper>
-      <DeleteTask deleteTask={deleteTask} handleClose={() => setIsOpenDeleteModal(false)} isOpen={isOpenDeleteModal} />
+      <DeleteTask
+        deleteTask={() => deleteTask(id)}
+        handleClose={() => setIsOpenDeleteModal(false)}
+        isOpen={isOpenDeleteModal}
+      />
     </>,
-    document.getElementById('portal-viewtaskdetails')!
+    document.getElementById('portal-viewtaskdetails') as HTMLElement
   )
 }
