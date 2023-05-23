@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { useState } from 'react'
 import styled from 'styled-components'
 
@@ -11,7 +12,7 @@ import { calculateRemainingDays } from '@/utils'
 import { TaskDetailsModal } from '../TaskDetailsModal'
 import { Checkbox } from './Checkbox'
 
-const TaskPreviewContainer = styled.div`
+const TaskPreviewContainer = styled(motion.div)`
   height: 60px;
   margin-top: 24px;
   display: grid;
@@ -57,6 +58,7 @@ type TaskPreviewProps = {
   dueDate: number
   priority: 'low' | 'medium' | 'high' | 'default'
   deleteTask: () => void
+  completeTask: () => void
 }
 
 const MAPPING_FLAG_ICON = {
@@ -66,7 +68,21 @@ const MAPPING_FLAG_ICON = {
   high: <RedFlag />
 }
 
-export const TaskPreview = ({ name, description, priority, dueDate, deleteTask }: TaskPreviewProps) => {
+const variants = {
+  initial: {
+    opacity: 1,
+    x: 0
+  },
+  complete: {
+    opacity: 0,
+    x: 400,
+    transition: {
+      duration: 0.4
+    }
+  }
+}
+
+export const TaskPreview = ({ name, description, priority, dueDate, deleteTask, completeTask }: TaskPreviewProps) => {
   const [isOpenModal, setIsOpenModal] = useState(false)
   const [task, setTask] = useState<TaskProps>({
     name: name,
@@ -74,11 +90,19 @@ export const TaskPreview = ({ name, description, priority, dueDate, deleteTask }
     priority: priority,
     dueDate: dueDate
   })
+  const [isCompleted, setIsCompleted] = useState(false)
+
+  const handleCheck = () => {
+    setIsCompleted(true)
+    setTimeout(() => {
+      completeTask()
+    }, 450)
+  }
 
   return (
     <>
-      <TaskPreviewContainer>
-        <CheckContainer>
+      <TaskPreviewContainer animate={isCompleted ? 'complete' : 'initial'} variants={variants}>
+        <CheckContainer onClick={handleCheck}>
           <Checkbox />
         </CheckContainer>
         <ContentContainer onClick={() => setIsOpenModal(true)}>

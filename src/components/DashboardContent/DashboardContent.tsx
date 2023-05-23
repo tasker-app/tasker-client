@@ -79,6 +79,12 @@ export const DashboardContent = ({ isNavOpen }: DashboardContentProps) => {
   const [isStatusHidden, setIsStatusHidden] = useState(false)
   const [tasks, setTasks] = useState<TaskType[]>([])
 
+  const handleCompleteTask = (id: number) => {
+    const newTasks = tasks.filter((task) => task.id !== id)
+
+    setTasks(newTasks)
+  }
+
   const handleAddTask = () => {
     setIsStatusHidden(true)
     setAddNewTask(true)
@@ -116,8 +122,14 @@ export const DashboardContent = ({ isNavOpen }: DashboardContentProps) => {
         </Flex>
 
         {tasks.map((task) => (
-          <div key={task.id}>
+          <div
+            key={task.id}
+            style={{
+              overflowX: 'hidden'
+            }}
+          >
             <TaskPreview
+              completeTask={() => handleCompleteTask(task.id)}
               deleteTask={() => {
                 const newTasks = tasks.filter((t) => t.id !== task.id)
 
