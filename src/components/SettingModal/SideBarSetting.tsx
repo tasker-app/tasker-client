@@ -251,8 +251,6 @@ export const SideBarSetting = () => {
                   width="16px"
                   onChecked={setIsCheckStatistic}
                   onClick={() => {
-                    console.log('checked')
-
                     setIsChanged(true)
                   }}
                 />
