@@ -1,5 +1,5 @@
 export type Task = {
-  id: number
+  id: string
   name: string
   description: string
   priority: 'low' | 'medium' | 'high' | 'default'
