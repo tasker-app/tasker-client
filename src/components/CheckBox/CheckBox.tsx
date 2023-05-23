@@ -12,10 +12,10 @@ type CheckBoxProps = {
   width?: string
   height?: string
   isChecked?: boolean
-  onChecked?: (isChecked: boolean) => void
+  onChange?: () => void
   onClick?: () => void
 }
-export const CheckBox = ({ onClick = () => {}, isChecked, width, height, onChecked = () => {} }: CheckBoxProps) => {
+export const CheckBox = ({ onClick = () => {}, isChecked, width, height, onChange = () => {} }: CheckBoxProps) => {
   return (
     <CheckBoxCover>
       <CheckBoxContainer
@@ -23,7 +23,7 @@ export const CheckBox = ({ onClick = () => {}, isChecked, width, height, onCheck
         height={height || '12px'}
         type="checkbox"
         width={width || '12px'}
-        onChange={(e) => onChecked(e.target.checked)}
+        onChange={() => onChange()}
         onClick={() => onClick()}
       />
     </CheckBoxCover>

@@ -150,10 +150,13 @@ const Loader = styled.div`
 export const SideBarSetting = () => {
   const [navbar, updateNavBar] = useNavStore((state) => [state.navbar, state.updateNavBar])
   const [isLoadingSave, setIsLoadingSave] = useState(false)
-  const [isCheckToday, setIsCheckToday] = useState<boolean>(navbar.includes('Today'))
-  const [isCheckUpcoming, setIsCheckUpcoming] = useState<boolean>(navbar.includes('Upcoming'))
-  const [isCheckOverdue, setIsCheckOverdue] = useState<boolean>(navbar.includes('Overdue'))
-  const [isCheckStatistic, setIsCheckStatistic] = useState<boolean>(navbar.includes('Statistic'))
+  const [checkboxStates, setCheckboxStates] = useState<Record<string, boolean>>({
+    isCheckToday: navbar.includes('Today'),
+    isCheckUpcoming: navbar.includes('Upcoming'),
+    isCheckOverdue: navbar.includes('Overdue'),
+    isCheckStatistic: navbar.includes('Statistic')
+  })
+
   const [isChanged, setIsChanged] = useState(false)
   const notify = () =>
     toast.error('At least one is chosen', {
@@ -166,21 +169,27 @@ export const SideBarSetting = () => {
       progress: undefined,
       theme: 'light'
     })
+  const handleCheckboxChange = (checkboxName: string) => {
+    setCheckboxStates((prevState) => ({
+      ...prevState,
+      [checkboxName]: !prevState[checkboxName]
+    }))
+  }
   const handleSubmit = () => {
     setIsLoadingSave(true)
 
     const allNav: string[] = []
 
-    if (isCheckToday) {
+    if (checkboxStates.isCheckToday) {
       allNav.push('Today')
     }
-    if (isCheckUpcoming) {
+    if (checkboxStates.isCheckUpcoming) {
       allNav.push('Upcoming')
     }
-    if (isCheckOverdue) {
+    if (checkboxStates.isCheckOverdue) {
       allNav.push('Overdue')
     }
-    if (isCheckStatistic) {
+    if (checkboxStates.isCheckStatistic) {
       allNav.push('Statistic')
     }
     if (allNav.length === 0) {
@@ -214,10 +223,12 @@ export const SideBarSetting = () => {
               <Nav>
                 <CheckBox
                   height="16px"
-                  isChecked={isCheckToday}
+                  isChecked={checkboxStates.isCheckToday}
                   width="16px"
-                  onChecked={setIsCheckToday}
-                  onClick={() => setIsChanged(true)}
+                  onChange={() => {
+                    handleCheckboxChange('isCheckToday')
+                    setIsChanged(true)
+                  }}
                 />
                 <CalendarIcon />
                 <Text size={16}>Today</Text>
@@ -225,10 +236,12 @@ export const SideBarSetting = () => {
               <Nav>
                 <CheckBox
                   height="16px"
-                  isChecked={isCheckUpcoming}
+                  isChecked={checkboxStates.isCheckUpcoming}
                   width="16px"
-                  onChecked={setIsCheckUpcoming}
-                  onClick={() => setIsChanged(true)}
+                  onChange={() => {
+                    handleCheckboxChange('isCheckUpcoming')
+                    setIsChanged(true)
+                  }}
                 />
                 <DateIcon />
                 <Text size={16}>Upcoming</Text>
@@ -236,10 +249,12 @@ export const SideBarSetting = () => {
               <Nav>
                 <CheckBox
                   height="16px"
-                  isChecked={isCheckOverdue}
+                  isChecked={checkboxStates.isCheckOverdue}
                   width="16px"
-                  onChecked={setIsCheckOverdue}
-                  onClick={() => setIsChanged(true)}
+                  onChange={() => {
+                    handleCheckboxChange('isCheckOverdue')
+                    setIsChanged(true)
+                  }}
                 />
                 <OverdueIcon />
                 <Text size={16}>Overdue</Text>
@@ -247,12 +262,10 @@ export const SideBarSetting = () => {
               <Nav>
                 <CheckBox
                   height="16px"
-                  isChecked={isCheckStatistic}
+                  isChecked={checkboxStates.isCheckStatistic}
                   width="16px"
-                  onChecked={setIsCheckStatistic}
-                  onClick={() => {
-                    console.log('checked')
-
+                  onChange={() => {
+                    handleCheckboxChange('isCheckStatistic')
                     setIsChanged(true)
                   }}
                 />
