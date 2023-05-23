@@ -261,7 +261,7 @@ export const AccountSetting = () => {
 
   useEffect(() => {
     setEmail('tienthinh@gmail.com')
-  })
+  }, [])
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     const reader = new FileReader()
@@ -380,7 +380,7 @@ export const AccountSetting = () => {
                     handleImageUpload(e)
                     setIsChanged(true)
                   }}
-                ></ChangePhotoButton>
+                />
                 <Notice>
                   <Text color="#787878" size={12}>
                     * Choose a photo up to 4MB. The format should be PNG or JPG

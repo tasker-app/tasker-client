@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
@@ -7,8 +7,10 @@ import { ReactComponent as SideBarIcon } from '@/assets/icons/sidebar.svg'
 import { ReactComponent as UserIcon } from '@/assets/icons/user-circle.svg'
 import { ReactComponent as WalletIcon } from '@/assets/icons/wallet.svg'
 import { Text } from '@/components/Common'
-
-import { AccountSetting } from '../AccountSetting'
+import { AccountSetting } from '@/components/SettingModal/AccountSetting'
+import { ReminderSetting } from '@/components/SettingModal/ReminderSetting'
+import { SideBarSetting } from '@/components/SettingModal/SideBarSetting'
+import { SubscriptionSetting } from '@/components/SettingModal/SubscriptionSetting'
 
 const ModalOverlay = styled.div<{ isOpenSetting: boolean }>`
   ${(props) => (props.isOpenSetting ? 'display: block' : 'display: none')};
@@ -71,7 +73,7 @@ const NavButton = styled.button<{ isActive?: boolean }>`
   padding-bottom: 5px;
   transition: background-color 0.2s ease-in-out;
   cursor: pointer;
-
+  outline: none;
   &:hover {
     background-color: #e1e1e1;
   }
@@ -124,6 +126,10 @@ export const SettingModal = ({ isOpenSetting, handleClose }: ModalProps) => {
     setActive(value)
   }
 
+  useEffect(() => {
+    if (isOpenSetting) setActive('Account')
+  }, [isOpenSetting])
+
   if (!isOpenSetting) return null
 
   return createPortal(
@@ -171,7 +177,17 @@ export const SettingModal = ({ isOpenSetting, handleClose }: ModalProps) => {
               </Options>
             </OptionBlock>
             <ContentBlock>
-              <AccountSetting />
+              {active === 'Account' ? (
+                <AccountSetting />
+              ) : active === 'Subscription' ? (
+                <SubscriptionSetting />
+              ) : active === 'Sidebar' ? (
+                <SideBarSetting />
+              ) : active === 'Reminder' ? (
+                <ReminderSetting />
+              ) : (
+                ''
+              )}
             </ContentBlock>
           </FlexBlock>
         </ModalContent>

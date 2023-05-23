@@ -6,7 +6,9 @@ import { ReactComponent as CalendarIcon } from '@/assets/icons/calendar.svg'
 import { ReactComponent as ChartIcon } from '@/assets/icons/chart.svg'
 import { ReactComponent as DateIcon } from '@/assets/icons/date.svg'
 import { ReactComponent as ExpandIcon } from '@/assets/icons/expand.svg'
+import { ReactComponent as OverdueIcon } from '@/assets/icons/overdue.svg'
 import { Text } from '@/components/Common'
+import { useNavStore } from '@/stores'
 
 const NavContainer = styled.nav<{ isNavOpen: boolean }>`
   width: ${(props) => (props.isNavOpen ? '300px' : '0')};
@@ -94,6 +96,7 @@ type NavProps = {
 }
 
 export const Nav = ({ isNavOpen }: NavProps) => {
+  const [navbar] = useNavStore((state) => [state.navbar, state.updateNavBar])
   const [active, setActive] = useState('Today')
   const [isOptionDisplayed, setIsOptionDisplayed] = useState(false)
 
@@ -112,30 +115,56 @@ export const Nav = ({ isNavOpen }: NavProps) => {
   return (
     <NavContainer isNavOpen={isNavOpen}>
       <NavOptions isNavOpen={isNavOpen} isOptionDisplayed={isOptionDisplayed}>
-        <NavButton isActive={active === 'Today'} onClick={() => handleActive('Today')}>
-          <Flex>
-            <CalendarIcon />
-            <Text size={16}>Today</Text>
-          </Flex>
-          <Text color="#787878" size={16}>
-            12
-          </Text>
-        </NavButton>
-        <NavButton isActive={active === 'Upcoming'} onClick={() => handleActive('Upcoming')}>
-          <Flex>
-            <DateIcon />
-            <Text size={16}>Upcoming</Text>
-          </Flex>
-          <Text color="#787878" size={16}>
-            20
-          </Text>
-        </NavButton>
-        <NavButton isActive={active === 'Statistic'} onClick={() => handleActive('Statistic')}>
-          <Flex>
-            <ChartIcon />
-            <Text size={16}>Statistic</Text>
-          </Flex>
-        </NavButton>
+        {navbar.includes('Today') ? (
+          <NavButton isActive={active === 'Today'} onClick={() => handleActive('Today')}>
+            <Flex>
+              <CalendarIcon />
+              <Text size={16}>Today</Text>
+            </Flex>
+            <Text color="#787878" size={16}>
+              12
+            </Text>
+          </NavButton>
+        ) : (
+          ''
+        )}
+
+        {navbar.includes('Upcoming') ? (
+          <NavButton isActive={active === 'Upcoming'} onClick={() => handleActive('Upcoming')}>
+            <Flex>
+              <DateIcon />
+              <Text size={16}>Upcoming</Text>
+            </Flex>
+            <Text color="#787878" size={16}>
+              20
+            </Text>
+          </NavButton>
+        ) : (
+          ''
+        )}
+        {navbar.includes('Overdue') ? (
+          <NavButton isActive={active === 'Overdue'} onClick={() => handleActive('Overdue')}>
+            <Flex>
+              <OverdueIcon />
+              <Text size={16}>Overdue</Text>
+            </Flex>
+            <Text color="#787878" size={16}>
+              20
+            </Text>
+          </NavButton>
+        ) : (
+          ''
+        )}
+        {navbar.includes('Statistic') ? (
+          <NavButton isActive={active === 'Statistic'} onClick={() => handleActive('Statistic')}>
+            <Flex>
+              <ChartIcon />
+              <Text size={16}>Statistic</Text>
+            </Flex>
+          </NavButton>
+        ) : (
+          ''
+        )}
       </NavOptions>
 
       <YourTeams isNavOpen={isNavOpen} isOptionDisplayed={isOptionDisplayed}>

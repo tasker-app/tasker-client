@@ -1,18 +1,31 @@
 import styled from 'styled-components'
 
 const CheckBoxCover = styled.div``
-const CheckBoxContainer = styled.input`
+const CheckBoxContainer = styled.input<{ width: string; height: string }>`
   border-radius: 10px;
   cursor: pointer;
+  width: ${({ width }) => `${width}`};
+  height: ${({ height }) => `${height}`};
 `
 
 type CheckBoxProps = {
+  width?: string
+  height?: string
+  isChecked?: boolean
   onChecked?: (isChecked: boolean) => void
+  onClick?: () => void
 }
-export const CheckBox = ({ onChecked = () => {} }: CheckBoxProps) => {
+export const CheckBox = ({ onClick = () => {}, isChecked, width, height, onChecked = () => {} }: CheckBoxProps) => {
   return (
     <CheckBoxCover>
-      <CheckBoxContainer type="checkbox" onChange={(e) => onChecked(e.target.checked)} />
+      <CheckBoxContainer
+        checked={isChecked}
+        height={height || '12px'}
+        type="checkbox"
+        width={width || '12px'}
+        onChange={(e) => onChecked(e.target.checked)}
+        onClick={() => onClick()}
+      />
     </CheckBoxCover>
   )
 }
