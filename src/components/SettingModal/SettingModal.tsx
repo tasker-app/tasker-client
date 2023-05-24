@@ -219,7 +219,15 @@ export const SettingModal = ({ isOpenSetting, handleClose }: ModalProps) => {
           </FlexBlock>
         </ModalContent>
       </ModalWrapper>
-      <AlertModal handleAlertClose={() => setIsOpenAlert(false)} handleClose={handleClose} isOpen={isOpenAlert} />
+      <AlertModal
+        handleAlertClose={() => {
+          setIsOpenAlert(false)
+          setIsAccountChanged(false)
+          setIsSideBarChanged(false)
+        }}
+        handleClose={handleClose}
+        isOpen={isOpenAlert}
+      />
     </>,
     document.getElementById('portal-settingmodal') as HTMLElement
   )
