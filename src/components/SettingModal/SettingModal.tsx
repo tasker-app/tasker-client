@@ -126,19 +126,28 @@ type ModalProps = {
 }
 export const SettingModal = ({ isOpenSetting, handleClose }: ModalProps) => {
   const [active, setActive] = useState('Account')
+  const [value, setValue] = useState('Account')
+
   const [isAccountChanged, setIsAccountChanged] = useState(false)
   const [isSideBarChanged, setIsSideBarChanged] = useState(false)
+  const [isAgreeSwitchTab, setIsAgreeSwitchTab] = useState(false)
+
   const [isOpenAlert, setIsOpenAlert] = useState(false)
   const modalRef = useRef<HTMLDivElement>(null)
 
   const handleActive = (value: string) => {
+    setValue(value)
+  }
+
+  useEffect(() => {
     if (value !== 'Account' && isAccountChanged === true) {
       setIsOpenAlert(true)
-
-      return
+      if (isAgreeSwitchTab === true) {
+        setActive(value)
+      } else return
     } else setIsOpenAlert(false)
     setActive(value)
-  }
+  }, [value, isAgreeSwitchTab])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -230,7 +239,7 @@ export const SettingModal = ({ isOpenSetting, handleClose }: ModalProps) => {
           setIsAccountChanged(false)
           setIsSideBarChanged(false)
         }}
-        handleClose={handleClose}
+        handleClose={() => setIsAgreeSwitchTab(true)}
         isOpen={isOpenAlert}
       />
     </>,
