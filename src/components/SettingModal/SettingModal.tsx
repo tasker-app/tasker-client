@@ -132,6 +132,11 @@ export const SettingModal = ({ isOpenSetting, handleClose }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null)
 
   const handleActive = (value: string) => {
+    if (value !== 'Account' && isAccountChanged === true) {
+      setIsOpenAlert(true)
+
+      return
+    } else setIsOpenAlert(false)
     setActive(value)
   }
 
