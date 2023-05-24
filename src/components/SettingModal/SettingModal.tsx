@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
@@ -12,6 +12,9 @@ import { ReminderSetting } from '@/components/SettingModal/ReminderSetting'
 import { SideBarSetting } from '@/components/SettingModal/SideBarSetting'
 import { SubscriptionSetting } from '@/components/SettingModal/SubscriptionSetting'
 
+import { AlertModal } from './AlertModal'
+
+//#region styles
 const ModalOverlay = styled.div<{ isOpenSetting: boolean }>`
   ${(props) => (props.isOpenSetting ? 'display: block' : 'display: none')};
   position: fixed;
@@ -115,6 +118,7 @@ const Tag = styled.div`
   border-radius: 4px;
   margin-left: 10px;
 `
+//#endregion
 
 type ModalProps = {
   isOpenSetting: boolean
@@ -122,9 +126,32 @@ type ModalProps = {
 }
 export const SettingModal = ({ isOpenSetting, handleClose }: ModalProps) => {
   const [active, setActive] = useState('Account')
+  const [isAccountChanged, setIsAccountChanged] = useState(false)
+  const [isSideBarChanged, setIsSideBarChanged] = useState(false)
+  const [isOpenAlert, setIsOpenAlert] = useState(false)
+  const modalRef = useRef<HTMLDivElement>(null)
+
   const handleActive = (value: string) => {
     setActive(value)
   }
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node) &&
+        (isAccountChanged || isSideBarChanged)
+      ) {
+        setIsOpenAlert(true)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isAccountChanged, isSideBarChanged])
 
   useEffect(() => {
     if (isOpenSetting) setActive('Account')
@@ -136,7 +163,7 @@ export const SettingModal = ({ isOpenSetting, handleClose }: ModalProps) => {
     <>
       <ModalOverlay isOpenSetting={isOpenSetting} onClick={handleClose} />
       <ModalWrapper isOpenSetting={isOpenSetting}>
-        <ModalContent>
+        <ModalContent ref={modalRef}>
           <FlexBlock>
             <OptionBlock>
               <Title>
@@ -178,11 +205,11 @@ export const SettingModal = ({ isOpenSetting, handleClose }: ModalProps) => {
             </OptionBlock>
             <ContentBlock>
               {active === 'Account' ? (
-                <AccountSetting />
+                <AccountSetting isChanged={isAccountChanged} setIsChanged={setIsAccountChanged} />
               ) : active === 'Subscription' ? (
                 <SubscriptionSetting />
               ) : active === 'Sidebar' ? (
-                <SideBarSetting />
+                <SideBarSetting isChanged={isSideBarChanged} setIsChanged={setIsSideBarChanged} />
               ) : active === 'Reminder' ? (
                 <ReminderSetting />
               ) : (
@@ -192,7 +219,8 @@ export const SettingModal = ({ isOpenSetting, handleClose }: ModalProps) => {
           </FlexBlock>
         </ModalContent>
       </ModalWrapper>
+      <AlertModal handleAlertClose={() => setIsOpenAlert(false)} handleClose={handleClose} isOpen={isOpenAlert} />
     </>,
-    document.getElementById('portal-settingmodal')!
+    document.getElementById('portal-settingmodal') as HTMLElement
   )
 }

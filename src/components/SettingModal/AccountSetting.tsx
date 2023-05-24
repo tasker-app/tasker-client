@@ -235,11 +235,16 @@ const Loader = styled.div`
   }
 `
 
-export const AccountSetting = () => {
+type AccountSettingProps = {
+  isChanged: boolean
+  setIsChanged: (isChanged: boolean) => void
+}
+
+export const AccountSetting = ({ isChanged, setIsChanged }: AccountSettingProps) => {
   const [name, setName] = useState('Hoang Tien Thinh')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('••••••••••••')
-  const [isChanged, setIsChanged] = useState(false)
+  // const [isChanged, setIsChanged] = useState(false)
   const [isErrorName, setIsErrorName] = useState(false)
   const [isErrorPass, setIsErrorPass] = useState(false)
   const [isLoadingSave, setIsLoadingSave] = useState(false)
@@ -325,6 +330,8 @@ export const AccountSetting = () => {
   }
   const handleSubmit = async () => {
     setIsLoadingSave(true)
+    setIsChanged(false)
+
     if (validation()) {
       setIsLoadingSave(false)
 
@@ -344,6 +351,21 @@ export const AccountSetting = () => {
       setIsLoadingSave(false)
     }
   }
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (isChanged) {
+        event.preventDefault()
+        event.returnValue = ''
+      }
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [isChanged])
 
   return (
     <AccountSettingContainer>

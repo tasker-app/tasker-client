@@ -147,7 +147,12 @@ const Loader = styled.div`
   }
 `
 
-export const SideBarSetting = () => {
+type SideBarSettingProps = {
+  isChanged: boolean
+  setIsChanged: (isChange: boolean) => void
+}
+
+export const SideBarSetting = ({ isChanged, setIsChanged }: SideBarSettingProps) => {
   const [navbar, updateNavBar] = useNavStore((state) => [state.navbar, state.updateNavBar])
   const [isLoadingSave, setIsLoadingSave] = useState(false)
   const [checkboxStates, setCheckboxStates] = useState<Record<string, boolean>>({
@@ -157,7 +162,7 @@ export const SideBarSetting = () => {
     isCheckStatistic: navbar.includes('Statistic')
   })
 
-  const [isChanged, setIsChanged] = useState(false)
+  // const [isChanged, setIsChanged] = useState(false)
   const notify = () =>
     toast.error('At least one is chosen', {
       position: 'top-center',
@@ -177,6 +182,7 @@ export const SideBarSetting = () => {
   }
   const handleSubmit = () => {
     setIsLoadingSave(true)
+    setIsChanged(false)
 
     const allNav: string[] = []
 
