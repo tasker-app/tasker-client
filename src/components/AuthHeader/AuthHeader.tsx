@@ -60,7 +60,7 @@ export const AuthHeader = () => {
         ) : (
           <Nav>
             <Link to="/pricing">
-              <StyledNavText color="#787878" size={15}>
+              <StyledNavText color="#787878" size={14}>
                 Pricing
               </StyledNavText>
             </Link>
@@ -70,7 +70,7 @@ export const AuthHeader = () => {
           ''
         ) : (
           <Nav>
-            <StyledNavText color="#787878" size={15}>
+            <StyledNavText color="#787878" size={14}>
               About Us
             </StyledNavText>
           </Nav>
@@ -81,7 +81,7 @@ export const AuthHeader = () => {
           <Nav>
             <Link to="/signin">
               <SignInButton>
-                <Text size={15}>Sign In</Text>
+                <Text size={14}>Sign In</Text>
               </SignInButton>
             </Link>
           </Nav>
