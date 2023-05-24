@@ -1,11 +1,15 @@
+import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
 import { ReactComponent as CloseIcon } from '@/assets/icons/close.svg'
 import { Text } from '@/components/Common'
+import { useTaskStore } from '@/stores'
 
 import { UndoButton } from './UndoButton'
 
-const Container = styled.div`
+const Container = styled(motion.div)<{ isShow: boolean }>`
   width: 200px;
   height: 48px;
   background: #262626;
@@ -17,7 +21,7 @@ const Container = styled.div`
   right: 60px;
   bottom: 32px;
 
-  display: grid;
+  display: ${({ isShow }) => (isShow ? 'grid' : 'none')};
   grid-template-columns: 113px 68px 1fr;
   align-items: center;
 `
@@ -47,15 +51,41 @@ const CloseButton = styled.button`
 `
 
 export const CompleteToast = () => {
-  return (
-    <Container>
-      <Text color="#fff" size={14}>
-        Task Completed
-      </Text>
-      <UndoButton />
-      <CloseButton>
-        <CloseIcon />
-      </CloseButton>
-    </Container>
+  const [completedTasks] = useTaskStore((state) => [state.completedTasks])
+  const [isToastShown, setIsToastShown] = useState(false)
+  const [isRemoveToast, setIsRemoveToast] = useState(false)
+
+  useEffect(() => {
+    if (completedTasks.length === 0) {
+      setIsRemoveToast(false)
+      setIsToastShown(false)
+    } else {
+      setIsRemoveToast(false)
+      setIsToastShown(true)
+
+      const timer = setTimeout(() => {
+        setIsToastShown(false)
+        setIsRemoveToast(true)
+      }, 3000)
+
+      return () => clearTimeout(timer)
+    }
+  }, [completedTasks])
+
+  if (isRemoveToast) return null
+
+  return createPortal(
+    <>
+      <Container isShow={isToastShown}>
+        <Text color="#fff" size={14}>
+          Task Completed
+        </Text>
+        <UndoButton />
+        <CloseButton>
+          <CloseIcon />
+        </CloseButton>
+      </Container>
+    </>,
+    document.getElementById('portal-toast') as HTMLElement
   )
 }

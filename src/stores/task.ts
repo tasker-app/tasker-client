@@ -8,6 +8,10 @@ type TaskState = {
   deleteTask: (id: string) => void
   updateTask: (task: TaskType) => void
   completeTask: (id: string) => void
+
+  completedTasks: TaskType[]
+  addCompletedTask: (task: TaskType) => void
+  undoCompletedTask: (id: string) => void
 }
 
 const useTaskStore = create<TaskState>((set) => ({
@@ -26,6 +30,14 @@ const useTaskStore = create<TaskState>((set) => ({
   completeTask: (id: string) => {
     set((state) => ({
       tasks: state.tasks.filter((task) => task.id !== id)
+    }))
+  },
+
+  completedTasks: [],
+  addCompletedTask: (task: TaskType) => set((state) => ({ completedTasks: [...state.completedTasks, task] })),
+  undoCompletedTask: (id: string) => {
+    set((state) => ({
+      completedTasks: state.completedTasks.filter((task) => task.id !== id)
     }))
   }
 }))
