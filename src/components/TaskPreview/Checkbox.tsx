@@ -35,9 +35,13 @@ const CheckboxContainer = styled.button`
   }
 `
 
-export const Checkbox = () => {
+type CheckboxProps = {
+  handleClick: () => void
+}
+
+export const Checkbox = ({ handleClick }: CheckboxProps) => {
   return (
-    <CheckboxContainer>
+    <CheckboxContainer onClick={handleClick}>
       <DoneIcon />
     </CheckboxContainer>
   )

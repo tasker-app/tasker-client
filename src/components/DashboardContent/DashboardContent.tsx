@@ -5,6 +5,7 @@ import { ReactComponent as AddIcon } from '@/assets/icons/add.svg'
 import { ReactComponent as FilterIcon } from '@/assets/icons/filter.svg'
 import { AddTask } from '@/components/AddTask'
 import { Text } from '@/components/Common'
+import { CompleteToast } from '@/components/CompleteToast'
 import { ViewModal } from '@/components/ViewModal'
 import { currentDateFormatted } from '@/utils'
 
@@ -114,6 +115,7 @@ export const DashboardContent = ({ isNavOpen }: DashboardContentProps) => {
         <DashboardStatus isStatusHidden={isStatusHidden} />
       </Content>
       <ViewModal handleClose={() => setIsOpenView(false)} isOpen={isOpenView} />
+      <CompleteToast />
     </DashboardContentContainer>
   )
 }
