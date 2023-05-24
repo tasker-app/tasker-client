@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import styled from 'styled-components'
@@ -9,7 +9,7 @@ import { useTaskStore } from '@/stores'
 
 import { UndoButton } from './UndoButton'
 
-const Container = styled(motion.div)<{ isShow: boolean }>`
+const Container = styled(motion.div)`
   width: 200px;
   height: 48px;
   background: #262626;
@@ -21,7 +21,7 @@ const Container = styled(motion.div)<{ isShow: boolean }>`
   right: 60px;
   bottom: 32px;
 
-  display: ${({ isShow }) => (isShow ? 'grid' : 'none')};
+  display: grid;
   grid-template-columns: 113px 68px 1fr;
   align-items: center;
 `
@@ -52,40 +52,45 @@ const CloseButton = styled.button`
 
 export const CompleteToast = () => {
   const [completedTasks] = useTaskStore((state) => [state.completedTasks])
-  const [isToastShown, setIsToastShown] = useState(false)
-  const [isRemoveToast, setIsRemoveToast] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    if (completedTasks.length === 0) {
-      setIsRemoveToast(false)
-      setIsToastShown(false)
+    if (completedTasks.length > 0) {
+      if (!isOpen) {
+        setIsOpen(true)
+      } else {
+        setIsOpen(false)
+        setTimeout(() => {
+          setIsOpen(true)
+        }, 200)
+      }
     } else {
-      setIsRemoveToast(false)
-      setIsToastShown(true)
-
-      const timer = setTimeout(() => {
-        setIsToastShown(false)
-        setIsRemoveToast(true)
-      }, 3000)
-
-      return () => clearTimeout(timer)
+      setIsOpen(false)
     }
   }, [completedTasks])
 
-  if (isRemoveToast) return null
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsOpen(false)
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  }, [isOpen])
 
   return createPortal(
-    <>
-      <Container isShow={isToastShown}>
-        <Text color="#fff" size={14}>
-          Task Completed
-        </Text>
-        <UndoButton />
-        <CloseButton>
-          <CloseIcon />
-        </CloseButton>
-      </Container>
-    </>,
+    <AnimatePresence>
+      {isOpen && (
+        <Container animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} initial={{ opacity: 0, y: 40 }}>
+          <Text color="#fff" size={14}>
+            Task Completed
+          </Text>
+          <UndoButton />
+          <CloseButton onClick={() => setIsOpen(false)}>
+            <CloseIcon />
+          </CloseButton>
+        </Container>
+      )}
+    </AnimatePresence>,
     document.getElementById('portal-toast') as HTMLElement
   )
 }

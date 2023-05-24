@@ -70,7 +70,7 @@ const variants = {
     opacity: 0,
     x: 400,
     transition: {
-      duration: 0.4
+      duration: 0.3
     }
   }
 }
@@ -85,14 +85,14 @@ export const TaskPreview = ({ id, name, description, priority, dueDate }: TaskPr
     setTimeout(() => {
       completeTask(id)
       addCompletedTask({ id, name, description, priority, dueDate })
-    }, 450)
+    }, 330)
   }
 
   return (
     <>
       <TaskPreviewContainer animate={isCompleted ? 'complete' : 'initial'} variants={variants}>
-        <CheckContainer onClick={handleCheck}>
-          <Checkbox />
+        <CheckContainer>
+          <Checkbox handleClick={handleCheck} />
         </CheckContainer>
         <ContentContainer onClick={() => setIsOpenModal(true)}>
           <Text color="#0F0F0F" size={16} type="bold">
