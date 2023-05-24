@@ -25,9 +25,13 @@ const Container = styled.button`
   }
 `
 
-export const UndoButton = () => {
+type UndoButtonProps = {
+  handleClick: () => void
+}
+
+export const UndoButton = ({ handleClick }: UndoButtonProps) => {
   return (
-    <Container>
+    <Container onClick={handleClick}>
       <Text color="#B95A5A" size={14}>
         Undo
       </Text>

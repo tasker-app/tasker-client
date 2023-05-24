@@ -78,13 +78,12 @@ const variants = {
 export const TaskPreview = ({ id, name, description, priority, dueDate }: TaskPreviewProps) => {
   const [isOpenModal, setIsOpenModal] = useState(false)
   const [isCompleted, setIsCompleted] = useState(false)
-  const [completeTask, addCompletedTask] = useTaskStore((state) => [state.completeTask, state.addCompletedTask])
+  const [completeTask] = useTaskStore((state) => [state.completeTask])
 
   const handleCheck = () => {
     setIsCompleted(true)
     setTimeout(() => {
       completeTask(id)
-      addCompletedTask({ id, name, description, priority, dueDate })
     }, 330)
   }
 

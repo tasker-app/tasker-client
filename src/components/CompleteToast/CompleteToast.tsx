@@ -51,7 +51,7 @@ const CloseButton = styled.button`
 `
 
 export const CompleteToast = () => {
-  const [completedTasks] = useTaskStore((state) => [state.completedTasks])
+  const [completedTasks, undo] = useTaskStore((state) => [state.completedTasks, state.undo])
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export const CompleteToast = () => {
           <Text color="#fff" size={14}>
             Task Completed
           </Text>
-          <UndoButton />
+          <UndoButton handleClick={undo} />
           <CloseButton onClick={() => setIsOpen(false)}>
             <CloseIcon />
           </CloseButton>
