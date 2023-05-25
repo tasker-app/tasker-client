@@ -132,7 +132,10 @@ export const SettingModal = ({ isOpenSetting, handleClose }: ModalProps) => {
   const [isSideBarChanged, setIsSideBarChanged] = useState(false)
   const [isAgreeSwitchTab, setIsAgreeSwitchTab] = useState(false)
 
+  const [isSwitchTab, setIsSwitchTab] = useState(false)
   const [isOpenAlert, setIsOpenAlert] = useState(false)
+  const [isOpenAlertSwitch, setIsOpenAlertSwitch] = useState(false)
+
   const modalRef = useRef<HTMLDivElement>(null)
 
   const handleActive = (value: string) => {
@@ -140,32 +143,45 @@ export const SettingModal = ({ isOpenSetting, handleClose }: ModalProps) => {
   }
 
   useEffect(() => {
-    if (value !== 'Account' && isAccountChanged === true) {
-      setIsOpenAlert(true)
-      if (isAgreeSwitchTab === true) {
-        setActive(value)
-      } else return
-    } else setIsOpenAlert(false)
-    setActive(value)
-  }, [value, isAgreeSwitchTab])
+    if (isSwitchTab || isAgreeSwitchTab) {
+      if (value !== 'Account' && isAccountChanged === true) {
+        setIsOpenAlertSwitch(true)
+        if (isAgreeSwitchTab === true) {
+          setActive(value)
+        } else return
+      } else setIsOpenAlertSwitch(false)
+      if (value !== 'Sidebar' && isSideBarChanged === true) {
+        setIsOpenAlertSwitch(true)
+        if (isAgreeSwitchTab === true) {
+          setActive(value)
+        } else return
+      } else setIsOpenAlertSwitch(false)
+
+      setActive(value)
+      setIsAgreeSwitchTab(false)
+    }
+  }, [value, isSwitchTab, isAgreeSwitchTab])
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node) &&
-        (isAccountChanged || isSideBarChanged)
-      ) {
-        setIsOpenAlert(true)
+    if (!isSwitchTab) {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (
+          modalRef.current &&
+          !modalRef.current.contains(event.target as Node) &&
+          (isAccountChanged || isSideBarChanged) &&
+          !isAgreeSwitchTab
+        ) {
+          setIsOpenAlert(true)
+        }
+      }
+
+      document.addEventListener('mousedown', handleClickOutside)
+
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside)
       }
     }
-
-    document.addEventListener('mousedown', handleClickOutside)
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isAccountChanged, isSideBarChanged])
+  }, [isAccountChanged, isSideBarChanged, isSwitchTab])
 
   useEffect(() => {
     if (isOpenSetting) setActive('Account')
@@ -186,25 +202,50 @@ export const SettingModal = ({ isOpenSetting, handleClose }: ModalProps) => {
                 </Text>
               </Title>
               <Options>
-                <NavButton isActive={active === 'Account'} onClick={() => handleActive('Account')}>
+                <NavButton
+                  isActive={active === 'Account'}
+                  onClick={() => {
+                    handleActive('Account')
+                    setIsSwitchTab(true)
+                  }}
+                >
                   <Flex>
                     <UserIcon />
                     <Text size={16}>Account</Text>
                   </Flex>
                 </NavButton>
-                <NavButton isActive={active === 'Subscription'} onClick={() => handleActive('Subscription')}>
+                <NavButton
+                  isActive={active === 'Subscription'}
+                  onClick={() => {
+                    handleActive('Subscription')
+                    setIsSwitchTab(true)
+                  }}
+                >
                   <Flex>
                     <WalletIcon />
                     <Text size={16}>Subscription</Text>
                   </Flex>
                 </NavButton>
-                <NavButton isActive={active === 'Sidebar'} onClick={() => handleActive('Sidebar')}>
+                <NavButton
+                  isActive={active === 'Sidebar'}
+                  onClick={() => {
+                    handleActive('Sidebar')
+
+                    setIsSwitchTab(true)
+                  }}
+                >
                   <Flex>
                     <SideBarIcon />
                     <Text size={16}>Sidebar</Text>
                   </Flex>
                 </NavButton>
-                <NavButton isActive={active === 'Reminder'} onClick={() => handleActive('Reminder')}>
+                <NavButton
+                  isActive={active === 'Reminder'}
+                  onClick={() => {
+                    handleActive('Reminder')
+                    setIsSwitchTab(true)
+                  }}
+                >
                   <Flex>
                     <ClockIcon />
                     <Text size={16}>Reminder</Text>
@@ -219,13 +260,21 @@ export const SettingModal = ({ isOpenSetting, handleClose }: ModalProps) => {
             </OptionBlock>
             <ContentBlock>
               {active === 'Account' ? (
-                <AccountSetting isChanged={isAccountChanged} setIsChanged={setIsAccountChanged} />
+                <AccountSetting
+                  isChanged={isAccountChanged}
+                  setIsChanged={setIsAccountChanged}
+                  setIsSwitchTab={setIsSwitchTab}
+                />
               ) : active === 'Subscription' ? (
-                <SubscriptionSetting />
+                <SubscriptionSetting setIsSwitchTab={setIsSwitchTab} />
               ) : active === 'Sidebar' ? (
-                <SideBarSetting isChanged={isSideBarChanged} setIsChanged={setIsSideBarChanged} />
+                <SideBarSetting
+                  isChanged={isSideBarChanged}
+                  setIsChanged={setIsSideBarChanged}
+                  setIsSwitchTab={setIsSwitchTab}
+                />
               ) : active === 'Reminder' ? (
-                <ReminderSetting />
+                <ReminderSetting setIsSwitchTab={setIsSwitchTab} />
               ) : (
                 ''
               )}
@@ -236,11 +285,25 @@ export const SettingModal = ({ isOpenSetting, handleClose }: ModalProps) => {
       <AlertModal
         handleAlertClose={() => {
           setIsOpenAlert(false)
+        }}
+        handleClose={() => {
+          handleClose()
           setIsAccountChanged(false)
           setIsSideBarChanged(false)
         }}
-        handleClose={() => setIsAgreeSwitchTab(true)}
         isOpen={isOpenAlert}
+      />
+      <AlertModal
+        handleAlertClose={() => {
+          setIsOpenAlertSwitch(false)
+          setIsSwitchTab(false)
+        }}
+        handleClose={() => {
+          setIsAgreeSwitchTab(true)
+          setIsAccountChanged(false)
+          setIsSideBarChanged(false)
+        }}
+        isOpen={isOpenAlertSwitch}
       />
     </>,
     document.getElementById('portal-settingmodal') as HTMLElement

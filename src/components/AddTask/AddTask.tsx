@@ -1,3 +1,5 @@
+import 'draft-js/dist/Draft.css'
+
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
@@ -199,6 +201,13 @@ export const AddTask = ({ setAddNewTask, setIsStatusHidden }: AddTaskProps) => {
     }
   }
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+      setTask((prevTask) => ({ ...prevTask, description: prevTask.description + '<br>' }))
+    }
+  }
+
   return (
     <AddTaskContainer isCancelAddTask={isCancelAddTask} tabIndex={0}>
       <AddTaskContent>
@@ -215,6 +224,7 @@ export const AddTask = ({ setAddNewTask, setIsStatusHidden }: AddTaskProps) => {
           type="text"
           value={task.description}
           onChange={(e) => setTask((prevTask) => ({ ...prevTask, description: e.target.value }))}
+          onKeyDown={handleKeyPress}
         />
         <TaskProperties>
           <DatePicker

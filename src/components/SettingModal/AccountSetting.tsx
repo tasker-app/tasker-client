@@ -238,9 +238,10 @@ const Loader = styled.div`
 type AccountSettingProps = {
   isChanged: boolean
   setIsChanged: (isChanged: boolean) => void
+  setIsSwitchTab: (isSwitchTab: boolean) => void
 }
 
-export const AccountSetting = ({ isChanged, setIsChanged }: AccountSettingProps) => {
+export const AccountSetting = ({ isChanged, setIsChanged, setIsSwitchTab }: AccountSettingProps) => {
   const [name, setName] = useState('Hoang Tien Thinh')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('••••••••••••')
@@ -252,6 +253,9 @@ export const AccountSetting = ({ isChanged, setIsChanged }: AccountSettingProps)
   const [previewImage, setPreviewImage] = useState('')
   const [fileImage, setFileImage] = useState<File | null>(null)
 
+  useEffect(() => {
+    setIsSwitchTab(false)
+  }, [])
   const notify = () =>
     toast.error('Please select files under 4MB', {
       position: 'top-center',

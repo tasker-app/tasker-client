@@ -63,11 +63,12 @@ const Button = styled.button`
 
 type AlertModalProps = {
   isOpen: boolean
-  handleAlertClose: () => void
+  handleAlertClose?: () => void
   handleClose?: () => void
+  handleAgree?: () => void
 }
 
-export const AlertModal = ({ isOpen, handleAlertClose, handleClose = () => {} }: AlertModalProps) => {
+export const AlertModal = ({ isOpen, handleAlertClose = () => {}, handleClose = () => {} }: AlertModalProps) => {
   return createPortal(
     <>
       <ModalOverlay isOpen={isOpen} onClick={handleAlertClose} />

@@ -1,6 +1,6 @@
 import 'react-toastify/dist/ReactToastify.css'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast, ToastContainer } from 'react-toastify'
 import styled from 'styled-components'
 
@@ -150,9 +150,10 @@ const Loader = styled.div`
 type SideBarSettingProps = {
   isChanged: boolean
   setIsChanged: (isChange: boolean) => void
+  setIsSwitchTab: (isSwitchTab: boolean) => void
 }
 
-export const SideBarSetting = ({ isChanged, setIsChanged }: SideBarSettingProps) => {
+export const SideBarSetting = ({ isChanged, setIsChanged, setIsSwitchTab }: SideBarSettingProps) => {
   const [navbar, updateNavBar] = useNavStore((state) => [state.navbar, state.updateNavBar])
   const [isLoadingSave, setIsLoadingSave] = useState(false)
   const [checkboxStates, setCheckboxStates] = useState<Record<string, boolean>>({
@@ -161,6 +162,10 @@ export const SideBarSetting = ({ isChanged, setIsChanged }: SideBarSettingProps)
     isCheckOverdue: navbar.includes('Overdue'),
     isCheckStatistic: navbar.includes('Statistic')
   })
+
+  useEffect(() => {
+    setIsSwitchTab(false)
+  }, [])
 
   // const [isChanged, setIsChanged] = useState(false)
   const notify = () =>
