@@ -11,14 +11,14 @@ const Container = styled.div`
   grid-template-rows: 100%;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(148, 148, 148, 0.6);
+  /* border: 1px solid rgba(148, 148, 148, 0.6); */
 `
 
 const Day = styled.button<{ isOver: boolean; isSelected: boolean }>`
   border: none;
   background-color: transparent;
   outline: none;
-  cursor: ${({ isOver }) => (isOver ? 'default' : 'pointer')};
+  cursor: ${({ isOver }) => (isOver ? 'not-allowed' : 'pointer')};
   width: 100%;
   height: 100%;
   display: flex;
@@ -26,9 +26,9 @@ const Day = styled.button<{ isOver: boolean; isSelected: boolean }>`
   align-items: center;
   justify-content: flex-start;
   gap: 4px;
-  transition: background-color 0.2s ease;
   opacity: ${({ isOver }) => (isOver ? 0.3 : 1)};
-  border-bottom: ${({ isSelected }) => (isSelected ? '1px solid #000000' : 'none')};
+  border-bottom: ${({ isSelected }) => (isSelected ? '1px solid #000000' : '1px solid transparent')};
+  transition: background-color 0.3s ease;
 
   &:hover {
     ${({ isOver }) => !isOver && 'background-color: rgba(148, 148, 148, 0.2);'}
@@ -58,7 +58,7 @@ export const Week = ({ weekDates, selectedDateTime, setSelectedDateTime }: WeekP
             key={index}
             isOver={date.isOver}
             isSelected={checkSameDate(date.time, selectedDateTime)}
-            onClick={() => setSelectedDateTime(date.time)}
+            onClick={() => (date.isOver ? null : setSelectedDateTime(date.time))}
           >
             <Text color="#000000" size={16}>
               {date.day}

@@ -18,11 +18,17 @@ const TestUpcoming = () => {
     setOffset((prev) => prev + 1)
   }
 
+  const handleGoToToday = () => {
+    setOffset(0)
+    setSelectedDateTime(new Date().getTime())
+  }
+
   return (
     <div>
-      <Week selectedDateTime={selectedDateTime} setSelectedDateTime={setSelectedDateTime} weekDates={weekDates} />
       <button onClick={handlePrev}>Prev</button>
       <button onClick={handleNext}>Next</button>
+      <button onClick={handleGoToToday}>Today</button>
+      <Week selectedDateTime={selectedDateTime} setSelectedDateTime={setSelectedDateTime} weekDates={weekDates} />
     </div>
   )
 }
