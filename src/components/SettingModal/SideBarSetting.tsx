@@ -1,6 +1,6 @@
 import 'react-toastify/dist/ReactToastify.css'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast, ToastContainer } from 'react-toastify'
 import styled from 'styled-components'
 
@@ -147,7 +147,13 @@ const Loader = styled.div`
   }
 `
 
-export const SideBarSetting = () => {
+type SideBarSettingProps = {
+  isChanged: boolean
+  setIsChanged: (isChange: boolean) => void
+  setIsSwitchTab: (isSwitchTab: boolean) => void
+}
+
+export const SideBarSetting = ({ isChanged, setIsChanged, setIsSwitchTab }: SideBarSettingProps) => {
   const [navbar, updateNavBar] = useNavStore((state) => [state.navbar, state.updateNavBar])
   const [isLoadingSave, setIsLoadingSave] = useState(false)
   const [checkboxStates, setCheckboxStates] = useState<Record<string, boolean>>({
@@ -157,7 +163,11 @@ export const SideBarSetting = () => {
     isCheckStatistic: navbar.includes('Statistic')
   })
 
-  const [isChanged, setIsChanged] = useState(false)
+  useEffect(() => {
+    setIsSwitchTab(false)
+  }, [])
+
+  // const [isChanged, setIsChanged] = useState(false)
   const notify = () =>
     toast.error('At least one is chosen', {
       position: 'top-center',
@@ -177,6 +187,7 @@ export const SideBarSetting = () => {
   }
   const handleSubmit = () => {
     setIsLoadingSave(true)
+    setIsChanged(false)
 
     const allNav: string[] = []
 

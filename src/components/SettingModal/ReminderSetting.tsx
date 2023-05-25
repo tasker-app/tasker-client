@@ -1,5 +1,6 @@
 import 'react-toastify/dist/ReactToastify.css'
 
+import { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { Text } from '@/components/Common/Text'
@@ -17,7 +18,14 @@ const SettingReminderContent = styled.div`
 `
 const ContentBlock = styled.div``
 
-export const ReminderSetting = () => {
+type ReminderSettingProps = {
+  setIsSwitchTab: (isSwitchTab: boolean) => void
+}
+export const ReminderSetting = ({ setIsSwitchTab }: ReminderSettingProps) => {
+  useEffect(() => {
+    setIsSwitchTab(false)
+  }, [])
+
   return (
     <SubscriptionSettingContainer>
       <Header>
