@@ -124,6 +124,7 @@ type ModalProps = {
   isOpenSetting: boolean
   handleClose: () => void
 }
+
 export const SettingModal = ({ isOpenSetting, handleClose }: ModalProps) => {
   const [active, setActive] = useState('Account')
   const [value, setValue] = useState('Account')
@@ -230,7 +231,6 @@ export const SettingModal = ({ isOpenSetting, handleClose }: ModalProps) => {
                   isActive={active === 'Sidebar'}
                   onClick={() => {
                     handleActive('Sidebar')
-
                     setIsSwitchTab(true)
                   }}
                 >

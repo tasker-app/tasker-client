@@ -66,7 +66,6 @@ type AlertModalProps = {
   isOpen: boolean
   handleAlertClose?: () => void
   handleClose?: () => void
-  handleAgree?: () => void
 }
 
 export const AlertModal = ({ isOpen, handleAlertClose = () => {}, handleClose = () => {} }: AlertModalProps) => {
