@@ -56,4 +56,25 @@ const checkSameDate = (date1: Date | number, date2: Date | number) => {
   )
 }
 
-export { checkIsToday, checkSameDate, getWeekDates }
+const getOffsetFromDate = (date: Date | number) => {
+  const currentDate = new Date()
+  const paramDate = new Date(date)
+
+  const currentDay = (currentDate.getDay() + 6) % 7 // Convert Sunday (0) to 6, Monday (1) to 0, ..., Saturday (6) to 5
+  const paramDay = (paramDate.getDay() + 6) % 7
+
+  const currentWeekStartDate = new Date(currentDate)
+  const paramWeekStartDate = new Date(paramDate)
+
+  currentWeekStartDate.setDate(currentDate.getDate() - currentDay)
+  paramWeekStartDate.setDate(paramDate.getDate() - paramDay)
+
+  const currentWeekStartTime = currentWeekStartDate.getTime()
+  const paramWeekStartTime = paramWeekStartDate.getTime()
+
+  const offset = Math.floor((paramWeekStartTime - currentWeekStartTime) / (1000 * 60 * 60 * 24 * 7))
+
+  return offset + 1
+}
+
+export { checkIsToday, checkSameDate, getOffsetFromDate, getWeekDates }

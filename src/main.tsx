@@ -23,7 +23,7 @@ const Guard = () => {
       <Route element={<SignUp />} path="/signup" />
       <Route element={<Pricing />} path="/pricing" />
       <Route element={<ForgotPassword />} path="/forgot-password" />
-      <Route element={<TestUpcoming />} path="/test-upcoming" />
+      <Route element={<TestUpcoming />} path="/upcoming" />
     </Routes>
   )
 }

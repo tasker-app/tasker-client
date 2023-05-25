@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { Week } from '@/components/Upcoming'
-import { getWeekDates } from '@/utils'
+import { DatePicker, Week } from '@/components/Upcoming'
+import { getOffsetFromDate, getWeekDates } from '@/utils'
 
 const TestUpcoming = () => {
   const [offset, setOffset] = useState(0)
@@ -23,12 +23,18 @@ const TestUpcoming = () => {
     setSelectedDateTime(new Date().getTime())
   }
 
+  useEffect(() => {
+    console.log(getOffsetFromDate(selectedDateTime))
+    setOffset(getOffsetFromDate(selectedDateTime))
+  }, [selectedDateTime])
+
   return (
     <div>
       <button onClick={handlePrev}>Prev</button>
       <button onClick={handleNext}>Next</button>
       <button onClick={handleGoToToday}>Today</button>
       <Week selectedDateTime={selectedDateTime} setSelectedDateTime={setSelectedDateTime} weekDates={weekDates} />
+      <DatePicker selectedDateTime={selectedDateTime} setSelectedDateTime={setSelectedDateTime} />
     </div>
   )
 }
