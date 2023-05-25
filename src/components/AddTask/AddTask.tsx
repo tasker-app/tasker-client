@@ -1,5 +1,3 @@
-import 'draft-js/dist/Draft.css'
-
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 

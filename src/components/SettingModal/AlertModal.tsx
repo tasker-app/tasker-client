@@ -47,9 +47,10 @@ const Button = styled.button`
   transition: background-color 0.2s ease-in-out;
 
   &:first-child {
-    background-color: #77b3df;
+    background-color: #e74c3c;
+
     &:hover {
-      background-color: #5fa8d3;
+      background-color: #c0392b;
     }
   }
 
@@ -86,7 +87,7 @@ export const AlertModal = ({ isOpen, handleAlertClose = () => {}, handleClose = 
                 handleAlertClose()
               }}
             >
-              <Text>OK</Text>
+              <Text color="#ffffff">Discard</Text>
             </Button>
             <Button onClick={handleAlertClose}>
               <Text>Cancel</Text>
