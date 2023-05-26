@@ -24,7 +24,6 @@ const TestUpcoming = () => {
   }
 
   useEffect(() => {
-    console.log(getOffsetFromDate(selectedDateTime))
     setOffset(getOffsetFromDate(selectedDateTime))
   }, [selectedDateTime])
 
