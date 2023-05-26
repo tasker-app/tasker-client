@@ -111,8 +111,8 @@ export const TaskPreview = ({ id, name, description, priority, dueDate }: TaskPr
   return (
     <>
       <TaskPreviewContainer animate={isCompleted ? 'complete' : 'initial'} variants={variants}>
-        <CheckContainer onClick={handleCheck}>
-          <Checkbox />
+        <CheckContainer>
+          <Checkbox handleClick={handleCheck} />
         </CheckContainer>
         <ContentContainer
           onClick={(event) => {
