@@ -36,10 +36,9 @@ const ContentContainer = styled.div`
   gap: 8px;
   a {
     color: #787878;
-    text-decoration: none;
 
     &:hover {
-      color: rgba(9, 61, 97, 0.5);
+      color: #0e76c0;
     }
   }
 `
