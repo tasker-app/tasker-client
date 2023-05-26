@@ -35,6 +35,7 @@ const ModalWrapper = styled.div<{ isOpen: boolean }>`
   position: fixed;
   width: 50%;
   height: fit-content;
+  max-height: 500px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -78,6 +79,35 @@ const TaskDetails = styled.div`
   gap: 20px;
   margin: 20px 0 0 32px;
   padding-bottom: 20px;
+  overflow-y: scroll;
+  max-height: 390px;
+
+  &:hover {
+    &::-webkit-scrollbar-thumb {
+      z-index: 2;
+      visibility: visible;
+    }
+  }
+  /* width */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 10px;
+  }
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: #bdbdbd;
+    z-index: 1;
+    visibility: hidden;
+  }
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #858585;
+  }
 `
 
 const CheckContainer = styled.div``
@@ -127,6 +157,7 @@ const TaskDescription = styled.div`
 `
 
 const TaskProperties = styled.div`
+  max-height: 446.5px;
   display: flex;
   flex-direction: column;
   background-color: #f4f3f5;

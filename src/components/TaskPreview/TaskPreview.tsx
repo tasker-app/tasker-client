@@ -96,11 +96,16 @@ export const TaskPreview = ({ id, name, description, priority, dueDate }: TaskPr
     }, 450)
   }
 
-  const processText = (text: string) => {
-    const linkRegex = /(https?:\/\/\S+)(?=<\/p>)/g
-    const processedText = text.replace(linkRegex, '<a target="_blank" href="$1">$1</a>')
+  const replaceLinks = () => {
+    const linkRegex = /(<p>[^<]*?(https?:\/\/[^\s<]+)[^<]*?<\/p>)/g
+    const replacedText = description.replace(linkRegex, (match, group1, group2) => {
+      return `<p>${group1.replace(
+        group2,
+        `<a href="${group2}" target="_blank" rel="noopener noreferrer">${group2}</a>`
+      )}</p>`
+    })
 
-    return processedText
+    return replacedText
   }
 
   return (
@@ -122,7 +127,7 @@ export const TaskPreview = ({ id, name, description, priority, dueDate }: TaskPr
             {name}
           </Text>
           <Text color="#787878" size={14} type="regular">
-            {description ? parse(processText(description)) : ''}
+            {description ? parse(replaceLinks()) : ''}
           </Text>
         </ContentContainer>
         <ContentContainer onClick={() => setIsOpenModal(true)}>
