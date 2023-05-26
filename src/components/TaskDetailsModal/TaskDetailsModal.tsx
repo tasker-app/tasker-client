@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
+import ReactQuill from 'react-quill'
 import styled from 'styled-components'
 
 import { ReactComponent as CloseIcon } from '@/assets/icons/close.svg'
@@ -33,7 +34,7 @@ const ModalWrapper = styled.div<{ isOpen: boolean }>`
   ${(props) => (props.isOpen ? 'display: block' : 'display: none')};
   position: fixed;
   width: 50%;
-  height: 400px;
+  height: fit-content;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -76,6 +77,7 @@ const TaskDetails = styled.div`
   align-items: flex-start;
   gap: 20px;
   margin: 20px 0 0 32px;
+  padding-bottom: 20px;
 `
 
 const CheckContainer = styled.div``
@@ -100,7 +102,7 @@ const TaskName = styled.input`
   }
 `
 
-const TaskDescription = styled.input`
+const TaskDescription = styled.div`
   width: 100%;
   border: none;
   font-weight: 400;
@@ -111,15 +113,27 @@ const TaskDescription = styled.input`
   &:focus {
     outline: none;
   }
+  .ql-container.ql-snow {
+    border: none;
+    .ql-editor {
+      padding: 0;
+    }
+    .ql-editor.ql-blank::before {
+      left: 0;
+      font-style: normal;
+      color: rgba(0, 0, 0, 0.4);
+    }
+  }
 `
 
 const TaskProperties = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #f4f3f5;
-  padding: 20px 22px 0 22px;
+  padding: 20px 22px 20px 22px;
   box-sizing: border-box;
   gap: 20px;
+  border-radius: 0 0 8px 0;
 `
 
 const Property = styled.div`
@@ -250,12 +264,18 @@ export const TaskDetailsModal = ({
                 value={task.name}
                 onChange={(e) => setTask((prevTask) => ({ ...prevTask, name: e.target.value }))}
               />
-              <TaskDescription
-                placeholder="Description"
-                type="text"
-                value={task.description}
-                onChange={(e) => setTask((prevTask) => ({ ...prevTask, description: e.target.value }))}
-              />
+              <TaskDescription>
+                <ReactQuill
+                  formats={[]}
+                  modules={{
+                    toolbar: null
+                  }}
+                  placeholder="Description"
+                  theme="snow"
+                  value={task.description}
+                  onChange={(value) => setTask((prevTask) => ({ ...prevTask, description: value }))}
+                />
+              </TaskDescription>
             </ContentContainer>
           </TaskDetails>
 

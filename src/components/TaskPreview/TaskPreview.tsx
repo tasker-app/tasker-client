@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import parse from 'html-react-parser'
 import { useState } from 'react'
 import styled from 'styled-components'
 
@@ -14,7 +15,7 @@ import { TaskDetailsModal } from '../TaskDetailsModal'
 import { Checkbox } from './Checkbox'
 
 const TaskPreviewContainer = styled(motion.div)`
-  height: 60px;
+  height: fit-content;
   margin-top: 24px;
   display: grid;
   grid-template-columns: 40px 1fr 92px;
@@ -28,10 +29,19 @@ const CheckContainer = styled.div`
 `
 
 const ContentContainer = styled.div`
+  padding-bottom: 20px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   gap: 8px;
+  a {
+    color: #787878;
+    text-decoration: none;
+
+    &:hover {
+      color: rgba(9, 61, 97, 0.5);
+    }
+  }
 `
 
 const Priority = styled.div`
@@ -70,7 +80,7 @@ const variants = {
     opacity: 0,
     x: 400,
     transition: {
-      duration: 0.3
+      duration: 0.4
     }
   }
 }
@@ -84,21 +94,36 @@ export const TaskPreview = ({ id, name, description, priority, dueDate }: TaskPr
     setIsCompleted(true)
     setTimeout(() => {
       completeTask(id)
-    }, 330)
+    }, 450)
+  }
+
+  const processText = (text: string) => {
+    const linkRegex = /(https?:\/\/\S+)(?=<\/p>)/g
+    const processedText = text.replace(linkRegex, '<a target="_blank" href="$1">$1</a>')
+
+    return processedText
   }
 
   return (
     <>
       <TaskPreviewContainer animate={isCompleted ? 'complete' : 'initial'} variants={variants}>
-        <CheckContainer>
-          <Checkbox handleClick={handleCheck} />
+        <CheckContainer onClick={handleCheck}>
+          <Checkbox />
         </CheckContainer>
-        <ContentContainer onClick={() => setIsOpenModal(true)}>
+        <ContentContainer
+          onClick={(event) => {
+            const target = event.target as HTMLElement
+
+            if (!target.closest('a')) {
+              setIsOpenModal(true)
+            }
+          }}
+        >
           <Text color="#0F0F0F" size={16} type="bold">
             {name}
           </Text>
           <Text color="#787878" size={14} type="regular">
-            {description}
+            {description ? parse(processText(description)) : ''}
           </Text>
         </ContentContainer>
         <ContentContainer onClick={() => setIsOpenModal(true)}>
