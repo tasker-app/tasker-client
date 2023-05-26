@@ -1,4 +1,7 @@
+import 'react-quill/dist/quill.snow.css'
+
 import { useEffect, useRef, useState } from 'react'
+import ReactQuill from 'react-quill'
 import styled from 'styled-components'
 
 import { ReactComponent as ClockIcon } from '@/assets/icons/clock.svg'
@@ -16,7 +19,7 @@ import { SelectPriority } from './SelectPriority'
 
 // #region Styles
 const AddTaskContainer = styled.div<{ isCancelAddTask: boolean }>`
-  height: 190px;
+  height: fit-content;
   border: 1px solid rgba(148, 148, 148, 0.8);
   border-radius: 12px;
   padding: 15px 40px 18px 27px;
@@ -46,7 +49,7 @@ const TaskName = styled.input`
   }
 `
 
-const TaskDescription = styled.input`
+const TaskDescription = styled.div`
   width: 100%;
   border: none;
   font-weight: 400;
@@ -56,6 +59,17 @@ const TaskDescription = styled.input`
 
   &:focus {
     outline: none;
+  }
+  .ql-container.ql-snow {
+    border: none;
+    .ql-editor {
+      padding: 0;
+    }
+    .ql-editor.ql-blank::before {
+      left: 0;
+      font-style: normal;
+      color: rgba(0, 0, 0, 0.4);
+    }
   }
 `
 
@@ -166,7 +180,6 @@ export const AddTask = ({ setAddNewTask, setIsStatusHidden }: AddTaskProps) => {
 
   const handleAddTask = () => {
     if (isTaskNameEmpty) return null
-
     const newTask = {
       id: Math.random().toString(36),
       name: task.name,
@@ -199,13 +212,6 @@ export const AddTask = ({ setAddNewTask, setIsStatusHidden }: AddTaskProps) => {
     }
   }
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      event.preventDefault()
-      setTask((prevTask) => ({ ...prevTask, description: prevTask.description + '<br>' }))
-    }
-  }
-
   return (
     <AddTaskContainer isCancelAddTask={isCancelAddTask} tabIndex={0}>
       <AddTaskContent>
@@ -217,13 +223,18 @@ export const AddTask = ({ setAddNewTask, setIsStatusHidden }: AddTaskProps) => {
           onChange={(e) => setTask((prevTask) => ({ ...prevTask, name: e.target.value }))}
           onKeyDown={handleKeyDown}
         />
-        <TaskDescription
-          placeholder="Description"
-          type="text"
-          value={task.description}
-          onChange={(e) => setTask((prevTask) => ({ ...prevTask, description: e.target.value }))}
-          onKeyDown={handleKeyPress}
-        />
+        <TaskDescription>
+          <ReactQuill
+            formats={[]}
+            modules={{
+              toolbar: null
+            }}
+            placeholder="Description"
+            theme="snow"
+            value={task.description}
+            onChange={(value) => setTask((prevTask) => ({ ...prevTask, description: value }))}
+          />
+        </TaskDescription>
         <TaskProperties>
           <DatePicker
             dueDate={task.dueDate}

@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import parse from 'html-react-parser'
 import { useState } from 'react'
 import styled from 'styled-components'
 
@@ -14,7 +15,7 @@ import { TaskDetailsModal } from '../TaskDetailsModal'
 import { Checkbox } from './Checkbox'
 
 const TaskPreviewContainer = styled(motion.div)`
-  height: 60px;
+  height: fit-content;
   margin-top: 24px;
   display: grid;
   grid-template-columns: 40px 1fr 92px;
@@ -28,10 +29,18 @@ const CheckContainer = styled.div`
 `
 
 const ContentContainer = styled.div`
+  padding-bottom: 20px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   gap: 8px;
+  a {
+    color: #787878;
+
+    &:hover {
+      color: #0e76c0;
+    }
+  }
 `
 
 const Priority = styled.div`
@@ -70,7 +79,7 @@ const variants = {
     opacity: 0,
     x: 400,
     transition: {
-      duration: 0.3
+      duration: 0.4
     }
   }
 }
@@ -84,21 +93,41 @@ export const TaskPreview = ({ id, name, description, priority, dueDate }: TaskPr
     setIsCompleted(true)
     setTimeout(() => {
       completeTask(id)
-    }, 330)
+    }, 450)
+  }
+
+  const replaceLinks = () => {
+    const linkRegex = /(<p>[^<]*?(https?:\/\/[^\s<]+)[^<]*?<\/p>)/g
+    const replacedText = description.replace(linkRegex, (match, group1, group2) => {
+      return `<p>${group1.replace(
+        group2,
+        `<a href="${group2}" target="_blank" rel="noopener noreferrer">${group2}</a>`
+      )}</p>`
+    })
+
+    return replacedText
   }
 
   return (
     <>
       <TaskPreviewContainer animate={isCompleted ? 'complete' : 'initial'} variants={variants}>
-        <CheckContainer>
-          <Checkbox handleClick={handleCheck} />
+        <CheckContainer onClick={handleCheck}>
+          <Checkbox />
         </CheckContainer>
-        <ContentContainer onClick={() => setIsOpenModal(true)}>
+        <ContentContainer
+          onClick={(event) => {
+            const target = event.target as HTMLElement
+
+            if (!target.closest('a')) {
+              setIsOpenModal(true)
+            }
+          }}
+        >
           <Text color="#0F0F0F" size={16} type="bold">
             {name}
           </Text>
           <Text color="#787878" size={14} type="regular">
-            {description}
+            {description ? parse(replaceLinks()) : ''}
           </Text>
         </ContentContainer>
         <ContentContainer onClick={() => setIsOpenModal(true)}>
