@@ -1,5 +1,6 @@
 import 'react-toastify/dist/ReactToastify.css'
 
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -59,7 +60,14 @@ const Button = styled.button`
   }
 `
 
-export const SubscriptionSetting = () => {
+type SubscriptionSettingProps = {
+  setIsSwitchTab: (isSwitchTab: boolean) => void
+}
+export const SubscriptionSetting = ({ setIsSwitchTab }: SubscriptionSettingProps) => {
+  useEffect(() => {
+    setIsSwitchTab(false)
+  }, [])
+
   return (
     <SubscriptionSettingContainer>
       <Header>
