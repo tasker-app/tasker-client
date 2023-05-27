@@ -54,10 +54,8 @@ const OptionsButton = styled.button<{ isToday?: number }>`
   svg {
     width: 20px;
     height: 20px;
-    filter: ${({ isToday }) =>
-      isToday === 0
-        ? ' brightness(0) saturate(100%) invert(20%) sepia(7%) saturate(1124%) hue-rotate(187deg) brightness(88%) contrast(90%)'
-        : ' '};
+    opacity: ${({ isToday }) => (isToday === 0 ? '0.5' : '1')};
+    transition: ${({ isToday }) => (isToday === 0 ? 'none' : 'opacity 0.2s ease-in-out')};
   }
 `
 
