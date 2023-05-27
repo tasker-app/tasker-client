@@ -26,11 +26,7 @@ export const DashboardContent = ({ isNavOpen, activeNavbar }: DashboardContentPr
     <DashboardContentContainer isNavOpen={isNavOpen}>
       <Content>
         {activeNavbar === 'Today' && <DashboardToday />}
-        {activeNavbar === 'Upcoming' && (
-          <div>
-            <DashboardUpcoming />
-          </div>
-        )}
+        {activeNavbar === 'Upcoming' && <DashboardUpcoming />}
         {activeNavbar === 'Overdue' && <div>Completed</div>}
         {activeNavbar === 'Statistic' && <div>Statistic</div>}
       </Content>
