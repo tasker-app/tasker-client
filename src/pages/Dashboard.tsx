@@ -18,6 +18,7 @@ const Grid = styled.div`
 
 const Dashboard = () => {
   const [isNavOpen, setIsNavOpen] = useState(true)
+  const [activeNavbar, setActiveNavbar] = useState('Today')
 
   const handleNavToggle = () => {
     setIsNavOpen(!isNavOpen)
@@ -27,8 +28,8 @@ const Dashboard = () => {
     <DashboardContainer>
       <Header handleNavToggle={handleNavToggle} />
       <Grid>
-        <Nav isNavOpen={isNavOpen} />
-        <DashboardContent isNavOpen={isNavOpen} />
+        <Nav isNavOpen={isNavOpen} setActiveNavbar={setActiveNavbar} />
+        <DashboardContent activeNavbar={activeNavbar} isNavOpen={isNavOpen} />
       </Grid>
     </DashboardContainer>
   )

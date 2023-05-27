@@ -12,7 +12,6 @@ import Landing from './pages/Landing'
 import Pricing from './pages/Pricing'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
-import TestUpcoming from './pages/TestUpcoming'
 
 const Guard = () => {
   return (
@@ -23,7 +22,6 @@ const Guard = () => {
       <Route element={<SignUp />} path="/signup" />
       <Route element={<Pricing />} path="/pricing" />
       <Route element={<ForgotPassword />} path="/forgot-password" />
-      <Route element={<TestUpcoming />} path="/upcoming" />
     </Routes>
   )
 }
