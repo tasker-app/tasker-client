@@ -93,9 +93,10 @@ const YourTeams = styled.div<{ isNavOpen?: boolean; isOptionDisplayed?: boolean 
 
 type NavProps = {
   isNavOpen: boolean
+  setActiveNavbar: (value: string) => void
 }
 
-export const Nav = ({ isNavOpen }: NavProps) => {
+export const Nav = ({ isNavOpen, setActiveNavbar }: NavProps) => {
   const [navbar] = useNavStore((state) => [state.navbar, state.updateNavBar])
   const [active, setActive] = useState('Today')
   const [isOptionDisplayed, setIsOptionDisplayed] = useState(false)
@@ -110,6 +111,7 @@ export const Nav = ({ isNavOpen }: NavProps) => {
 
   const handleActive = (value: string) => {
     setActive(value)
+    setActiveNavbar(value)
   }
 
   return (
