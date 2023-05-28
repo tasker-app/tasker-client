@@ -12,6 +12,10 @@ const getWeekDates = (date: Date | number, offset: number) => {
 
   const startDate = new Date(currentDate) // Clone the current date
 
+  if (currentDay === 0) {
+    offset -= 1
+  }
+
   startDate.setDate(currentDate.getDate() - (currentDay - 1) + offset * 7) // Add or subtract the offset weeks
 
   const weekDates = []
