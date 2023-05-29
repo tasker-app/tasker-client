@@ -49,6 +49,7 @@ const Input = styled.input`
 type DatePickerProps = {
   maxWidth?: string
   dueDate: number
+  addTime?: number
   setDueDate: (date: number) => void
 }
 
