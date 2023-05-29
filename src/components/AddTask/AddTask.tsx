@@ -147,7 +147,7 @@ const MAPPING_FLAG_ICON = {
 }
 
 type AddTaskProps = {
-  setAddNewTask: (isAddNewTask: boolean) => void
+  setAddNewTask: (isAddNewTask: boolean | any) => void
   setIsStatusHidden: (isStatusHidden: boolean) => void
 }
 
