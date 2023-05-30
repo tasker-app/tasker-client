@@ -1,21 +1,23 @@
 import { create } from 'zustand'
 
+import { Order as OrderType, Priority as PriorityType, Sort as SortType } from '@/models/task'
+
 type FilterState = {
-  selectedSorting: string
-  setSelectedSorting: (sorting: string) => void
-  selectedOrdering: string
-  setSelectedOrdering: (ordering: string) => void
-  selectedPriority: string
-  setSelectedPriority: (priority: string) => void
+  selectedSorting: SortType
+  setSelectedSorting: (sorting: SortType) => void
+  selectedOrdering: OrderType
+  setSelectedOrdering: (ordering: OrderType) => void
+  selectedPriority: PriorityType
+  setSelectedPriority: (priority: PriorityType) => void
 }
 
 const useFilterStore = create<FilterState>((set) => ({
   selectedSorting: 'default',
-  setSelectedSorting: (sorting: string) => set(() => ({ selectedSorting: sorting })),
+  setSelectedSorting: (sorting: SortType) => set(() => ({ selectedSorting: sorting })),
   selectedOrdering: 'ascending',
-  setSelectedOrdering: (ordering: string) => set(() => ({ selectedOrdering: ordering })),
+  setSelectedOrdering: (ordering: OrderType) => set(() => ({ selectedOrdering: ordering })),
   selectedPriority: 'default',
-  setSelectedPriority: (priority: string) => set(() => ({ selectedPriority: priority }))
+  setSelectedPriority: (priority: PriorityType) => set(() => ({ selectedPriority: priority }))
 }))
 
 export { useFilterStore }

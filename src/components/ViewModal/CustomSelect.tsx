@@ -47,7 +47,8 @@ type SelectProps = {
   children: ReactNode
   list: Array<{ label: string; value: string }>
   value: string
-  setValue: (value: string) => void
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setValue: (value: any) => void // value can be Sort, Order, or Priority
 }
 
 export const CustomSelect = (props: SelectProps) => {

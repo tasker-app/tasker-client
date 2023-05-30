@@ -54,7 +54,7 @@ export const ListTask = () => {
 
       return tasks.slice()
     }
-  }, [selectedSorting, selectedOrdering])
+  }, [selectedOrdering, selectedSorting])
 
   const filteredTasks = tasks.filter((task) => selectedPriority === 'default' || task.priority === selectedPriority)
 
