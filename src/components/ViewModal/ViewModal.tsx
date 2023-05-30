@@ -1,12 +1,13 @@
-import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg'
+import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg'
 import { ReactComponent as CollapseIcon } from '@/assets/icons/collapse.svg'
 import { ReactComponent as FlagIcon } from '@/assets/icons/flag.svg'
 import { Text } from '@/components/Common'
 import { ORDERING_LIST, PRIORITY_LIST, SORTING_LIST } from '@/libs/constant'
+import { useFilterStore } from '@/stores/filter'
 
 import { CustomSelect } from './CustomSelect'
 
@@ -70,9 +71,21 @@ type ModalProps = {
 }
 
 export const ViewModal = ({ isOpen, handleClose }: ModalProps) => {
-  const [selectedSorting, setSelectedSorting] = useState('default')
-  const [selectedOrdering, setSelectedOrdering] = useState('ascending')
-  const [selectedPriority, setSelectedPriority] = useState('default')
+  const [
+    selectedSorting,
+    selectedOrdering,
+    selectedPriority,
+    setSelectedOrdering,
+    setSelectedSorting,
+    setSelectedPriority
+  ] = useFilterStore((state) => [
+    state.selectedSorting,
+    state.selectedOrdering,
+    state.selectedPriority,
+    state.setSelectedOrdering,
+    state.setSelectedSorting,
+    state.setSelectedPriority
+  ])
 
   if (!isOpen) return null
 
@@ -97,7 +110,7 @@ export const ViewModal = ({ isOpen, handleClose }: ModalProps) => {
 
           <Flex>
             <Title>
-              <ArrowDownIcon />
+              {selectedOrdering === 'ascending' ? <ArrowDownIcon /> : <ArrowUpIcon />}
               <Text size={16}> Ordering</Text>
             </Title>
 

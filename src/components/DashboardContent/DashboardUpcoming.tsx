@@ -188,6 +188,7 @@ export const DashboardUpcoming = () => {
     updatedAddNewTask[convertTimeStamp(time)] = true
     setAddNewTask(updatedAddNewTask)
     setSelectedDateTime(time)
+
   }
   const convertTimeStamp: (time: number) => number = (time) => {
     const date = new Date(time)
@@ -241,7 +242,7 @@ export const DashboardUpcoming = () => {
       <Week selectedDateTime={selectedDateTime} setSelectedDateTime={setSelectedDateTime} weekDates={weekDates} />
       <UpcomingContent ref={upcomingContentRef} id="upcomingContent">
         {weekDates.map((date, index) => (
-          <>
+          <div key={index}>
             {convertTimeStamp(new Date().getTime()) <= convertTimeStamp(date.time) ? (
               <UpcomingBlock
                 key={index}
@@ -302,7 +303,8 @@ export const DashboardUpcoming = () => {
             ) : (
               ''
             )}
-          </>
+          </div>
+
         ))}
       </UpcomingContent>
     </>
