@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { scroller } from 'react-scroll'
 import styled, { css } from 'styled-components'
 
 import { ReactComponent as AddIcon } from '@/assets/icons/add.svg'
@@ -10,7 +11,7 @@ import { TaskPreview } from '@/components/TaskPreview'
 import { DatePicker, Week } from '@/components/Upcoming'
 import { Task as TaskType } from '@/models/task'
 import { useTaskStore } from '@/stores'
-import { checkSameDate, fullWordDate, getOffsetFromDate, getWeekDates, monthNames } from '@/utils'
+import { checkSameDate, fullWordDate, getWeekDates, monthNames } from '@/utils'
 
 const DateOptions = styled.div`
   display: flex;
@@ -117,7 +118,7 @@ const Time = styled.div`
   margin: 0 0 12px 0;
   padding-bottom: 12px;
   padding-top: 37px;
-
+  cursor: pointer;
   border-bottom: 1px solid rgba(148, 148, 148, 0.6);
 `
 const AddTaskButton = styled.button<{ isHidden: boolean }>`
@@ -137,8 +138,7 @@ const AddTaskButton = styled.button<{ isHidden: boolean }>`
   }
 `
 const UpcomingBlock = styled.div<{ isActiveDate: boolean }>`
-  opacity: 0.7;
-
+  opacity: 0.5;
   ${({ isActiveDate }) =>
     isActiveDate
       ? css`
@@ -154,18 +154,18 @@ const UpcomingBlock = styled.div<{ isActiveDate: boolean }>`
 const TasksContainer = styled.div`
   padding: 0 15px 0 15px;
 `
+const Add = styled.div``
 
 type UpdatedAddNewTask = {
   [key: number]: boolean
 }
 export const DashboardUpcoming = () => {
   const [offset, setOffset] = useState(0)
-
   const [addNewTask, setAddNewTask] = useState<UpdatedAddNewTask>({})
   const [selectedDateTime, setSelectedDateTime] = useState<number>(new Date().getTime())
   const weekDates = getWeekDates(new Date(), offset)
   const [tasks] = useTaskStore((state) => [state.tasks])
-
+  const upcomingContentRef = useRef<HTMLDivElement>(null)
   const handlePrev = () => {
     if (offset > 0) {
       setOffset((prev) => prev - 1)
@@ -181,8 +181,9 @@ export const DashboardUpcoming = () => {
     setSelectedDateTime(new Date().getTime())
   }
   const handleAddTask = (time: number) => {
-    // setIsStatusHidden(true)
-    const updatedAddNewTask = { ...addNewTask }
+    const updatedAddNewTask: {
+      [key: number]: boolean
+    } = {}
 
     updatedAddNewTask[convertTimeStamp(time)] = true
     setAddNewTask(updatedAddNewTask)
@@ -200,7 +201,24 @@ export const DashboardUpcoming = () => {
   }
 
   useEffect(() => {
-    setOffset(getOffsetFromDate(selectedDateTime))
+    const targetBlock = Array.from(upcomingContentRef.current?.children || []).find((block) => {
+      const time = parseInt((block as HTMLElement).dataset.time || '')
+
+      return checkSameDate(selectedDateTime, time)
+    }) as HTMLElement
+
+    if (targetBlock) {
+      const elementId = targetBlock.getAttribute('id')
+
+      if (elementId) {
+        scroller.scrollTo(elementId, {
+          duration: 500,
+          smooth: 'easeInOutQuart',
+          containerId: 'upcomingContent',
+          offset: -50
+        })
+      }
+    }
   }, [selectedDateTime])
 
   return (
@@ -220,49 +238,70 @@ export const DashboardUpcoming = () => {
         </OptionsContainer>
       </DateOptions>
       <Week selectedDateTime={selectedDateTime} setSelectedDateTime={setSelectedDateTime} weekDates={weekDates} />
-      <UpcomingContent>
+      <UpcomingContent ref={upcomingContentRef} id="upcomingContent">
         {weekDates.map((date, index) => (
-          <UpcomingBlock key={index} isActiveDate={checkSameDate(selectedDateTime, date.time)}>
-            <Time>
-              <Text size={16}>
-                {date.date} {monthNames[date.month]} | {fullWordDate[date.day]}
-              </Text>
-            </Time>
-            <TasksContainer>
-              {tasks.map((task: TaskType, index) => (
-                <div key={index}>
-                  {checkSameDate(task.dueDate, date.time) ? (
-                    <TaskPreview
-                      key={task.id}
-                      description={task.description}
-                      dueDate={task.dueDate}
-                      id={task.id}
-                      name={task.name}
-                      priority={task.priority}
+          <>
+            {convertTimeStamp(new Date().getTime()) <= convertTimeStamp(date.time) ? (
+              <UpcomingBlock
+                key={index}
+                data-time={date.time}
+                id={`block-${index}`}
+                isActiveDate={checkSameDate(selectedDateTime, date.time)}
+              >
+                <Time
+                  onClick={() => {
+                    setSelectedDateTime(date.time)
+                  }}
+                >
+                  <Text size={16}>
+                    {date.date} {monthNames[date.month]} | {fullWordDate[date.day]}
+                  </Text>
+                </Time>
+                <TasksContainer>
+                  {tasks.map((task: TaskType, index) => (
+                    <div key={index}>
+                      {checkSameDate(task.dueDate, date.time) ? (
+                        <TaskPreview
+                          key={task.id}
+                          description={task.description}
+                          dueDate={task.dueDate}
+                          id={task.id}
+                          name={task.name}
+                          priority={task.priority}
+                        />
+                      ) : (
+                        ''
+                      )}
+                    </div>
+                  ))}
+                </TasksContainer>
+                <Add className="add">
+                  <AddTaskButton
+                    isHidden={addNewTask[convertTimeStamp(date.time)]}
+                    onClick={() => handleAddTask(date.time)}
+                  >
+                    <AddIcon />
+                    <Text size={16}>Add your task</Text>
+                  </AddTaskButton>
+                  {addNewTask[convertTimeStamp(date.time)] && (
+                    <AddTask
+                      addTime={date.time}
+                      handleCancel={() => {
+                        const updatedAddNewTask: {
+                          [key: number]: boolean
+                        } = {}
+
+                        updatedAddNewTask[convertTimeStamp(date.time)] = false
+                        setAddNewTask(updatedAddNewTask)
+                      }}
                     />
-                  ) : (
-                    ''
                   )}
-                </div>
-              ))}
-            </TasksContainer>
-
-            <AddTaskButton isHidden={addNewTask[convertTimeStamp(date.time)]} onClick={() => handleAddTask(date.time)}>
-              <AddIcon />
-              <Text size={16}>Add your task</Text>
-            </AddTaskButton>
-            {addNewTask[convertTimeStamp(date.time)] && (
-              <AddTask
-                addTime={date.time}
-                handleCancel={() => {
-                  const updatedAddNewTask = { ...addNewTask }
-
-                  updatedAddNewTask[convertTimeStamp(date.time)] = false
-                  setAddNewTask(updatedAddNewTask)
-                }}
-              />
+                </Add>
+              </UpcomingBlock>
+            ) : (
+              ''
             )}
-          </UpcomingBlock>
+          </>
         ))}
       </UpcomingContent>
     </>

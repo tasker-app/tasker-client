@@ -201,13 +201,20 @@ export const AddTask = ({
     }
 
     addTask(newTask)
-
-    setTask({
-      name: '',
-      description: '',
-      priority: 'default',
-      dueDate: new Date().getTime()
-    })
+    if (addTime !== 0) {
+      setTask({
+        name: '',
+        description: '',
+        priority: 'default',
+        dueDate: new Date(addTime).getTime()
+      })
+    } else
+      setTask({
+        name: '',
+        description: '',
+        priority: 'default',
+        dueDate: new Date().getTime()
+      })
   }
 
   const isTaskNameEmpty = task.name.trim() === ''
