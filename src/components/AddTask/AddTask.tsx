@@ -19,6 +19,7 @@ import { SelectPriority } from './SelectPriority'
 
 // #region Styles
 const AddTaskContainer = styled.div<{ isCancelAddTask: boolean }>`
+  opacity: 1;
   height: fit-content;
   border: 1px solid rgba(148, 148, 148, 0.8);
   border-radius: 12px;
@@ -176,6 +177,7 @@ export const AddTask = ({
   const [tasks, addTask] = useTaskStore((state) => [state.tasks, state.addTask])
 
   const inputNameRef = useRef<HTMLInputElement>(null)
+  const addTaskRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (addTime !== 0) {
@@ -232,8 +234,25 @@ export const AddTask = ({
     }
   }
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (event.target) {
+        if (addTaskRef.current && !addTaskRef.current.contains(event.target as HTMLElement)) {
+          // User clicked outside the AddTask component
+          handleCancel()
+        }
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [handleCancel])
+
   return (
-    <AddTaskContainer isCancelAddTask={isCancelAddTask} tabIndex={0}>
+    <AddTaskContainer ref={addTaskRef} isCancelAddTask={isCancelAddTask} tabIndex={0}>
       <AddTaskContent>
         <TaskName
           ref={inputNameRef}
