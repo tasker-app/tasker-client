@@ -14,7 +14,7 @@ const Date = styled.div<{ maxWidth: string | undefined }>`
   position: relative;
   max-width: ${(props) => (props.maxWidth ? props.maxWidth : '100%')};
 
-  svg {
+  > svg {
     width: 20px;
     height: 20px;
     position: absolute;
