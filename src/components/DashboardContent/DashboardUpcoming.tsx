@@ -187,6 +187,7 @@ export const DashboardUpcoming = () => {
 
     updatedAddNewTask[convertTimeStamp(time)] = true
     setAddNewTask(updatedAddNewTask)
+    setSelectedDateTime(time)
   }
   const convertTimeStamp: (time: number) => number = (time) => {
     const date = new Date(time)
