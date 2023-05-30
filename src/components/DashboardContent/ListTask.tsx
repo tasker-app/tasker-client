@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { TaskPreview } from '@/components/TaskPreview'
@@ -16,42 +17,44 @@ export const ListTask = () => {
     state.selectedPriority
   ])
 
-  const sortTasks = (tasks: TaskType[]) => {
-    if (selectedSorting === 'name') {
-      return tasks.slice().sort((a, b) => {
-        if (selectedOrdering === 'ascending') {
-          return a.name.localeCompare(b.name)
-        } else {
-          return b.name.localeCompare(a.name)
-        }
-      })
-    } else if (selectedSorting === 'date') {
-      return tasks.slice().sort((a, b) => {
-        if (selectedOrdering === 'ascending') {
-          return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
-        } else {
-          return new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime()
-        }
-      })
-    } else if (selectedSorting === 'priority') {
-      return tasks.slice().sort((a, b) => {
-        const priorityOrder = {
-          default: 0,
-          low: 1,
-          medium: 2,
-          high: 3
-        }
+  const sortTasks = useMemo(() => {
+    return (tasks: TaskType[]) => {
+      if (selectedSorting === 'name') {
+        return tasks.slice().sort((a, b) => {
+          if (selectedOrdering === 'ascending') {
+            return a.name.localeCompare(b.name)
+          } else {
+            return b.name.localeCompare(a.name)
+          }
+        })
+      } else if (selectedSorting === 'date') {
+        return tasks.slice().sort((a, b) => {
+          if (selectedOrdering === 'ascending') {
+            return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+          } else {
+            return new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime()
+          }
+        })
+      } else if (selectedSorting === 'priority') {
+        return tasks.slice().sort((a, b) => {
+          const priorityOrder = {
+            default: 0,
+            low: 1,
+            medium: 2,
+            high: 3
+          }
 
-        if (selectedOrdering === 'ascending') {
-          return priorityOrder[a.priority] - priorityOrder[b.priority]
-        } else {
-          return priorityOrder[b.priority] - priorityOrder[a.priority]
-        }
-      })
+          if (selectedOrdering === 'ascending') {
+            return priorityOrder[a.priority] - priorityOrder[b.priority]
+          } else {
+            return priorityOrder[b.priority] - priorityOrder[a.priority]
+          }
+        })
+      }
+
+      return tasks.slice()
     }
-
-    return tasks.slice()
-  }
+  }, [selectedSorting, selectedOrdering])
 
   const filteredTasks = tasks.filter((task) => selectedPriority === 'default' || task.priority === selectedPriority)
 
