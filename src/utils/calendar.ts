@@ -28,6 +28,7 @@ const getWeekDates = (date: Date | number, offset: number) => {
     const calendarDate: CalendarDate = {
       day: getDayAbbreviation(weekDate.getDay()),
       date: weekDate.getDate(),
+      month: weekDate.getMonth(),
       time: weekDate.getTime(),
       isOver: weekDate < currentDate
     }
@@ -81,4 +82,28 @@ const getOffsetFromDate = (date: Date | number) => {
   return offset + 1
 }
 
-export { checkIsToday, checkSameDate, getOffsetFromDate, getWeekDates }
+const fullWordDate = {
+  Mon: 'Monday',
+  Tue: 'Tuesday',
+  Wed: 'Wednesday',
+  Thu: 'Thursday',
+  Fri: 'Friday',
+  Sat: 'Saturday',
+  Sun: 'Sunday'
+}
+const monthNames = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
+]
+
+export { checkIsToday, checkSameDate, fullWordDate, getOffsetFromDate, getWeekDates, monthNames }

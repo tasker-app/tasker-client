@@ -147,8 +147,10 @@ const MAPPING_FLAG_ICON = {
 }
 
 type AddTaskProps = {
-  setAddNewTask: (isAddNewTask: boolean) => void
-  setIsStatusHidden: (isStatusHidden: boolean) => void
+  setAddNewTask?: (isAddNewTask: boolean | any) => void
+  setIsStatusHidden?: (isStatusHidden: boolean) => void
+  handleCancel?: () => void
+  addTime?: number
 }
 
 type NewTask = {
@@ -158,7 +160,12 @@ type NewTask = {
   dueDate: number
 }
 
-export const AddTask = ({ setAddNewTask, setIsStatusHidden }: AddTaskProps) => {
+export const AddTask = ({
+  addTime = 0,
+  setAddNewTask = () => {},
+  setIsStatusHidden = () => {},
+  handleCancel = () => {}
+}: AddTaskProps) => {
   const [isCancelAddTask, setIsCancelAddTask] = useState(false)
   const [task, setTask] = useState<NewTask>({
     name: '',
@@ -170,6 +177,11 @@ export const AddTask = ({ setAddNewTask, setIsStatusHidden }: AddTaskProps) => {
 
   const inputNameRef = useRef<HTMLInputElement>(null)
 
+  useEffect(() => {
+    if (addTime !== 0) {
+      setTask((prevTask) => ({ ...prevTask, dueDate: addTime }))
+    }
+  }, [])
   useEffect(() => {
     inputNameRef.current?.focus()
 
@@ -189,13 +201,20 @@ export const AddTask = ({ setAddNewTask, setIsStatusHidden }: AddTaskProps) => {
     }
 
     addTask(newTask)
-
-    setTask({
-      name: '',
-      description: '',
-      priority: 'default',
-      dueDate: new Date().getTime()
-    })
+    if (addTime !== 0) {
+      setTask({
+        name: '',
+        description: '',
+        priority: 'default',
+        dueDate: new Date(addTime).getTime()
+      })
+    } else
+      setTask({
+        name: '',
+        description: '',
+        priority: 'default',
+        dueDate: new Date().getTime()
+      })
   }
 
   const isTaskNameEmpty = task.name.trim() === ''
@@ -204,6 +223,7 @@ export const AddTask = ({ setAddNewTask, setIsStatusHidden }: AddTaskProps) => {
     setIsCancelAddTask(true)
     setAddNewTask(false)
     setIsStatusHidden(false)
+    handleCancel()
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -237,6 +257,7 @@ export const AddTask = ({ setAddNewTask, setIsStatusHidden }: AddTaskProps) => {
         </TaskDescription>
         <TaskProperties>
           <DatePicker
+            addTime={addTime}
             dueDate={task.dueDate}
             setDueDate={(dueDate) => setTask((prevTask) => ({ ...prevTask, dueDate }))}
           />

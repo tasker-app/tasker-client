@@ -1,6 +1,6 @@
 import AirDatepicker from 'air-datepicker'
 import localeEn from 'air-datepicker/locale/en'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { ReactComponent as CalendarIcon } from '@/assets/icons/calendar.svg'
@@ -14,7 +14,7 @@ const Date = styled.div<{ maxWidth: string | undefined }>`
   position: relative;
   max-width: ${(props) => (props.maxWidth ? props.maxWidth : '100%')};
 
-  svg {
+  > svg {
     width: 20px;
     height: 20px;
     position: absolute;
@@ -49,6 +49,7 @@ const Input = styled.input`
 type DatePickerProps = {
   maxWidth?: string
   dueDate: number
+  addTime?: number
   setDueDate: (date: number) => void
 }
 
@@ -56,6 +57,7 @@ export const DatePicker = ({ dueDate, setDueDate, maxWidth }: DatePickerProps) =
   const inputRef = useRef<HTMLInputElement>(null)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const datepickerRef = useRef<any>(null)
+  const containerId = useId()
 
   const [selectedDate, setSelectedDate] = useState<number>(new window.Date(dueDate).getTime())
 
@@ -69,6 +71,7 @@ export const DatePicker = ({ dueDate, setDueDate, maxWidth }: DatePickerProps) =
   useEffect(() => {
     if (inputRef.current) {
       datepickerRef.current = new AirDatepicker(inputRef.current, {
+        container: (document.getElementById(containerId) as HTMLElement) || '.air-datepicker-global-container',
         locale: localeEn,
         firstDay: 1,
         dateFormat(date: Date) {
@@ -111,7 +114,7 @@ export const DatePicker = ({ dueDate, setDueDate, maxWidth }: DatePickerProps) =
   }, [])
 
   return (
-    <Date maxWidth={maxWidth}>
+    <Date id={containerId} maxWidth={maxWidth}>
       <Input ref={inputRef} readOnly />
       <CalendarIcon />
     </Date>
