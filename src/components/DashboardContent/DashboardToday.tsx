@@ -2,10 +2,14 @@ import { useState } from 'react'
 import styled from 'styled-components'
 
 import { ReactComponent as AddIcon } from '@/assets/icons/add.svg'
+import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg'
+import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg'
+import { ReactComponent as CloseIcon } from '@/assets/icons/close.svg'
 import { ReactComponent as FilterIcon } from '@/assets/icons/filter.svg'
 import { AddTask } from '@/components/AddTask'
-import { Text } from '@/components/Common'
+import { CustomTooltip, Text } from '@/components/Common'
 import { ViewModal } from '@/components/ViewModal'
+import { useFilterStore } from '@/stores'
 import { currentDateFormatted } from '@/utils'
 
 import { DashboardStatus } from './DashboardStatus'
@@ -20,6 +24,35 @@ const Today = styled.div`
   display: flex;
   align-items: center;
   gap: 20px;
+`
+
+const FilterContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 45px;
+`
+
+const FilterText = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`
+
+const OrderingButton = styled.button`
+  border: none;
+  background-color: transparent;
+  padding: 5px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #d9d9d9;
+  }
+`
+
+const SortedBy = styled.span`
+  text-transform: capitalize;
 `
 
 const FilterButton = styled.button`
@@ -61,6 +94,21 @@ export const DashboardToday = () => {
   const [addNewTask, setAddNewTask] = useState(false)
   const [isStatusHidden, setIsStatusHidden] = useState(false)
   const [isOpenView, setIsOpenView] = useState(false)
+  const [
+    selectedSorting,
+    selectedOrdering,
+    selectedPriority,
+    setSelectedOrdering,
+    setSelectedSorting,
+    setSelectedPriority
+  ] = useFilterStore((state) => [
+    state.selectedSorting,
+    state.selectedOrdering,
+    state.selectedPriority,
+    state.setSelectedOrdering,
+    state.setSelectedSorting,
+    state.setSelectedPriority
+  ])
 
   const handleAddTask = () => {
     setIsStatusHidden(true)
@@ -79,12 +127,56 @@ export const DashboardToday = () => {
           </Text>
         </Today>
 
-        <FilterButton onClick={() => setIsOpenView(true)}>
-          <FilterIcon />
-          <Text color="#949494" size={16}>
-            View
-          </Text>
-        </FilterButton>
+        <FilterContainer>
+          {selectedSorting !== 'default' && (
+            <FilterText>
+              <CustomTooltip content="Reverse order">
+                {selectedOrdering === 'ascending' ? (
+                  <OrderingButton onClick={() => setSelectedOrdering('descending')}>
+                    <ArrowDownIcon />
+                  </OrderingButton>
+                ) : (
+                  <OrderingButton onClick={() => setSelectedOrdering('ascending')}>
+                    <ArrowUpIcon />
+                  </OrderingButton>
+                )}
+              </CustomTooltip>
+              <Text size={16}>
+                Sorted by <SortedBy>{`${selectedSorting}`}</SortedBy>
+              </Text>
+              <CustomTooltip content="Reset sorting">
+                <OrderingButton
+                  onClick={() => {
+                    setSelectedOrdering('ascending')
+                    setSelectedSorting('default')
+                  }}
+                >
+                  <CloseIcon />
+                </OrderingButton>
+              </CustomTooltip>
+            </FilterText>
+          )}
+
+          {selectedPriority !== 'default' && (
+            <FilterText>
+              <Text size={16}>
+                Filtered by <SortedBy>{`${selectedPriority}`}</SortedBy>
+              </Text>
+              <CustomTooltip content="Reset filter">
+                <OrderingButton onClick={() => setSelectedPriority('default')}>
+                  <CloseIcon />
+                </OrderingButton>
+              </CustomTooltip>
+            </FilterText>
+          )}
+
+          <FilterButton onClick={() => setIsOpenView(true)}>
+            <FilterIcon />
+            <Text color="#949494" size={16}>
+              View
+            </Text>
+          </FilterButton>
+        </FilterContainer>
       </Flex>
 
       <ListTask />
