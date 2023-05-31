@@ -83,7 +83,7 @@ const TodayButton = styled.button`
 const UpcomingContent = styled.div`
   min-width: 100px;
   margin-left: 35px;
-  height: calc(100vh - 80px - 24px - 24px - 41px - 35px - 60px - 24px);
+  height: calc(100vh - 80px - 48px - 41px - 60px - 35px - 52px);
   overflow-y: scroll;
   overflow-x: hidden;
 

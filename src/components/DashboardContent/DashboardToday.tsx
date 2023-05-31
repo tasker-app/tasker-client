@@ -72,6 +72,39 @@ const FilterButton = styled.button`
   }
 `
 
+const TodayContent = styled.div`
+  height: calc(100vh - 80px - 48px - 42px - 52px);
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  &:hover {
+    &::-webkit-scrollbar-thumb {
+      z-index: 2;
+      visibility: visible;
+    }
+  }
+  /* width */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 10px;
+  }
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: #bdbdbd;
+    z-index: 1;
+    visibility: hidden;
+  }
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #858585;
+  }
+`
+
 const AddTaskButton = styled.button<{ isHidden: boolean }>`
   display: flex;
   align-items: center;
@@ -179,15 +212,15 @@ export const DashboardToday = () => {
         </FilterContainer>
       </Flex>
 
-      <ListTask />
-
-      <AddTaskButton isHidden={addNewTask} onClick={handleAddTask}>
-        <AddIcon />
-        <Text size={16}>Add your task</Text>
-      </AddTaskButton>
-
-      {addNewTask && <AddTask setAddNewTask={setAddNewTask} setIsStatusHidden={setIsStatusHidden} />}
-      <DashboardStatus isStatusHidden={isStatusHidden} />
+      <TodayContent>
+        <ListTask />
+        <AddTaskButton isHidden={addNewTask} onClick={handleAddTask}>
+          <AddIcon />
+          <Text size={16}>Add your task</Text>
+        </AddTaskButton>
+        {addNewTask && <AddTask setAddNewTask={setAddNewTask} setIsStatusHidden={setIsStatusHidden} />}
+        <DashboardStatus isStatusHidden={isStatusHidden} />
+      </TodayContent>
       <ViewModal handleClose={() => setIsOpenView(false)} isOpen={isOpenView} />
     </>
   )
