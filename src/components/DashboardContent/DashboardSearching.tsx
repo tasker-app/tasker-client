@@ -1,10 +1,9 @@
-import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 import SearchNotFoundImage from '@/assets/images/SearchNotFound.webp'
 import { Text } from '@/components/Common'
 import { TaskPreview } from '@/components/TaskPreview'
-import { useSearchStore, useTaskStore } from '@/stores'
+import { useNavStore, useSearchStore, useTaskStore } from '@/stores'
 
 const SearchContainer = styled.div`
   display: flex;
@@ -49,10 +48,14 @@ const HomeButton = styled.button`
 export const DashboardSearching = () => {
   const [search] = useSearchStore((state) => [state.search])
   const [tasks] = useTaskStore((state) => [state.tasks])
-
-  const navigate = useNavigate()
+  const [setActiveNavbar, setActive] = useNavStore((state) => [state.updateActiveNavbar, state.updateActive])
 
   const matchedTasks = tasks.filter((task) => task.name.includes(search))
+
+  const handleHomeButtonClick = () => {
+    setActive('Today')
+    setActiveNavbar('Today')
+  }
 
   return (
     <SearchContainer>
@@ -90,7 +93,7 @@ export const DashboardSearching = () => {
             </Text>
           </NotFound>
 
-          <HomeButton onClick={() => navigate('/')}>
+          <HomeButton onClick={handleHomeButtonClick}>
             <Text color="#787878">Return Home</Text>
           </HomeButton>
         </NotFoundContainer>

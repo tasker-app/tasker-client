@@ -43,9 +43,17 @@ export const SearchBar = () => {
     }
   }
 
+  const handleSearchIconClick = () => {
+    if (inputRef.current?.value) {
+      setActive('Searching')
+      setActiveNavbar('Searching')
+      updateSearch(inputRef.current.value)
+    }
+  }
+
   return (
     <SearchBarContainer onKeyDown={handleSearch}>
-      <SearchIcon onClick={() => setActiveNavbar('Searching')} />
+      <SearchIcon onClick={handleSearchIconClick} />
       <input ref={inputRef} placeholder="Task ABC" type="text" />
     </SearchBarContainer>
   )
