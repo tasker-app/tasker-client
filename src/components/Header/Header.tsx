@@ -4,11 +4,12 @@ import styled from 'styled-components'
 import { ReactComponent as HomeIcon } from '@/assets/icons/home.svg'
 import { ReactComponent as MenuIcon } from '@/assets/icons/menu.svg'
 import { ReactComponent as QuestionIcon } from '@/assets/icons/question.svg'
-import { ReactComponent as SearchIcon } from '@/assets/icons/search.svg'
 import { ReactComponent as StarIcon } from '@/assets/icons/star.svg'
 import DefaultAvatar from '@/assets/images/DefaultAvatar.webp'
 import { CustomTooltip, Text } from '@/components/Common'
 import { UserModal } from '@/components/UserModal'
+
+import { SearchBar } from './SearchBar'
 
 const StyledHeader = styled.header`
   position: -webkit-sticky;
@@ -48,32 +49,6 @@ const NavigationButton = styled.button`
 
   svg {
     padding: 4px;
-  }
-`
-
-const SearchBar = styled.div`
-  position: relative;
-
-  svg {
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    transform: translateY(-50%);
-    cursor: pointer;
-  }
-
-  input {
-    width: 175px;
-    height: 32px;
-    border-radius: 8px;
-    border: none;
-    background-color: #d9d9d9;
-    padding-left: 35px;
-    font-family: 'Regular';
-
-    &:focus {
-      outline: none;
-    }
   }
 `
 
@@ -154,10 +129,7 @@ export const Header = ({ handleNavToggle }: HeaderProps) => {
           </CustomTooltip>
         </Navigation>
 
-        <SearchBar>
-          <SearchIcon />
-          <input placeholder="Task ABC" type="text" />
-        </SearchBar>
+        <SearchBar />
       </NavigationAndSearch>
       <ButtonAndAvatar>
         <Button>

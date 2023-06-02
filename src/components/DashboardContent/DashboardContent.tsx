@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 import { CompleteToast } from '@/components/CompleteToast'
 
+import { DashboardSearching } from './DashboardSearching'
 import { DashboardToday } from './DashboardToday'
 import { DashboardUpcoming } from './DashboardUpcoming'
 
@@ -29,6 +30,7 @@ export const DashboardContent = ({ isNavOpen, activeNavbar }: DashboardContentPr
         {activeNavbar === 'Upcoming' && <DashboardUpcoming />}
         {activeNavbar === 'Overdue' && <div>Completed</div>}
         {activeNavbar === 'Statistic' && <div>Statistic</div>}
+        {activeNavbar === 'Searching' && <DashboardSearching />}
       </Content>
       <CompleteToast />
     </DashboardContentContainer>
