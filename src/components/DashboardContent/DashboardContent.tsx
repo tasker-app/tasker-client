@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { CompleteToast } from '@/components/CompleteToast'
 
 import { DashboardSearching } from './DashboardSearching'
+import { DashboardStatistic } from './DashboardStatistic'
 import { DashboardToday } from './DashboardToday'
 import { DashboardUpcoming } from './DashboardUpcoming'
 
@@ -15,6 +16,7 @@ const DashboardContentContainer = styled.section<{ isNavOpen: boolean }>`
 
 const Content = styled.div`
   width: 100%;
+  height: 100%;
 `
 
 type DashboardContentProps = {
@@ -29,7 +31,7 @@ export const DashboardContent = ({ isNavOpen, activeNavbar }: DashboardContentPr
         {activeNavbar === 'Today' && <DashboardToday />}
         {activeNavbar === 'Upcoming' && <DashboardUpcoming />}
         {activeNavbar === 'Overdue' && <div>Completed</div>}
-        {activeNavbar === 'Statistic' && <div>Statistic</div>}
+        {activeNavbar === 'Statistic' && <DashboardStatistic />}
         {activeNavbar === 'Searching' && <DashboardSearching />}
       </Content>
       <CompleteToast />
