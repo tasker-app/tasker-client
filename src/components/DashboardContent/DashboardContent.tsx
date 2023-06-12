@@ -15,6 +15,7 @@ const DashboardContentContainer = styled.section<{ isNavOpen: boolean }>`
 
 const Content = styled.div`
   width: 100%;
+  height: 100%;
 `
 
 type DashboardContentProps = {

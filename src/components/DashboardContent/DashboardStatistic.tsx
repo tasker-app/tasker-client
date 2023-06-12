@@ -1,11 +1,11 @@
+import { motion } from 'framer-motion'
 import { useState } from 'react'
 import styled from 'styled-components'
 
-import { ReactComponent as FireIcon } from '@/assets/icons/fire.svg'
-import { ReactComponent as GoalIcon } from '@/assets/icons/goal.svg'
 import { Text } from '@/components/Common'
 
-import { StatictisCircle } from './StatisticCircle'
+import { DailyStatistic } from './DailyStatistic'
+import { WeeklyStatistic } from './WeeklyStatistic'
 
 const Title = styled.div`
   display: flex;
@@ -14,8 +14,9 @@ const Title = styled.div`
 `
 const StatisticContent = styled.div`
   padding-top: 32px;
-  height: calc(100vh - 80px - 24px - 24px - 41px - 35px - 60px - 58px);
+  height: calc(100vh - 80px - 24px - 24px - 41px - 35px - 40px);
   position: relative;
+  overflow: hidden;
 `
 const Option = styled.div`
   position: relative;
@@ -60,37 +61,10 @@ const OptionName = styled.span`
     font-weight: 600;
   }
 `
-const Note = styled.div`
-  margin-top: 10px;
-  margin-left: 4px;
-`
-
-const Content = styled.div`
-  display: flex;
-  width: 80%;
-  margin-top: 80px;
+const PageContent = styled(motion.div)`
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  justify-content: space-between;
-`
-const Statistic = styled.div`
-  display: grid;
-  justify-items: center;
-`
-const StaticText = styled.div`
-  text-align: center;
-  margin-top: 20px;
-  line-height: 1.5;
-`
-const EditGoal = styled.div`
-  margin-top: 20px;
-  cursor: pointer;
-  &:hover {
-    text-decoration: underline;
-    text-decoration-color: #b95a5a;
-  }
+  width: 100%;
+  height: 100%;
 `
 
 export const DashboardStatistic = () => {
@@ -106,55 +80,28 @@ export const DashboardStatistic = () => {
       <StatisticContent>
         <Option>
           <Radio onClick={() => setSelectedOption('daily')}>
-            <RadioInput checked={selectedOption === 'daily'} name="radio" type="radio" />
+            <RadioInput defaultChecked={selectedOption === 'daily'} name="radio" type="radio" />
             <OptionName>Daily</OptionName>
           </Radio>
           <Radio onClick={() => setSelectedOption('weekly')}>
-            <RadioInput checked={selectedOption === 'weekly'} name="radio" type="radio" />
+            <RadioInput defaultChecked={selectedOption === 'weekly'} name="radio" type="radio" />
             <OptionName>Weekly</OptionName>
           </Radio>
         </Option>
-        <Note>
-          <Text color="#787878" size={15}>
-            5 completed tasks today
-          </Text>
-        </Note>
-
-        <Content>
-          <Statistic>
-            <StatictisCircle completedWorkload={0} iconSize={55} totalWorkload={100}>
-              <FireIcon height={55} width={55} />
-            </StatictisCircle>
-            <StaticText>
-              <Text color="#787878" size={15}>
-                Daily goal completed:<span style={{ color: 'black', fontWeight: 700 }}> 5/5</span>
-              </Text>
-              <br />
-              <Text color="#787878" size={15}>
-                All of today tasks is easy for you, Toan
-              </Text>
-              <EditGoal>
-                <Text color="#B95A5A" size={15}>
-                  Edit your daily goal
-                </Text>
-              </EditGoal>
-            </StaticText>
-          </Statistic>
-          <Statistic>
-            <StatictisCircle completedWorkload={100} iconSize={75} totalWorkload={100}>
-              <GoalIcon height={75} width={75} />
-            </StatictisCircle>
-            <StaticText>
-              <Text color="#787878" size={15}>
-                You’ve completed your goal: 2 days in a row
-              </Text>
-              <br />
-              <Text color="#787878" size={15}>
-                30 May 2023 - 31 May 2023
-              </Text>
-            </StaticText>
-          </Statistic>
-        </Content>
+        <PageContent
+          animate={{ x: selectedOption === 'daily' ? 0 : '-100%' }}
+          initial={{ x: 0 }}
+          transition={{ duration: 0.6, ease: 'easeInOut' }}
+        >
+          <DailyStatistic />
+        </PageContent>
+        <PageContent
+          animate={{ x: selectedOption === 'weekly' ? 0 : '100%' }}
+          initial={{ x: '100%' }}
+          transition={{ duration: 0.6, ease: 'easeInOut' }}
+        >
+          <WeeklyStatistic />
+        </PageContent>
       </StatisticContent>
     </>
   )
