@@ -98,7 +98,7 @@ type NavProps = {
 
 export const Nav = ({ isNavOpen, setActiveNavbar }: NavProps) => {
   const [navbar] = useNavStore((state) => [state.navbar, state.updateNavBar])
-  const [active, setActive] = useState('Today')
+  const [active, setActive] = useNavStore((state) => [state.active, state.updateActive])
   const [isOptionDisplayed, setIsOptionDisplayed] = useState(false)
 
   useEffect(() => {

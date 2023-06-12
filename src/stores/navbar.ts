@@ -3,6 +3,10 @@ import { persist } from 'zustand/middleware'
 type NavBarState = {
   navbar: string[]
   updateNavBar: (newNav: string[]) => void
+  activeNavbar: string
+  updateActiveNavbar: (newActive: string) => void
+  active: string
+  updateActive: (newActive: string) => void
 }
 
 const useNavStore = create<NavBarState>()(
@@ -13,6 +17,22 @@ const useNavStore = create<NavBarState>()(
       updateNavBar: (newNav: string[]) => {
         set(() => ({
           navbar: newNav
+        }))
+      },
+
+      activeNavbar: 'Today',
+
+      updateActiveNavbar: (newActive: string) => {
+        set(() => ({
+          activeNavbar: newActive
+        }))
+      },
+
+      active: 'Today',
+
+      updateActive: (newActive: string) => {
+        set(() => ({
+          active: newActive
         }))
       }
     }),
